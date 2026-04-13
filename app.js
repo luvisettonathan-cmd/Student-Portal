@@ -10,7 +10,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 // ══════════════════════════════════════════════════════════════
 
 if (!window.supabase) { document.getElementById('app').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#c23616;font-size:1rem;">Erro ao carregar Supabase. Verifique sua conexão e recarregue a página.</div>'; throw new Error('Supabase SDK não carregou'); }
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const MODULES = [
   { id: 'starter', label: 'Starter' },
@@ -74,21 +74,21 @@ let state = {
 
 // ── DB ──
 async function dbSelect(table, order = 'id') {
-  const { data, error } = await supabase.from(table).select('*').order(order);
+  const { data, error } = await db.from(table).select('*').order(order);
   if (error) { console.error(table, error); return []; }
   return data || [];
 }
 async function dbInsert(table, row) {
-  const { data, error } = await supabase.from(table).insert(row).select();
+  const { data, error } = await db.from(table).insert(row).select();
   if (error) { alert('Erro: ' + error.message); return null; }
   return data?.[0];
 }
 async function dbUpdate(table, id, updates) {
-  const { error } = await supabase.from(table).update(updates).eq('id', id);
+  const { error } = await db.from(table).update(updates).eq('id', id);
   if (error) alert('Erro: ' + error.message);
 }
 async function dbDelete(table, id) {
-  const { error } = await supabase.from(table).delete().eq('id', id);
+  const { error } = await db.from(table).delete().eq('id', id);
   if (error) alert('Erro: ' + error.message);
 }
 
@@ -185,7 +185,7 @@ function renderLogin() {
     }
 
     const table = state.loginTab === 'admin' ? 'student_portal_admins' : 'students';
-    const { data, error } = await supabase.from(table).select('*').eq('username', username).eq('password', password).single();
+    const { data, error } = await db.from(table).select('*').eq('username', username).eq('password', password).single();
 
     if (error || !data) {
       errBox.textContent = 'Usuário ou senha incorretos';

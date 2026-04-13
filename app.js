@@ -158,46 +158,71 @@ function renderLogin() {
   form.appendChild(h('div', { className: 'login-form-kicker' }, 'Acesso ao portal'));
   form.appendChild(h('h2', { innerHTML: 'Welcome<span>.</span>' }));
 
-  const tabs = h('div', { className: 'login-tabs' },
-    h('button', {
-      className: `login-tab ${state.loginTab === 'student' ? 'active' : ''}`,
-      onClick: () => { state.loginTab = 'student'; render(); }
-    }, 'Aluno'),
-    h('button', {
-      className: `login-tab ${state.loginTab === 'admin' ? 'active' : ''}`,
-      onClick: () => { state.loginTab = 'admin'; render(); }
-    }, 'Administração')
-  );
-  form.appendChild(tabs);
-
   const errBox = h('div', { className: 'login-error', style: { display: 'none' } });
 
-  const userInput = h('input', { className: 'field-input', placeholder: 'seu.usuario', autocomplete: 'username' });
-  const pwInput = h('input', { className: 'field-input', type: 'password', placeholder: '••••••', autocomplete: 'current-password' });
+  const userInput = h('input', {
+    className: 'field-input',
+    placeholder: 'seu.usuario',
+    autocomplete: 'username'
+  });
+
+  const pwInput = h('input', {
+    className: 'field-input',
+    type: 'password',
+    placeholder: '••••••',
+    autocomplete: 'current-password'
+  });
 
   const doLogin = async () => {
     const username = userInput.value.toLowerCase().trim();
     const password = pwInput.value;
+
     if (!username || !password) {
       errBox.textContent = 'Preencha usuário e senha';
       errBox.style.display = 'flex';
       return;
     }
 
-    const table = state.loginTab === 'admin' ? 'student_portal_admins' : 'students';
-    const { data, error } = await db.from(table).select('*').eq('username', username).eq('password', password).single();
+    errBox.style.display = 'none';
 
-    if (error || !data) {
-      errBox.textContent = 'Usuário ou senha incorretos';
-      errBox.style.display = 'flex';
+    // Tenta admin primeiro
+    const { data: adminData, error: adminError } = await db
+      .from('student_portal_admins')
+      .select('*')
+      .eq('username', username)
+      .eq('password', password)
+      .single();
+
+    if (!adminError && adminData) {
+      state.user = adminData;
+      state.userType = 'admin';
+      state.loginTab = 'admin';
+      state.screen = 'portal';
+      state.tab = 'admin';
+      await loadAll();
       return;
     }
 
-    state.user = data;
-    state.userType = state.loginTab === 'admin' ? 'admin' : 'student';
-    state.screen = 'portal';
-    state.tab = state.userType === 'admin' ? 'admin' : 'home';
-    await loadAll();
+    // Tenta aluno
+    const { data: studentData, error: studentError } = await db
+      .from('students')
+      .select('*')
+      .eq('username', username)
+      .eq('password', password)
+      .single();
+
+    if (!studentError && studentData) {
+      state.user = studentData;
+      state.userType = 'student';
+      state.loginTab = 'student';
+      state.screen = 'portal';
+      state.tab = 'home';
+      await loadAll();
+      return;
+    }
+
+    errBox.textContent = 'Usuário ou senha incorretos';
+    errBox.style.display = 'flex';
   };
 
   pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
@@ -206,33 +231,26 @@ function renderLogin() {
   form.append(
     errBox,
     h('div', { className: 'field' },
-      h('label', { className: 'field-label' }, state.loginTab === 'admin' ? 'Usuário admin' : 'Usuário'),
+      h('label', { className: 'field-label' }, 'Usuário'),
       userInput
     ),
     h('div', { className: 'field' },
       h('label', { className: 'field-label' }, 'Senha'),
       pwInput
     ),
-    h('button', { className: 'login-btn', onClick: doLogin }, 'Entrar', icon('arrowRight')),
+    h('button', { className: 'login-btn', onClick: doLogin },
+      'Entrar',
+      icon('arrowRight')
+    ),
   );
 
-  if (state.loginTab === 'admin') {
-    form.appendChild(h('div', { className: 'login-hint' },
-      h('span', { className: 'login-hint-icon' }, icon('info')),
-      h('div', {},
-        h('div', { className: 'login-hint-title' }, 'Primeiro acesso admin'),
-        h('div', { className: 'login-hint-text', innerHTML: 'Usuário: <code>admin</code> / Senha: <code>nexus2026</code>' })
-      )
-    ));
-  } else {
-    form.appendChild(h('div', { className: 'login-hint' },
-      h('span', { className: 'login-hint-icon' }, icon('info')),
-      h('div', {},
-        h('div', { className: 'login-hint-title' }, 'Credenciais'),
-        h('div', { className: 'login-hint-text' }, 'Seu login foi criado pela coordenação. Em caso de dúvidas, fale com a secretaria da sua unidade.')
-      )
-    ));
-  }
+  form.appendChild(h('div', { className: 'login-hint' },
+    h('span', { className: 'login-hint-icon' }, icon('info')),
+    h('div', {},
+      h('div', { className: 'login-hint-title' }, 'Credenciais'),
+      h('div', { className: 'login-hint-text' }, 'Seu login foi criado pela coordenação. Em caso de dúvidas, fale com a secretaria da sua unidade.')
+    )
+  ));
 
   right.appendChild(form);
   wrap.append(left, right);

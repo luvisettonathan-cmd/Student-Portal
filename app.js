@@ -4,8 +4,8 @@
 //
 // ⚠️ SUBSTITUA AS 2 LINHAS ABAIXO COM OS DADOS DO SEU SUPABASE
 //
-const SUPABASE_URL = 'COLE_AQUI_SUA_PROJECT_URL';
-const SUPABASE_KEY = 'COLE_AQUI_SUA_ANON_KEY';
+const SUPABASE_URL = 'https://aqlnihunzthcilrabasp.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxbG5paHVuenRoY2lscmFiYXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwNDMxOTQsImV4cCI6MjA5MTYxOTE5NH0.Dth5evj04iA9X9V68QfbSJ9qFC2PSCdetXNOG5MKg7c';
 //
 // ══════════════════════════════════════════════════════════════
 

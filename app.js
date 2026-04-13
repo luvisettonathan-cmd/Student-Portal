@@ -134,29 +134,17 @@ function render() {
 function renderLogin() {
   const wrap = h('div', { className: 'login-wrap' });
 
-  const left = h('div', { className: 'login-left' },
-    h('div', { className: 'login-mark-wrap' },
-      h('div', { className: 'login-logo' }, 'N'),
-      h('div', { className: 'login-mark-text' },
-        h('div', {}, 'Nexus English Center'),
-        h('div', {}, 'Since 2017')
-      )
-    ),
-    h('div', { className: 'login-hero' },
-      h('h1', { innerHTML: 'Your <strong>journey</strong><br>starts here.' }),
-      h('p', {}, 'Acesse materiais do seu curso, avisos da coordenação e recursos extras para acelerar seu inglês. Tudo em um só lugar.')
-    ),
-    h('div', { className: 'login-footer-info' },
-      h('span', {}, 'Chapecó / Passo Fundo / Online'),
-      h('span', {}, '2026 —')
-    )
-  );
-
-  const right = h('div', { className: 'login-right' });
   const form = h('div', { className: 'login-form' });
 
-  form.appendChild(h('div', { className: 'login-form-kicker' }, 'Acesso ao portal'));
-  form.appendChild(h('h2', { innerHTML: 'Welcome<span>.</span>' }));
+  form.appendChild(h('div', { className: 'login-brand' },
+    h('div', { className: 'login-logo-dot' }),
+    h('span', { className: 'login-brand-name' }, 'NEXUS')
+  ));
+
+  form.appendChild(h('div', { className: 'login-heading' },
+    h('h2', { innerHTML: 'Área do <span>aluno</span>' }),
+    h('p', {}, 'Acesse seu portal e continue sua jornada no inglês.')
+  ));
 
   const errBox = h('div', { className: 'login-error', style: { display: 'none' } });
 
@@ -238,27 +226,13 @@ function renderLogin() {
       h('label', { className: 'field-label' }, 'Senha'),
       pwInput
     ),
-    h('button', { className: 'login-btn', onClick: doLogin },
-      'Entrar',
-      icon('arrowRight')
-    ),
+    h('button', { className: 'login-btn', onClick: doLogin }, 'Entrar'),
   );
 
-  form.appendChild(h('div', { className: 'login-hint' },
-    h('span', { className: 'login-hint-icon' }, icon('info')),
-    h('div', {},
-      h('div', { className: 'login-hint-title' }, 'Credenciais'),
-      h('div', { className: 'login-hint-text' }, 'Seu login foi criado pela coordenação. Em caso de dúvidas, fale com a secretaria da sua unidade.')
-    )
-  ));
-
-  right.appendChild(form);
-  wrap.append(left, right);
+  wrap.appendChild(form);
   return wrap;
 }
 
-// ══════════════════════════════════════════════════════════════
-// PORTAL LAYOUT
 // ══════════════════════════════════════════════════════════════
 function renderPortal() {
   const wrap = h('div', { className: 'portal-layout' });

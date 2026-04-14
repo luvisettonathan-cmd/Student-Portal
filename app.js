@@ -138,7 +138,11 @@ function renderLogin() {
 
   // Coluna esquerda decorativa
   const left = h('div', { className: 'login-left' });
-  const logoLeft = h('div', { className: 'login-left-logo', innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 95" width="200" height="68"><path d="M 38 72 C 10 55, 10 15, 50 5 C 90 -5, 195 5, 220 45 C 235 68, 215 88, 185 85" fill="none" stroke="#d9622d" stroke-width="6" stroke-linecap="round"/><text x="28" y="72" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="62" fill="#ffffff" letter-spacing="-2">NEXUS</text><text x="62" y="88" font-family="Arial, sans-serif" font-weight="400" font-size="13" fill="#ffffff" letter-spacing="3">ENGLISH CENTER</text></svg>` });
+  const logoLeft = h('div', { className: 'login-left-logo', innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-15 -18 325 118" width="215" height="74">
+  <path d="M 5 88 C -20 65, -22 -10, 55 -12 C 130 -14, 228 -6, 268 28 C 285 48, 272 80, 252 86" fill="none" stroke="#d9622d" stroke-width="7.5" stroke-linecap="round"/>
+  <text x="10" y="72" font-family="'Arial Black', 'Arial Bold', Arial, sans-serif" font-weight="900" font-size="66" fill="#ffffff" letter-spacing="-1">NEXUS</text>
+  <text x="58" y="91" font-family="Arial, sans-serif" font-weight="400" font-size="12.5" fill="#ffffff" letter-spacing="3.5">ENGLISH CENTER</text>
+</svg>` });
   const heroText = h('div', { className: 'login-left-hero' },
     h('h1', { innerHTML: 'Bem-vindo ao<br><span>Portal do Aluno</span>' }),
     h('p', {}, 'Acesse suas aulas, materiais e acompanhe sua evolução no inglês.')

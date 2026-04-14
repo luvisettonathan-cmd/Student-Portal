@@ -306,8 +306,14 @@ function renderSidebar(isAdmin) {
   } else {
     // Aluno sidebar
     const mainLinks = [
-      { id: 'home', label: 'Início', iconName: 'home' },
-      { id: 'announcements', label: 'Avisos', iconName: 'announce', count: state.data.announcements.length },
+      { id: 'daily', label: 'Daily practice', iconName: 'spark' },
+      { id: 'aulas', label: 'Aulas', iconName: 'book' },
+      { id: 'exercicios', label: 'Exercícios', iconName: 'stack' },
+      { id: 'materiais', label: 'Materiais', iconName: 'compass' },
+      { id: 'gramatica', label: 'Referência gramatical', iconName: 'info' },
+      { id: 'prova', label: 'Prova', iconName: 'sparkle' },
+      { id: 'chat', label: 'Chat com IA', iconName: 'waveform' },
+      { id: 'comunidades', label: 'Comunidades', iconName: 'users' },
     ];
 
     mainLinks.forEach(link => {
@@ -318,6 +324,22 @@ function renderSidebar(isAdmin) {
         icon(link.iconName),
         h('span', {}, link.label),
         link.count > 0 && h('span', { className: 'sidebar-badge' }, link.count)
+      ));
+    });
+
+    // Divisor e itens futuros
+    const divider = h('div', { className: 'sidebar-divider' });
+    nav.appendChild(divider);
+
+    const soonItems = [
+      { label: 'Em breve', iconName: 'announce' },
+    ];
+    soonItems.forEach(item => {
+      nav.appendChild(h('button', {
+        className: 'sidebar-link disabled',
+      },
+        icon(item.iconName),
+        h('span', {}, item.label),
       ));
     });
 

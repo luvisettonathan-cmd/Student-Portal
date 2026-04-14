@@ -138,7 +138,7 @@ function renderLogin() {
 
   // Coluna esquerda decorativa
   const left = h('div', { className: 'login-left' });
-  const logoLeft = h('div', { className: 'login-left-logo', innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 110" width="240" height="82">
+  const logoLeft = h('div', { className: 'login-left-logo', innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 110" width="240" height="82">
   <text x="0" y="82" font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="90" fill="#ffffff" letter-spacing="-2">NEXUS</text>
   <text x="82" y="104" font-family="Arial, Helvetica, sans-serif" font-weight="400" font-size="13.5" fill="#ffffff" letter-spacing="5">ENGLISH CENTER</text>
 </svg>` });

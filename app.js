@@ -49,8 +49,8 @@ const ICONS = {
   external: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4L10 14"/><path d="M19 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6"/></svg>',
   arrowRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>',
   pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h6l-5 4 2 7-6-4-6 4 2-7-5-4h6l3-7z" stroke-linejoin="round"/></svg>',
-  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.5M12 11v5" stroke-linecap="round"/></svg>',
-  sparkle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4l1.5 5L19 11l-5.5 2L12 18l-1.5-5L5 11l5.5-2L12 4z" stroke-linejoin="round"/></svg>',
+  info: '<svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.5M12 11v5" stroke-linecap="round"/></svg>',
+  sparkle: '<svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4l1.5 5L19 11l-5.5 2L12 18l-1.5-5L5 11l5.5-2L12 4z" stroke-linejoin="round"/></svg>',
 };
 
 function icon(name) {
@@ -313,7 +313,7 @@ function renderSidebar(isAdmin) {
   } else {
     // Aluno sidebar
     const mainLinks = [
-      { id: 'daily', label: 'Daily practice', iconName: 'spark' },
+      { id: 'home', label: 'Home', iconName: 'home' },      { id: 'daily', label: 'Daily practice', iconName: 'spark' },
       { id: 'aulas', label: 'Aulas', iconName: 'book' },
       { id: 'exercicios', label: 'Exercícios', iconName: 'stack' },
       { id: 'materiais', label: 'Materiais', iconName: 'compass' },
@@ -352,7 +352,7 @@ function renderSidebar(isAdmin) {
 
     // Seções dinâmicas
     const mod = state.user.module || 'starter';
-    const visibleSections = state.data.sections.filter(s =>
+    const visibleSections = state.data.sections.filter(s => s.name !== 'Materiais do Curso' && s.name !== 'Atividades Extras' &&
       s.visible && (!s.target_modules || s.target_modules.length === 0 || s.target_modules.includes(mod))
     );
 
@@ -428,7 +428,7 @@ function renderHome() {
   ));
 
   // Visible sections as cards
-  const visibleSections = state.data.sections.filter(s =>
+  const visibleSections = state.data.sections.filter(s => s.name !== 'Materiais do Curso' && s.name !== 'Atividades Extras' &&
     s.visible && (!s.target_modules || s.target_modules.length === 0 || s.target_modules.includes(mod))
   );
 

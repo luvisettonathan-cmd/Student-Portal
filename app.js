@@ -207,14 +207,23 @@ function renderLogin() {
     }
 
     // Tenta aluno
-    const { data: studentData, error: studentError } = await db
+    const { data: studentRows, error: studentError } = await db
       .from('students')
       .select('*')
       .eq('username', username)
       .eq('password', password)
-      .single();
+      .limit(1);
 
-    if (!studentError && studentData) {
+    if (studentError) {
+      console.error('Erro de login:', studentError);
+      errBox.textContent = 'Erro ao conectar: ' + studentError.message;
+      errBox.style.display = 'flex';
+      return;
+    }
+
+    const studentData = studentRows && studentRows[0];
+
+    if (studentData) {
       state.user = studentData;
       state.userType = 'student';
       state.loginTab = 'student';
@@ -226,9 +235,7 @@ function renderLogin() {
 
     errBox.textContent = 'Usuário ou senha incorretos';
     errBox.style.display = 'flex';
-  };
-
-  pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  };pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   userInput.addEventListener('keydown', e => { if (e.key === 'Enter') pwInput.focus(); });
 
   form.append(

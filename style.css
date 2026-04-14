@@ -33,6 +33,17 @@
   --sidebar-w: 240px;
   --radius: 14px;
   --radius-lg: 20px;
+
+
+  --dark-bg: #141414;
+  --dark-card: #1e1e1e;
+  --dark-input: #252525;
+  --dark-border: #333333;
+  --dark-text: #f0f0f0;
+  --dark-muted: #888888;
+  --dark-orange: #E8491E;
+  --dark-orange-hover: #ff5a2b;
+  --dark-orange-glow: rgba(232, 73, 30, 0.18);
 }
 
 html { scroll-behavior: smooth; }
@@ -96,22 +107,8 @@ undefined/* ══════════════════════�
    LOGIN - DARK MODE
    ══════════════════════════════════════════════════════════════ */
 
-:root {
-  --dark-bg: #141414;
-  --dark-card: #1e1e1e;
-  --dark-input: #252525;
-  --dark-border: #333333;
-  --dark-text: #f0f0f0;
-  --dark-muted: #888888;
-  --dark-orange: #E8491E;
-  --dark-orange-hover: #ff5a2b;
-  --dark-orange-glow: rgba(232, 73, 30, 0.18);
-}
 
-body {
-  background: var(--dark-bg);
-  color: var(--dark-text);
-}
+
 
 .login-wrap {
   min-height: 100vh;

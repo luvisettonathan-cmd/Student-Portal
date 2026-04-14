@@ -1436,3 +1436,180 @@ input:focus, textarea:focus, select:focus { outline: none; }
   .students-grid { grid-template-columns: 1fr; }
   .form-row.cols-2 { grid-template-columns: 1fr; }
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   DARK THEME — PORTAL INTERNO
+   Aplica dark apenas na área de conteúdo (não afeta a sidebar)
+   ══════════════════════════════════════════════════════════════ */
+
+/* Background geral do portal */
+body {
+  background: #111113;
+}
+
+.portal-layout {
+  background: #111113;
+}
+
+/* Área de conteúdo principal */
+.portal-layout > *:not(.sidebar) {
+  background: #111113;
+}
+
+/* Page header */
+.page-title {
+  color: #f0ece8;
+}
+
+.page-subtitle {
+  color: #8a8490;
+}
+
+/* Welcome */
+.welcome-meta {
+  color: #8a8490;
+}
+
+.welcome-meta strong {
+  color: #f0ece8;
+}
+
+.welcome-meta .divider {
+  background: #2e2e35;
+}
+
+/* Cards de informação */
+.info-card {
+  background: #1c1c20;
+  border: 1px solid #2a2a30;
+}
+
+.info-card::before {
+  background: radial-gradient(circle at top right, rgba(217,98,45,0.12) 0%, transparent 70%);
+}
+
+.info-card:hover {
+  border-color: rgba(217,98,45,0.45);
+  box-shadow: 0 8px 24px rgba(217,98,45,0.10);
+}
+
+.info-card-desc {
+  color: #8a8490;
+}
+
+.info-card-count {
+  background: rgba(217,98,45,0.15);
+  color: #f4a27a;
+}
+
+/* Back link */
+.back-link {
+  color: #8a8490;
+}
+
+.back-link:hover {
+  background: rgba(255,255,255,0.05);
+  color: #f0ece8;
+}
+
+/* Admin panel */
+.info-panel {
+  background: rgba(217,98,45,0.12);
+  border: 1px solid rgba(217,98,45,0.20);
+}
+
+.info-panel-title {
+  color: #f4a27a;
+}
+
+.info-panel-text {
+  color: #d4a090;
+}
+
+.info-panel-icon {
+  color: #d9622d;
+}
+
+/* Tabs bar */
+.tabs-bar {
+  background: #1c1c20;
+}
+
+.tabs-bar-btn {
+  color: #8a8490;
+}
+
+.tabs-bar-btn.active {
+  background: #2e2e35;
+  color: #f0ece8;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Module filter */
+.module-filter {
+  background: #1c1c20;
+}
+
+.module-filter button {
+  color: #8a8490;
+}
+
+.module-filter button.active {
+  background: #2e2e35;
+  color: #f0ece8;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Empty state */
+.empty-state {
+  background: #1c1c20;
+  border-color: #2a2a30;
+}
+
+.empty-state-icon {
+  color: #3a3a42;
+}
+
+.empty-state-title {
+  color: #f0ece8;
+}
+
+.empty-state-desc {
+  color: #8a8490;
+}
+
+/* Admin list items */
+.admin-list-item {
+  background: #1c1c20;
+  border: 1px solid #2a2a30;
+}
+
+.admin-list-name {
+  color: #f0ece8;
+}
+
+.admin-list-meta {
+  color: #8a8490;
+}
+
+/* Sidebar active link — mantém o fundo claro para contraste na sidebar laranja */
+.sidebar-link.active {
+  background: rgba(255,255,255,0.92);
+  color: #1a1411;
+}
+
+/* Inputs dentro do portal */
+.content input,
+.content select,
+.content textarea {
+  background: #1c1c20;
+  border-color: #2a2a30;
+  color: #f0ece8;
+}
+
+.content input::placeholder,
+.content select::placeholder,
+.content textarea::placeholder {
+  color: #5a5860;
+}

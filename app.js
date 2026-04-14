@@ -131,47 +131,119 @@ function render() {
 // ══════════════════════════════════════════════════════════════
 // LOGIN
 // ══════════════════════════════════════════════════════════════
-function renderLogin(msg = '') {
-  const nexusLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 90" width="180" height="60" class="nexus-logo-svg">
-    <path d="M 62 12 C 105 -8, 195 8, 210 55 C 218 78, 190 92, 165 85" fill="none" stroke="#E8491E" stroke-width="5.5" stroke-linecap="round"/>
-    <text x="20" y="68" font-family="'Bricolage Grotesque','Arial Black',sans-serif" font-weight="900" font-size="58" fill="#f0f0f0">NEXUS</text>
-    <text x="68" y="84" font-family="'Geist Mono','Arial',monospace" font-size="11" fill="rgba(240,240,240,0.5)" letter-spacing="4">ENGLISH CENTER</text>
-  </svg>`;
+// LOGIN
+// ══════════════════════════════════════════════════════════════
+function renderLogin() {
+  const wrap = h('div', { className: 'login-wrap' });
 
-  document.getElementById('app').innerHTML = `
-    <div class="login-wrap">
-      <div class="login-left">
-        <div class="login-mark-wrap">
-          ${nexusLogo}
-        </div>
-        <div class="login-hero">
-          <h1>Bem-vindo ao<br><strong>Portal do Aluno</strong></h1>
-          <p>Acesse suas aulas, materiais e acompanhe sua evolução no inglês.</p>
-        </div>
-        <div style="height:40px"></div>
-      </div>
-      <div class="login-form">
-        <div class="login-form-inner">
-          <div class="login-heading">
-            <div class="login-form-kicker">Portal do Aluno</div>
-            <h2>Área do aluno</h2>
-            <p>Acesse seu portal e continue sua jornada no inglês.</p>
-          </div>
-          ${msg ? `<div class="login-error">${msg}</div>` : '<div class="login-error"></div>'}
-          <div class="field">
-            <label class="field-label">Usuário</label>
-            <input class="field-input" id="user" placeholder="seu.usuario" autocomplete="username">
-          </div>
-          <div class="field">
-            <label class="field-label">Senha</label>
-            <input class="field-input" type="password" id="pass" placeholder="••••••" autocomplete="current-password">
-          </div>
-          <button class="login-btn" onclick="doLogin()">Entrar</button>
-        </div>
-      </div>
-    </div>
-  `;
-  document.getElementById('user').focus();
+  // Coluna esquerda decorativa
+  const left = h('div', { className: 'login-left' });
+  const logoLeft = h('div', { className: 'login-left-logo', innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 95" width="200" height="68"><path d="M 38 72 C 10 55, 10 15, 50 5 C 90 -5, 195 5, 220 45 C 235 68, 215 88, 185 85" fill="none" stroke="#d9622d" stroke-width="6" stroke-linecap="round"/><text x="28" y="72" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="62" fill="#ffffff" letter-spacing="-2">NEXUS</text><text x="62" y="88" font-family="Arial, sans-serif" font-weight="400" font-size="13" fill="#ffffff" letter-spacing="3">ENGLISH CENTER</text></svg>` });
+  const heroText = h('div', { className: 'login-left-hero' },
+    h('h1', { innerHTML: 'Bem-vindo ao<br><span>Portal do Aluno</span>' }),
+    h('p', {}, 'Acesse suas aulas, materiais e acompanhe sua evolução no inglês.')
+  );
+  left.append(logoLeft, heroText);
+
+  // Coluna direita com formulário
+  const right = h('div', { className: 'login-right' });
+  const form = h('div', { className: 'login-form' });
+
+  const kicker = h('div', { className: 'login-form-kicker' },
+    h('div', { className: 'login-kicker-line' }),
+    h('span', {}, 'PORTAL DO ALUNO')
+  );
+  form.appendChild(kicker);
+  form.appendChild(h('h2', { className: 'login-form-title', innerHTML: 'Área do <span>aluno</span>' }));
+  form.appendChild(h('p', { className: 'login-form-sub' }, 'Acesse seu portal e continue sua jornada no inglês.'));
+
+  const errBox = h('div', { className: 'login-error', style: { display: 'none' } });
+
+  const userInput = h('input', {
+    className: 'field-input',
+    placeholder: 'seu.usuario',
+    autocomplete: 'username',
+    id: 'login-user-input'
+  });
+
+  const pwInput = h('input', {
+    className: 'field-input',
+    type: 'password',
+    placeholder: '••••••',
+    autocomplete: 'current-password'
+  });
+
+  const doLogin = async () => {
+    const username = userInput.value.toLowerCase().trim();
+    const password = pwInput.value;
+
+    if (!username || !password) {
+      errBox.textContent = 'Preencha usuário e senha';
+      errBox.style.display = 'flex';
+      return;
+    }
+
+    errBox.style.display = 'none';
+
+    // Tenta admin primeiro
+    const { data: adminData, error: adminError } = await db
+      .from('student_portal_admins')
+      .select('*')
+      .eq('username', username)
+      .eq('password', password)
+      .single();
+
+    if (!adminError && adminData) {
+      state.user = adminData;
+      state.userType = 'admin';
+      state.loginTab = 'admin';
+      state.screen = 'portal';
+      state.tab = 'admin';
+      await loadAll();
+      return;
+    }
+
+    // Tenta aluno
+    const { data: studentData, error: studentError } = await db
+      .from('students')
+      .select('*')
+      .eq('username', username)
+      .eq('password', password)
+      .single();
+
+    if (!studentError && studentData) {
+      state.user = studentData;
+      state.userType = 'student';
+      state.loginTab = 'student';
+      state.screen = 'portal';
+      state.tab = 'home';
+      await loadAll();
+      return;
+    }
+
+    errBox.textContent = 'Usuário ou senha incorretos';
+    errBox.style.display = 'flex';
+  };
+
+  pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  userInput.addEventListener('keydown', e => { if (e.key === 'Enter') pwInput.focus(); });
+
+  form.append(
+    errBox,
+    h('div', { className: 'field' },
+      h('label', { className: 'field-label' }, 'USUÁRIO'),
+      userInput
+    ),
+    h('div', { className: 'field' },
+      h('label', { className: 'field-label' }, 'SENHA'),
+      pwInput
+    ),
+    h('button', { className: 'login-btn', onClick: doLogin }, 'Entrar'),
+  );
+
+  right.appendChild(form);
+  wrap.append(left, right);
+  return wrap;
 }
 
 function renderPortal() {

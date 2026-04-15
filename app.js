@@ -429,67 +429,85 @@ function renderSidebar(isAdmin) {
 // STUDENT: HOME
 // ══════════════════════════════════════════════════════════════
 function renderHome() {
-  const d = h('div');
+  const d = h('div', { className: 'home-page' });
   const mod = state.user.module || 'starter';
   const modLabel = MODULES.find(m => m.id === mod)?.label || '—';
   const unitLabel = UNITS.find(u => u.id === state.user.unit)?.label || '—';
+  const firstName = state.user.name ? state.user.name.split(' ')[0] : 'Aluno';
 
-  // Welcome
-  d.appendChild(h('div', { className: 'welcome' },
-    h('h1', { className: 'welcome-title' },
-      h('span', {}, 'Welcome'),
-      h('span', { className: 'welcome-wave' }, waveIconSvg())
+  // Streak e progresso (calculados localmente por ora)
+  const streak = state.user.streak || 0;
+  const progress = state.user.progress || 0;
+
+  // ── 1. TOPO ──
+  const topBar = h('div', { className: 'home-topbar' },
+    h('div', { className: 'home-welcome' },
+      h('h1', { className: 'home-welcome-title' }, 'Welcome back, ' + firstName + ' 👋'),
+      h('p', { className: 'home-welcome-sub' }, "You're on: ", h('strong', {}, modLabel), ' • ', h('strong', {}, unitLabel))
     ),
-    h('div', { className: 'welcome-meta' },
-      h('span', {}, state.user.name.split(' ')[0]),
-      h('span', { className: 'divider' }),
-      h('span', {}, h('strong', {}, modLabel)),
-      h('span', { className: 'divider' }),
-      h('span', {}, unitLabel)
+    h('div', { className: 'home-stats' },
+      h('div', { className: 'home-stat' },
+        h('span', { className: 'home-stat-icon' }, '🔥'),
+        h('div', {},
+          h('div', { className: 'home-stat-value' }, streak + (streak === 1 ? ' day' : ' days')),
+          h('div', { className: 'home-stat-label' }, 'Streak')
+        )
+      ),
+      h('div', { className: 'home-stat' },
+        h('span', { className: 'home-stat-icon' }, '📊'),
+        h('div', {},
+          h('div', { className: 'home-stat-value' }, progress + '%'),
+          h('div', { className: 'home-stat-label' }, 'Progress')
+        )
+      )
     )
-  ));
-
-  // Visible sections as cards
-  const visibleSections = state.data.sections.filter(s => s.name !== 'Materiais do Curso' && s.name !== 'Atividades Extras' &&
-    s.visible && (!s.target_modules || s.target_modules.length === 0 || s.target_modules.includes(mod))
   );
+  d.appendChild(topBar);
 
-  if (visibleSections.length === 0) {
-    d.appendChild(h('div', { className: 'empty-state' },
-      h('div', { className: 'empty-state-icon' }, icon('sparkle')),
-      h('div', { className: 'empty-state-title', innerHTML: 'Em <span>preparação</span>' }),
-      h('div', { className: 'empty-state-text' }, 'A coordenação está organizando o conteúdo. Volte em breve para acessar materiais novos.')
+  // ── 2. DAILY PRACTICE CARD ──
+  const dailyCard = h('div', { className: 'home-daily-card' },
+    h('div', { className: 'home-daily-left' },
+      h('div', { className: 'home-daily-tag' }, '🔥 Daily Practice'),
+      h('h2', { className: 'home-daily-title' }, "Complete today's challenge"),
+      h('p', { className: 'home-daily-sub' }, '5 min • Quick exercises to keep your streak going')
+    ),
+    h('button', {
+      className: 'home-daily-btn',
+      onClick: () => { state.tab = 'daily'; render(); }
+    }, 'Start now →')
+  );
+  d.appendChild(dailyCard);
+
+  // ── 3. QUICK ACCESS GRID ──
+  const quickLabel = h('div', { className: 'home-section-label' }, 'Quick access');
+  d.appendChild(quickLabel);
+
+  const quickItems = [
+    { icon: '🎓', title: 'Aulas', desc: 'Watch your lessons', tab: 'aulas' },
+    { icon: '🧠', title: 'Exercícios', desc: 'Practice what you learned', tab: 'exercicios' },
+    { icon: '📚', title: 'Materiais', desc: 'Access extra content', tab: 'materiais' },
+    { icon: '🤖', title: 'Chat com IA', desc: 'Ask questions anytime', tab: 'chat' },
+  ];
+
+  const grid = h('div', { className: 'home-quick-grid' });
+  quickItems.forEach(item => {
+    grid.appendChild(h('div', {
+      className: 'home-quick-card',
+      onClick: () => { state.tab = item.tab; render(); }
+    },
+      h('div', { className: 'home-quick-icon' }, item.icon),
+      h('div', { className: 'home-quick-title' }, item.title),
+      h('div', { className: 'home-quick-desc' }, item.desc)
     ));
-  } else {
-    const grid = h('div', { className: 'cards-grid' });
-    visibleSections.forEach(sec => {
-      const count = state.data.contents.filter(c =>
-        c.section_id === sec.id &&
-        (!c.target_modules || c.target_modules.length === 0 || c.target_modules.includes(mod))
-      ).length;
+  });
+  d.appendChild(grid);
 
-      grid.appendChild(h('div', {
-        className: 'info-card',
-        onClick: () => { state.currentSection = sec.id; state.tab = 'section'; render(); }
-      },
-        h('div', { className: 'info-card-head' },
-          h('div', { className: 'info-card-title' }, sec.name),
-          count > 0 && h('div', { className: 'info-card-count' }, count)
-        ),
-        h('div', { className: 'info-card-desc' }, sec.description || 'Conteúdos desta seção'),
-        h('div', { className: 'info-card-arrow' }, 'Acessar', icon('arrowRight'))
-      ));
-    });
-    d.appendChild(grid);
-  }
-
-  // Pinned announcements
-  const pinned = state.data.announcements.filter(a => a.pinned && (!a.target_modules || a.target_modules.length === 0 || a.target_modules.includes(mod)));
+  // ── 4. AVISOS FIXADOS ──
+  const pinned = state.data.announcements.filter(a =>
+    a.pinned && (!a.target_modules || a.target_modules.length === 0 || a.target_modules.includes(mod))
+  );
   if (pinned.length > 0) {
-    d.appendChild(h('div', { className: 'section-kicker' },
-      h('span', { className: 'section-kicker-label' }, 'Em destaque'),
-      h('div', { className: 'section-kicker-line' })
-    ));
+    d.appendChild(h('div', { className: 'home-section-label' }, 'Em destaque'));
     const list = h('div', { className: 'announcement-list' });
     pinned.slice(0, 2).forEach(a => list.appendChild(announcementNode(a)));
     d.appendChild(list);

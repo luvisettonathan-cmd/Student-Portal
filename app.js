@@ -432,7 +432,6 @@ function renderHome() {
   const d = h('div', { className: 'home-page' });
   const mod = state.user.module || 'starter';
   const modLabel = MODULES.find(m => m.id === mod)?.label || '—';
-  const unitLabel = UNITS.find(u => u.id === state.user.unit)?.label || '—';
   const firstName = state.user.name ? state.user.name.split(' ')[0] : 'Aluno';
 
   // Streak e progresso (calculados localmente por ora)
@@ -443,7 +442,7 @@ function renderHome() {
   const topBar = h('div', { className: 'home-topbar' },
     h('div', { className: 'home-welcome' },
       h('h1', { className: 'home-welcome-title' }, 'Welcome back, ' + firstName + ' 👋'),
-      h('p', { className: 'home-welcome-sub' }, "You're on: ", h('strong', {}, modLabel), ' • ', h('strong', {}, unitLabel))
+      h('p', { className: 'home-welcome-sub' }, "You're on: ", h('strong', {}, modLabel))
     ),
     h('div', { className: 'home-stats' },
       h('div', { className: 'home-stat' },
@@ -483,39 +482,32 @@ function renderHome() {
   d.appendChild(quickLabel);
 
   const quickItems = [
-    { icon: '🎓', title: 'Aulas', desc: 'Watch your lessons', tab: 'aulas' },
-    { icon: '🧠', title: 'Exercícios', desc: 'Practice what you learned', tab: 'exercicios' },
-    { icon: '📚', title: 'Materiais', desc: 'Access extra content', tab: 'materiais' },
-    { icon: '🤖', title: 'Chat com IA', desc: 'Ask questions anytime', tab: 'chat' },
+    { iconName: 'book',     title: 'Aulas',       desc: 'Watch your lessons',        tab: 'aulas' },
+    { iconName: 'stack',    title: 'Exercícios',  desc: 'Practice what you learned', tab: 'exercicios' },
+    { iconName: 'compass',  title: 'Materiais',   desc: 'Access extra content',      tab: 'materiais' },
+    { iconName: 'waveform', title: 'Chat com IA', desc: 'Ask questions anytime',     tab: 'chat' },
   ];
 
   const grid = h('div', { className: 'home-quick-grid' });
   quickItems.forEach(item => {
+    const iconEl = icon(item.iconName);
+    if (iconEl) {
+      iconEl.removeAttribute('class');
+      iconEl.setAttribute('class', 'home-quick-svg');
+    }
     grid.appendChild(h('div', {
       className: 'home-quick-card',
       onClick: () => { state.tab = item.tab; render(); }
     },
-      h('div', { className: 'home-quick-icon' }, item.icon),
+      h('div', { className: 'home-quick-icon' }, iconEl || ''),
       h('div', { className: 'home-quick-title' }, item.title),
       h('div', { className: 'home-quick-desc' }, item.desc)
     ));
   });
   d.appendChild(grid);
 
-  // ── 4. AVISOS FIXADOS ──
-  const pinned = state.data.announcements.filter(a =>
-    a.pinned && (!a.target_modules || a.target_modules.length === 0 || a.target_modules.includes(mod))
-  );
-  if (pinned.length > 0) {
-    d.appendChild(h('div', { className: 'home-section-label' }, 'Em destaque'));
-    const list = h('div', { className: 'announcement-list' });
-    pinned.slice(0, 2).forEach(a => list.appendChild(announcementNode(a)));
-    d.appendChild(list);
-  }
-
   return d;
 }
-
 function waveIconSvg() {
   const w = document.createElement('span');
   w.style.display = 'inline-flex';

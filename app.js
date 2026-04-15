@@ -1140,31 +1140,237 @@ function renderAdminStudents() {
     h('span', { className: 'info-panel-icon' }, icon('info')),
     h('div', {},
       h('div', { className: 'info-panel-title' }, 'Como funciona'),
-      h('div', { className: 'info-panel-text', innerHTML: 'Cada aluno precisa de <strong>login individual</strong> para acessar o portal. Use a unidade e o módulo certos — os conteúdos são filtrados automaticamente.' })
+      h('div', { className: 'info-panel-text', innerHTML: 'Cada aluno precisa de <strong>login individual</strong> para acessar o portal. Use a unidade e o m\u00f3dulo certos \u2014 os conte\u00fados s\u00e3o filtrados automaticamente.' })
     )
   ));
 
-  const addBtn = h('button', { className: 'btn-add', onClick: async () => {
-    const name = prompt('Nome completo do aluno:'); if (!name) return;
-    const username = prompt('Nome de usuário (ex: joao.silva, sem espaços):'); if (!username) return;
-    const password = prompt('Senha inicial:'); if (!password) return;
-    const email = prompt('E-mail (opcional):') || '';
-    const module = prompt('Módulo (starter, a1, a2, b1, b2):', 'starter') || 'starter';
-    const unit = prompt('Unidade (chapeco, passo-fundo, online):', 'chapeco') || 'chapeco';
+  // ---- MODAL ----
+  function openStudentModal(student) {
+    const isEdit = !!student;
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
 
-    const exists = state.data.students.find(s => s.username === username.toLowerCase().trim());
-    if (exists) { alert('Esse nome de usuário já existe!'); return; }
+    const modal = document.createElement('div');
+    modal.className = 'modal-container';
 
-    await dbInsert('students', {
-      username: username.toLowerCase().trim(),
-      password, name, email,
-      module: module.toLowerCase().trim(),
-      unit: unit.toLowerCase().trim()
+    // Helper: generate username from full name
+    function generateUsername(name) {
+      return name.trim().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, '.')
+        .replace(/[^a-z0-9.]/g, '');
+    }
+
+    // Helper: generate random password
+    function generatePassword() {
+      const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!';
+      let p = '';
+      for (let i = 0; i < 10; i++) p += chars[Math.floor(Math.random() * chars.length)];
+      return p;
+    }
+
+    modal.innerHTML = `
+      <div class="modal-header">
+        <h2 class="modal-title">${isEdit ? 'Edit Student' : 'Create Student'}</h2>
+        <button class="modal-close-btn" id="modalCloseBtn">&#x2715;</button>
+      </div>
+      <div class="modal-body">
+        <form id="studentModalForm" autocomplete="off">
+
+          <div class="modal-section">
+            <h3 class="modal-section-title">Informa\u00e7\u00f5es do aluno</h3>
+            <div class="modal-field">
+              <label class="modal-label" for="fieldName">Nome completo <span class="required">*</span></label>
+              <input class="modal-input" type="text" id="fieldName" placeholder="Ex: Jo\u00e3o da Silva" value="${isEdit ? (student.name || '') : ''}" required />
+            </div>
+            <div class="modal-field">
+              <label class="modal-label" for="fieldUsername">Username <span class="required">*</span></label>
+              <div class="modal-input-row">
+                <input class="modal-input" type="text" id="fieldUsername" placeholder="joao.silva" value="${isEdit ? (student.username || '') : ''}" required ${isEdit ? 'readonly' : ''} />
+              </div>
+              <p class="modal-hint">Gerado automaticamente a partir do nome</p>
+            </div>
+            <div class="modal-field">
+              <label class="modal-label" for="fieldPassword">Senha ${isEdit ? '' : '<span class="required">*</span>'}</label>
+              <div class="modal-input-row">
+                <input class="modal-input" type="text" id="fieldPassword" placeholder="${isEdit ? 'Deixe em branco para manter' : 'Digite ou gere automaticamente'}" autocomplete="new-password" />
+                <button type="button" class="btn-gen-pass" id="btnGenPass">Gerar</button>
+              </div>
+            </div>
+            <div class="modal-field">
+              <label class="modal-label" for="fieldEmail">E-mail</label>
+              <input class="modal-input" type="email" id="fieldEmail" placeholder="joao@email.com" value="${isEdit ? (student.email || '') : ''}" />
+            </div>
+          </div>
+
+          <div class="modal-section">
+            <h3 class="modal-section-title">Configura\u00e7\u00e3o acad\u00eamica</h3>
+            <div class="modal-row-2">
+              <div class="modal-field">
+                <label class="modal-label" for="fieldModule">N\u00edvel <span class="required">*</span></label>
+                <select class="modal-select" id="fieldModule" required>
+                  <option value="">Selecione...</option>
+                  ${MODULES.map(m => `<option value="${m.id}" ${isEdit && student.module === m.id ? 'selected' : ''}>${m.label}</option>`).join('')}
+                </select>
+              </div>
+              <div class="modal-field">
+                <label class="modal-label" for="fieldUnit">Unidade <span class="required">*</span></label>
+                <select class="modal-select" id="fieldUnit" required>
+                  <option value="">Selecione...</option>
+                  ${UNITS.map(u => `<option value="${u.id}" ${isEdit && student.unit === u.id ? 'selected' : ''}>${u.label}</option>`).join('')}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-section">
+            <h3 class="modal-section-title">Configura\u00e7\u00f5es</h3>
+            <div class="modal-checkboxes">
+              <label class="modal-checkbox-label">
+                <input type="checkbox" id="checkActive" ${!isEdit || student.active !== false ? 'checked' : ''} />
+                <span>Usu\u00e1rio ativo</span>
+              </label>
+              <label class="modal-checkbox-label">
+                <input type="checkbox" id="checkForcePass" />
+                <span>For\u00e7ar troca de senha no primeiro login</span>
+              </label>
+              <label class="modal-checkbox-label">
+                <input type="checkbox" id="checkResetProgress" />
+                <span>Resetar progresso</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="modal-section modal-summary-section">
+            <h3 class="modal-section-title">Resumo</h3>
+            <div class="modal-summary" id="modalSummary">
+              <div class="summary-row"><span class="summary-label">Nome</span><span class="summary-value" id="summaryName">-</span></div>
+              <div class="summary-row"><span class="summary-label">Username</span><span class="summary-value" id="summaryUsername">-</span></div>
+              <div class="summary-row"><span class="summary-label">N\u00edvel</span><span class="summary-value" id="summaryModule">-</span></div>
+              <div class="summary-row"><span class="summary-label">Unidade</span><span class="summary-value" id="summaryUnit">-</span></div>
+            </div>
+          </div>
+
+        </form>
+        <div class="modal-error" id="modalError" style="display:none"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" id="modalCancelBtn">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="modalSubmitBtn">
+          ${isEdit ? 'Salvar altera\u00e7\u00f5es' : 'Criar aluno'}
+        </button>
+      </div>
+    `;
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    requestAnimationFrame(() => overlay.classList.add('modal-visible'));
+
+    const fieldName = modal.querySelector('#fieldName');
+    const fieldUsername = modal.querySelector('#fieldUsername');
+    const fieldPassword = modal.querySelector('#fieldPassword');
+    const fieldEmail = modal.querySelector('#fieldEmail');
+    const fieldModule = modal.querySelector('#fieldModule');
+    const fieldUnit = modal.querySelector('#fieldUnit');
+    const btnGenPass = modal.querySelector('#btnGenPass');
+    const modalError = modal.querySelector('#modalError');
+
+    function updateSummary() {
+      modal.querySelector('#summaryName').textContent = fieldName.value.trim() || '-';
+      modal.querySelector('#summaryUsername').textContent = fieldUsername.value.trim() || '-';
+      const modEl = fieldModule;
+      modal.querySelector('#summaryModule').textContent = modEl.options[modEl.selectedIndex]?.text || '-';
+      const unitEl = fieldUnit;
+      modal.querySelector('#summaryUnit').textContent = unitEl.options[unitEl.selectedIndex]?.text || '-';
+    }
+
+    if (!isEdit) {
+      fieldName.addEventListener('input', () => {
+        if (fieldName.value.trim()) {
+          fieldUsername.value = generateUsername(fieldName.value);
+        }
+        updateSummary();
+      });
+    }
+    fieldUsername.addEventListener('input', updateSummary);
+    fieldModule.addEventListener('change', updateSummary);
+    fieldUnit.addEventListener('change', updateSummary);
+    btnGenPass.addEventListener('click', () => {
+      fieldPassword.value = generatePassword();
     });
-    await loadAll();
-  }}, icon('plus'), 'Cadastrar aluno');
+
+    updateSummary();
+
+    function closeModal() {
+      overlay.classList.remove('modal-visible');
+      setTimeout(() => overlay.remove(), 250);
+    }
+
+    modal.querySelector('#modalCloseBtn').addEventListener('click', closeModal);
+    modal.querySelector('#modalCancelBtn').addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+
+    modal.querySelector('#modalSubmitBtn').addEventListener('click', async () => {
+      const name = fieldName.value.trim();
+      const username = fieldUsername.value.trim();
+      const password = fieldPassword.value.trim();
+      const email = fieldEmail.value.trim();
+      const module = fieldModule.value;
+      const unit = fieldUnit.value;
+      const active = modal.querySelector('#checkActive').checked;
+
+      modalError.style.display = 'none';
+
+      if (!name || !username || !module || !unit) {
+        modalError.textContent = 'Preencha todos os campos obrigat\u00f3rios.';
+        modalError.style.display = 'block';
+        return;
+      }
+
+      if (!isEdit && !password) {
+        modalError.textContent = 'Informe uma senha para o novo aluno.';
+        modalError.style.display = 'block';
+        return;
+      }
+
+      const btn = modal.querySelector('#modalSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Salvando...';
+
+      try {
+        if (isEdit) {
+          const updates = { name, module, unit, email, active };
+          if (password) updates.password = password;
+          await dbUpdate('students', student.id, updates);
+        } else {
+          const exists = state.data.students.find(s => s.username === username.toLowerCase());
+          if (exists) throw new Error('J\u00e1 existe um aluno com esse username.');
+          await dbInsert('students', {
+            username: username.toLowerCase(),
+            password, name, email,
+            module: module.toLowerCase(),
+            unit: unit.toLowerCase(),
+            active
+          });
+        }
+        await loadAll();
+        closeModal();
+      } catch (err) {
+        modalError.textContent = err.message || 'Erro ao salvar. Tente novamente.';
+        modalError.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = isEdit ? 'Salvar altera\u00e7\u00f5es' : 'Criar aluno';
+      }
+    });
+  }
+
+  // ---- ADD BUTTON ----
+  const addBtn = h('button', { className: 'btn-add', onClick: () => openStudentModal(null) },
+    icon('plus'), 'Cadastrar aluno');
   d.appendChild(addBtn);
 
+  // ---- MODULE FILTER ----
   const filter = h('div', { className: 'module-filter' });
   ['all', 'starter', 'a1', 'a2', 'b1', 'b2'].forEach(m => {
     filter.appendChild(h('button', {
@@ -1182,12 +1388,13 @@ function renderAdminStudents() {
     d.appendChild(h('div', { className: 'empty-state' },
       h('div', { className: 'empty-state-icon' }, icon('users')),
       h('div', { className: 'empty-state-title', innerHTML: 'Nenhum <span>aluno</span>' }),
-      h('div', { className: 'empty-state-text' }, 'Clique em "Cadastrar aluno" para começar.')
+      h('div', { className: 'empty-state-text' }, 'Clique em "Cadastrar aluno" para come\u00e7ar.')
     ));
   } else {
-    const grid = h('div', { className: 'students-grid' });
+    const grid = h('div', { className: 'student-grid' });
     filtered.forEach(s => {
-      const initials = s.name.split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
+      const names = (s.name || '').split(' ');
+      const initials = (names[0]?.[0] || '') + (names[1]?.[0] || '');
       grid.appendChild(h('div', { className: 'student-card' },
         h('div', { className: 'student-top' },
           h('div', { className: 'student-avatar' }, initials),
@@ -1197,24 +1404,15 @@ function renderAdminStudents() {
           )
         ),
         h('div', { className: 'student-details' },
-          h('div', {}, 'Módulo', h('strong', {}, (s.module || '—').toUpperCase())),
-          h('div', {}, 'Unidade', h('strong', {}, UNITS.find(u => u.id === s.unit)?.label || '—'))
+          h('div', {}, 'M\u00f3dulo', h('strong', {}, (s.module || '?').toUpperCase())),
+          h('div', {}, 'Unidade', h('strong', {}, UNITS.find(u => u.id === s.unit)?.label || '?'))
         ),
         h('div', { className: 'student-card-actions' },
-          h('button', { className: 'btn btn-ghost btn-small', onClick: async () => {
-            const name = prompt('Nome:', s.name); if (!name) return;
-            const password = prompt('Nova senha (vazio = manter):', '');
-            const module = prompt('Módulo:', s.module) || s.module;
-            const unit = prompt('Unidade:', s.unit) || s.unit;
-            const email = prompt('E-mail:', s.email || '') || '';
-            const updates = { name, module, unit, email };
-            if (password) updates.password = password;
-            await dbUpdate('students', s.id, updates); await loadAll();
-          }}, 'Editar'),
-          h('button', { className: 'btn btn-ghost btn-small', onClick: async () => {
+          h('button', { className: 'btn btn-ghost btn-small', onClick: () => openStudentModal(s) }, 'Editar'),
+          h('button', { className: 'btn btn-ghost btn-small btn-danger', onClick: async () => {
             if (!confirm('Excluir aluno ' + s.name + '?')) return;
             await dbDelete('students', s.id); await loadAll();
-            }}, 'Excluir')
+          }}, 'Excluir')
         )
       ));
     });

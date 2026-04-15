@@ -269,6 +269,7 @@ function renderPortal() {
     if (state.currentSection) content.appendChild(renderSectionDetail());
     else if (state.tab === 'home') content.appendChild(renderHome());
     else if (state.tab === 'announcements') content.appendChild(renderAnnouncements());
+    else if (state.tab === 'aulas') content.appendChild(renderAulas());
   }
 
   wrap.appendChild(content);
@@ -605,6 +606,258 @@ function renderAnnouncements() {
 
   return d;
 }
+
+// ══════════════════════════════════════════════════════════════
+// AULAS
+// ══════════════════════════════════════════════════════════════
+function renderAulas() {
+  // ── Dados dos cursos gerados automaticamente ──
+  const COURSES = [
+    {
+      id: 'starter', label: 'Starter',
+      lessons: Array.from({ length: 8 }, (_, i) => ({ id: `starter-${i+1}`, label: `Lesson ${i+1}`, num: i+1 }))
+    },
+    {
+      id: 'a1', label: 'A1',
+      lessons: Array.from({ length: 10 }, (_, i) => ({ id: `a1-${i+1}`, label: `Lesson ${i+1}`, num: i+1 }))
+    },
+    {
+      id: 'a2', label: 'A2',
+      lessons: Array.from({ length: 10 }, (_, i) => ({ id: `a2-${i+11}`, label: `Lesson ${i+11}`, num: i+11 }))
+    },
+    {
+      id: 'b1', label: 'B1',
+      lessons: Array.from({ length: 10 }, (_, i) => ({ id: `b1-${i+21}`, label: `Lesson ${i+21}`, num: i+21 }))
+    },
+    {
+      id: 'b2', label: 'B2',
+      lessons: Array.from({ length: 19 }, (_, i) => i + 1)
+        .filter(n => ![5, 10, 15, 20].includes(n))
+        .map(n => ({ id: `b2-${n}`, label: `Unit ${n}`, num: n }))
+    },
+  ];
+
+  // ── Estado local (persiste em state.aulas) ──
+  if (!state.aulas) state.aulas = { level: 'starter', openLesson: null, quizAnswers: {}, quizSubmitted: {} };
+  const as = state.aulas;
+
+  // ── Progresso salvo no localStorage ──
+  function getProgress() {
+    try { return JSON.parse(localStorage.getItem('nexus_aulas_progress') || '{}'); } catch { return {}; }
+  }
+  function saveProgress(p) {
+    localStorage.setItem('nexus_aulas_progress', JSON.stringify(p));
+  }
+  function markComplete(lessonId) {
+    const p = getProgress(); p[lessonId] = 'completed'; saveProgress(p);
+  }
+  function getStatus(lessonId) {
+    const p = getProgress(); return p[lessonId] || 'not-started';
+  }
+  function getLevelProgress(course) {
+    const p = getProgress();
+    const total = course.lessons.length;
+    const done = course.lessons.filter(l => p[l.id] === 'completed').length;
+    return { done, total, pct: total > 0 ? Math.round((done / total) * 100) : 0 };
+  }
+
+  // ── Wrapper principal ──
+  const page = h('div', { className: 'aulas-page' });
+
+  // ── Título ──
+  page.appendChild(h('div', { className: 'aulas-header' },
+    h('h1', { className: 'aulas-title' }, 'Aulas'),
+    h('p', { className: 'aulas-subtitle' }, 'Selecione um nível e acompanhe seu progresso')
+  ));
+
+  // ── Level Tabs ──
+  const tabs = h('div', { className: 'aulas-tabs' });
+  COURSES.forEach(course => {
+    const active = as.level === course.id;
+    const prog = getLevelProgress(course);
+    tabs.appendChild(h('button', {
+      className: `aulas-tab ${active ? 'active' : ''}`,
+      onClick: () => { as.level = course.id; as.openLesson = null; as.quizAnswers = {}; as.quizSubmitted = {}; render(); }
+    },
+      h('span', { className: 'aulas-tab-label' }, course.label),
+      h('span', { className: `aulas-tab-badge ${prog.pct === 100 ? 'done' : ''}` }, prog.pct + '%')
+    ));
+  });
+  page.appendChild(tabs);
+
+  const activeCourse = COURSES.find(c => c.id === as.level);
+  const prog = getLevelProgress(activeCourse);
+
+  // ── Progress bar do nível ──
+  const progBar = h('div', { className: 'aulas-level-progress' },
+    h('div', { className: 'aulas-level-progress-info' },
+      h('span', {}, activeCourse.label + ' — ' + prog.done + ' de ' + prog.total + ' aulas concluídas'),
+      h('span', { className: 'aulas-level-progress-pct' }, prog.pct + '%')
+    ),
+    h('div', { className: 'aulas-progress-track' },
+      h('div', { className: 'aulas-progress-fill', style: `width:${prog.pct}%` })
+    )
+  );
+  page.appendChild(progBar);
+
+  // ── Painel de aula aberta ──
+  if (as.openLesson) {
+    const lesson = activeCourse.lessons.find(l => l.id === as.openLesson);
+    if (lesson) {
+      const status = getStatus(lesson.id);
+      const panel = h('div', { className: 'aulas-lesson-panel' });
+
+      // Cabeçalho do painel
+      panel.appendChild(h('div', { className: 'aulas-panel-header' },
+        h('div', { className: 'aulas-panel-title-row' },
+          h('h2', { className: 'aulas-panel-title' }, lesson.label),
+          h('div', { className: 'aulas-panel-actions' },
+            status !== 'completed' ? h('button', {
+              className: 'aulas-complete-btn',
+              onClick: () => { markComplete(lesson.id); render(); }
+            }, '✓ Marcar como concluída') : h('span', { className: 'aulas-complete-badge' }, '✓ Concluída'),
+            h('button', { className: 'aulas-close-btn', onClick: () => { as.openLesson = null; render(); } }, '✕ Fechar')
+          )
+        )
+      ));
+
+      // Player de vídeo (placeholder)
+      panel.appendChild(h('div', { className: 'aulas-video-wrapper' },
+        h('div', { className: 'aulas-video-placeholder' },
+          h('div', { className: 'aulas-video-icon' }, icon('book')),
+          h('p', { className: 'aulas-video-text' }, 'Vídeo da ' + lesson.label),
+          h('p', { className: 'aulas-video-hint' }, 'O vídeo será incorporado aqui')
+        )
+      ));
+
+      // Quiz
+      const quizKey = lesson.id;
+      const submitted = !!as.quizSubmitted[quizKey];
+
+      // Perguntas placeholder — serão substituídas por dados reais depois
+      const questions = [
+        {
+          id: 'q1', text: `Quiz: ${lesson.label} — Pergunta 1`,
+          options: ['Opção A', 'Opção B', 'Opção C', 'Opção D'], correct: 0
+        },
+        {
+          id: 'q2', text: `Quiz: ${lesson.label} — Pergunta 2`,
+          options: ['Opção A', 'Opção B', 'Opção C', 'Opção D'], correct: 1
+        },
+        {
+          id: 'q3', text: `Quiz: ${lesson.label} — Pergunta 3`,
+          options: ['Opção A', 'Opção B', 'Opção C', 'Opção D'], correct: 2
+        },
+      ];
+
+      const quizSection = h('div', { className: 'aulas-quiz' });
+      quizSection.appendChild(h('h3', { className: 'aulas-quiz-title' }, '📝 Quiz'));
+
+      questions.forEach((q, qi) => {
+        const qBlock = h('div', { className: 'aulas-quiz-question' });
+        qBlock.appendChild(h('p', { className: 'aulas-quiz-q-text' }, (qi + 1) + '. ' + q.text));
+        const opts = h('div', { className: 'aulas-quiz-options' });
+        q.options.forEach((opt, oi) => {
+          const selected = as.quizAnswers[quizKey + '_' + q.id] === oi;
+          let optClass = 'aulas-quiz-opt';
+          if (submitted) {
+            if (oi === q.correct) optClass += ' correct';
+            else if (selected && oi !== q.correct) optClass += ' wrong';
+          } else if (selected) optClass += ' selected';
+
+          opts.appendChild(h('button', {
+            className: optClass,
+            disabled: submitted,
+            onClick: () => {
+              if (!submitted) {
+                as.quizAnswers[quizKey + '_' + q.id] = oi;
+                render();
+              }
+            }
+          }, opt));
+        });
+        qBlock.appendChild(opts);
+        quizSection.appendChild(qBlock);
+      });
+
+      if (!submitted) {
+        const allAnswered = questions.every(q => as.quizAnswers[quizKey + '_' + q.id] !== undefined);
+        quizSection.appendChild(h('button', {
+          className: `aulas-quiz-submit ${allAnswered ? '' : 'disabled'}`,
+          disabled: !allAnswered,
+          onClick: () => {
+            if (allAnswered) {
+              as.quizSubmitted[quizKey] = true;
+              markComplete(lesson.id);
+              render();
+            }
+          }
+        }, 'Enviar respostas'));
+      } else {
+        const score = questions.filter(q => as.quizAnswers[quizKey + '_' + q.id] === q.correct).length;
+        const pct = Math.round((score / questions.length) * 100);
+        const resultClass = pct >= 70 ? 'great' : pct >= 40 ? 'ok' : 'retry';
+        quizSection.appendChild(h('div', { className: `aulas-quiz-result ${resultClass}` },
+          h('span', { className: 'aulas-quiz-score' }, score + '/' + questions.length + ' corretas'),
+          h('span', { className: 'aulas-quiz-pct' }, pct + '%'),
+          pct < 70 ? h('button', {
+            className: 'aulas-quiz-retry',
+            onClick: () => {
+              as.quizAnswers = Object.fromEntries(
+                Object.entries(as.quizAnswers).filter(([k]) => !k.startsWith(quizKey + '_'))
+              );
+              as.quizSubmitted[quizKey] = false;
+              render();
+            }
+          }, '↺ Tentar novamente') : h('span', { className: 'aulas-quiz-congrats' }, '🎉 Parabéns!')
+        ));
+      }
+
+      panel.appendChild(quizSection);
+      page.appendChild(panel);
+    }
+  }
+
+  // ── Grade de aulas ──
+  const grid = h('div', { className: 'aulas-grid' });
+  activeCourse.lessons.forEach(lesson => {
+    const status = getStatus(lesson.id);
+    const isOpen = as.openLesson === lesson.id;
+    const card = h('div', {
+      className: `aulas-card ${status} ${isOpen ? 'open' : ''}`,
+      onClick: () => {
+        as.openLesson = isOpen ? null : lesson.id;
+        as.quizAnswers = {};
+        as.quizSubmitted = {};
+        render();
+        // Scroll suave ao painel
+        setTimeout(() => {
+          const panel = document.querySelector('.aulas-lesson-panel');
+          if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 50);
+      }
+    },
+      h('div', { className: 'aulas-card-top' },
+        h('span', { className: 'aulas-card-num' }, lesson.num),
+        h('span', { className: `aulas-status-dot ${status}` })
+      ),
+      h('div', { className: 'aulas-card-title' }, lesson.label),
+      h('div', { className: 'aulas-card-icons' },
+        h('span', { className: 'aulas-card-icon-item' }, icon('book'), h('span', {}, 'Vídeo')),
+        h('span', { className: 'aulas-card-icon-item' }, icon('shape'), h('span', {}, 'Quiz'))
+      ),
+      h('div', { className: `aulas-status-label ${status}` },
+        status === 'completed' ? '✓ Concluída' :
+        status === 'in-progress' ? '▶ Em andamento' : '○ Não iniciada'
+      )
+    );
+    grid.appendChild(card);
+  });
+  page.appendChild(grid);
+
+  return page;
+}
+
 
 function announcementNode(a) {
   const dt = new Date(a.created_at);

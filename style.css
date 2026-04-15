@@ -1834,9 +1834,20 @@ body {
 }
 
 .home-quick-icon {
-  font-size: 36px;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
   margin-bottom: 14px;
+  color: var(--dark-orange);
+}
+
+.home-quick-svg {
+  width: 32px;
+  height: 32px;
+  stroke: var(--dark-orange);
+  stroke-width: 1.5;
   display: block;
 }
 

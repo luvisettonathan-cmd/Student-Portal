@@ -755,7 +755,67 @@ function renderAdminStudents() {
   }
   return d;
 }
-function renderAdminTabHome(){const d=h('div');d.appendChild(h('div',{className:'admin-section-header'},h('h2',{className:'admin-section-title'},'Home'),h('p',{className:'admin-section-sub'},'Gerencie o conteudo da tela inicial do aluno.')));d.appendChild(h('div',{className:'info-panel'},h('span',{className:'info-panel-icon'},icon('home')),h('div',{},h('div',{className:'info-panel-title'},'Secao Home'),h('div',{className:'info-panel-text',innerHTML:'A tela Home e a primeira que o aluno ve ao entrar no portal. Use a secao <strong>Conteudos</strong> para adicionar materiais vinculados.'}))));const btn=h('button',{className:'btn-primary',onClick:()=>{state.adminSubTab='contents';render();}},icon('stack'),'Ir para Conteudos');d.appendChild(btn);return d;} function renderAdminTabDaily(){const d=h('div');d.appendChild(h('div',{className:'admin-section-header'},h('h2',{className:'admin-section-title'},'Daily Practice'),h('p',{className:'admin-section-sub'},'Gerencie os exercicios diarios dos alunos.')));d.appendChild(h('div',{className:'info-panel'},h('span',{className:'info-panel-icon'},icon('spark')),h('div',{},h('div',{className:'info-panel-title'},'Daily Practice'),h('div',{className:'info-panel-text',innerHTML:'Adicione atividades de pratica diaria. Os alunos acessam esta secao todos os dias para praticar.'}))));const btn=h('button',{className:'btn-primary',onClick:()=>{state.adminSubTab='contents';render();}},icon('stack'),'Ir para Conteudos');d.appendChild(btn);return d;} function renderAdminTabAulas(){const d=h('div');d.appendChild(h('div',{className:'admin-section-header'},h('h2',{className:'admin-section-title'},'Aulas'),h('p',{className:'admin-section-sub'},'Gerencie as aulas do modulo.')));d.appendChild(h('div',{className:'info-panel'},h('span',{className:'info-panel-icon'},icon('book')),h('div',{},h('div',{className:'info-panel-title'},'Aulas'),h('div',{className:'info-panel-text',innerHTML:'Adicione aulas em video, PDF ou link externo. Organize por modulo e visibilidade.'}))));const btn=h('button',{className:'btn-primary',onClick:()=>{state.adminSubTab='contents';render();}},icon('stack'),'Ir para Conteudos');d.appendChild(btn);return d;} function renderAdminTabExercicios(){const d=h('div');d.appendChild(h('div',{className:'admin-section-header'},h('h2',{className:'admin-section-title'},'Exercicios'),h('p',{className:'admin-section-sub'},'Gerencie os exercicios do modulo.')));d.appendChild(h('div',{className:'info-panel'},h('span',{className:'info-panel-icon'},icon('stack')),h('div',{},h('div',{className:'info-panel-title'},'Exercicios'),h('div',{className:'info-panel-text',innerHTML:'Adicione listas de exercicios, quizzes e atividades de fixacao para os alunos.'}))));const btn=h('button',{className:'btn-primary',onClick:()=>{state.adminSubTab='contents';render();}},icon('stack'),'Ir para Conteudos');d.appendChild(btn);return d;} function renderAdminTabMateriais(){const d=h('div');d.appendChild(h('div',{className:'admin-section-header'},h('h2',{className:'admin-section-title'},'Materiais'),h('p',{className:'admin-section-sub'},'Gerencie os materiais do modulo.')));d.appendChild(h('div',{className:'info-panel'},h('span',{className:'info-panel-icon'},icon('compass')),h('div',{},h('div',{className:'info-panel-title'},'Materiais'),h('div',{className:'info-panel-text',innerHTML:'Adicione livros, audios, slides e recursos complementares do modulo.'}))));const btn=h('button',{className:'btn-primary',onClick:()=>{state.adminSubTab='contents';render();}},icon('stack'),'Ir para Conteudos');d.appendChild(btn);return d;} function renderAdminTabGramatica(){const d=h('div');d.appendChild(h('div',{className:'admin-section-header'},h('h2',{className:'admin-section-title'},'Referencia Gramatical'),h('p',{className:'admin-section-sub'},'Gerencie o material de referencia gramatical.')));d.appendChild(h('div',{className:'info-panel'},h('span',{className:'info-panel-icon'},icon('info')),h('div',{},h('div',{className:'info-panel-title'},'Ref. Gramatical'),h('div',{className:'info-panel-text',innerHTML:'Adicione guias de gramatica, tabelas de verbos, regras e exemplos para consulta dos alunos.'}))));const btn=h('button',{className:'btn-primary',onClick:()=>{state.adminSubTab='contents';render();}},icon('stack'),'Ir para Conteudos');d.appendChild(btn);return d;} function renderAdminTabProva(){const d=h('div');d.appendChild(h('div',{className:'admin-section-header'},h('h2',{className:'admin-section-title'},'Prova'),h('p',{className:'admin-section-sub'},'Gerencie as provas e avaliacoes.')));d.appendChild(h('div',{className:'info-panel'},h('span',{className:'info-panel-icon'},icon('sparkle')),h('div',{},h('div',{className:'info-panel-title'},'Prova'),h('div',{className:'info-panel-text',innerHTML:'Adicione provas, testes e avaliacoes. Os alunos acessam esta area para realizar as avaliacoes do modulo.'}))));const btn=h('button',{className:'btn-primary',onClick:()=>{state.adminSubTab='contents';render();}},icon('stack'),'Ir para Conteudos');d.appendChild(btn);return d;} function renderAdminTabChat(){const d=h('div');d.appendChild(h('div',{className:'admin-section-header'},h('h2',{className:'admin-section-title'},'Chat com IA'),h('p',{className:'admin-section-sub'},'Configuracoes do Chat com IA.')));d.appendChild(h('div',{className:'info-panel'},h('span',{className:'info-panel-icon'},icon('waveform')),h('div',{},h('div',{className:'info-panel-title'},'Chat com IA'),h('div',{className:'info-panel-text',innerHTML:'O Chat com IA e gerado automaticamente. Configure os prompts nas configuracoes do sistema.'}))));return d;} function renderAdminTabComunidades(){const d=h('div');d.appendChild(h('div',{className:'admin-section-header'},h('h2',{className:'admin-section-title'},'Comunidades'),h('p',{className:'admin-section-sub'},'Gerencie as comunidades e grupos.')));d.appendChild(h('div',{className:'info-panel'},h('span',{className:'info-panel-icon'},icon('users')),h('div',{},h('div',{className:'info-panel-title'},'Comunidades'),h('div',{className:'info-panel-text',innerHTML:'Adicione links para grupos de WhatsApp, Discord, Telegram ou outras comunidades de estudo.'}))));const btn=h('button',{className:'btn-primary',onClick:()=>{state.adminSubTab='contents';render();}},icon('stack'),'Ir para Conteudos');d.appendChild(btn);return d;}
+function renderAdminTabGeneric(tabId, label, iconName) {
+  const d = h('div');
+  const tabKey = 'TAB-' + tabId.replace('tab-', '').toUpperCase();
+  const items = state.data.contents.filter(c => c.content_type === tabKey);
+
+  d.appendChild(h('button', { className: 'btn-add', onClick: async () => {
+    const title = prompt('Título:'); if (!title) return;
+    const description = prompt('Descrição (opcional):') || '';
+    const link = prompt('Link (URL, opcional):') || '';
+    const modStr = prompt('Para quais módulos? (starter,a1,a2,b1,b2 \u2014 vazio = todos):', '') || '';
+    const target_modules = modStr ? modStr.toLowerCase().split(',').map(s => s.trim()).filter(Boolean) : ['starter','a1','a2','b1','b2'];
+    await dbInsert('contents', { title, description, link, content_type: tabKey, target_modules, sort_order: items.length });
+    await loadAll();
+  }}, icon('plus'), 'Adicionar item'));
+
+  if (items.length === 0) {
+    d.appendChild(h('div', { className: 'empty-state' },
+      h('div', { className: 'empty-state-icon' }, icon(iconName)),
+      h('div', { className: 'empty-state-title', innerHTML: 'Nenhum item em <span>' + label + '</span>' }),
+      h('div', { className: 'empty-state-text' }, 'Use o botão acima para adicionar o primeiro item.')
+    ));
+  } else {
+    const list = h('div', { className: 'admin-list' });
+    items.forEach((item, i) => {
+      list.appendChild(h('div', { className: 'admin-list-item' },
+        h('div', { className: 'admin-list-number' }, String(i + 1).padStart(2, '0')),
+        h('div', { className: 'admin-list-main' },
+          h('div', { className: 'content-tag' }, item.target_modules && item.target_modules.length < 5 ? item.target_modules.map(m => m.toUpperCase()).join(', ') : 'TODOS'),
+          h('h3', { className: 'content-title' }, item.title),
+          item.description && h('p', { className: 'content-desc' }, item.description)
+        ),
+        h('div', { className: 'edit-actions' },
+          item.link && h('a', { className: 'icon-btn', href: item.link, target: '_blank', title: 'Abrir' }, icon('external')),
+          h('button', { className: 'icon-btn', title: 'Editar', onClick: async () => {
+            const title = prompt('Título:', item.title); if (!title) return;
+            const description = prompt('Descrição:', item.description || '') || '';
+            const link = prompt('Link:', item.link || '') || '';
+            const modStr = prompt('Módulos (vazio=todos):', (item.target_modules || []).join(',')) || '';
+            const target_modules = modStr ? modStr.toLowerCase().split(',').map(s => s.trim()).filter(Boolean) : ['starter','a1','a2','b1','b2'];
+            await dbUpdate('contents', item.id, { title, description, link, target_modules }); await loadAll();
+          }}, icon('edit')),
+          h('button', { className: 'icon-btn danger', title: 'Excluir', onClick: async () => {
+            if (!confirm('Excluir "' + item.title + '"?')) return;
+            await dbDelete('contents', item.id); await loadAll();
+          }}, icon('trash'))
+        )
+      ));
+    });
+    d.appendChild(list);
+  }
+  return d;
+}
+function renderAdminTabHome(){ return renderAdminTabGeneric('tab-home', 'Home', 'home'); }
+function renderAdminTabDaily(){ return renderAdminTabGeneric('tab-daily', 'Daily Practice', 'spark'); }
+function renderAdminTabAulas(){ return renderAdminTabGeneric('tab-aulas', 'Aulas', 'book'); }
+function renderAdminTabExercicios(){ return renderAdminTabGeneric('tab-exercicios', 'Exercícios', 'stack'); }
+function renderAdminTabMateriais(){ return renderAdminTabGeneric('tab-materiais', 'Materiais', 'compass'); }
+function renderAdminTabGramatica(){ return renderAdminTabGeneric('tab-gramatica', 'Ref. Gramatical', 'info'); }
+function renderAdminTabProva(){ return renderAdminTabGeneric('tab-prova', 'Prova', 'sparkle'); }
+function renderAdminTabChat(){ return renderAdminTabGeneric('tab-chat', 'Chat com IA', 'waveform'); }
+function renderAdminTabComunidades(){ return renderAdminTabGeneric('tab-comunidades', 'Comunidades', 'users'); }
 
 // ── Admin: Sections ──
 function renderAdminSections() {

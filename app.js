@@ -300,8 +300,30 @@ function renderSidebar(isAdmin) {
       { id: 'announcements', label: 'Avisos', iconName: 'announce' },
       { id: 'admins', label: 'Admins', iconName: 'cog' },
     ];
+    const studentTabLinks = [
+      { id: 'tab-home', label: 'Home', iconName: 'home' },
+      { id: 'tab-daily', label: 'Daily Practice', iconName: 'spark' },
+      { id: 'tab-aulas', label: 'Aulas', iconName: 'book' },
+      { id: 'tab-exercicios', label: 'Exercícios', iconName: 'stack' },
+      { id: 'tab-materiais', label: 'Materiais', iconName: 'compass' },
+      { id: 'tab-gramatica', label: 'Ref. Gramatical', iconName: 'info' },
+      { id: 'tab-prova', label: 'Prova', iconName: 'sparkle' },
+      { id: 'tab-chat', label: 'Chat com IA', iconName: 'waveform' },
+      { id: 'tab-comunidades', label: 'Comunidades', iconName: 'users' },
+    ];
 
     adminLinks.forEach(link => {
+      nav.appendChild(h('button', {
+        className: `sidebar-link ${state.adminSubTab === link.id ? 'active' : ''}`,
+        onClick: () => { state.adminSubTab = link.id; render(); }
+      },
+        icon(link.iconName),
+        h('span', {}, link.label)
+      ));
+    });
+    nav.appendChild(h('div', { className: 'sidebar-divider' }));
+    nav.appendChild(h('div', { className: 'sidebar-section-label' }, 'Portal do Aluno'));
+    studentTabLinks.forEach(link => {
       nav.appendChild(h('button', {
         className: `sidebar-link ${state.adminSubTab === link.id ? 'active' : ''}`,
         onClick: () => { state.adminSubTab = link.id; render(); }
@@ -605,6 +627,15 @@ function renderAdminPanel() {
     contents: { kicker: 'Conteúdos', title: 'Itens das <span>seções</span>', sub: 'Adicione links, materiais e recursos dentro de cada seção criada.' },
     announcements: { kicker: 'Comunicação', title: 'Avisos e <span>comunicados</span>', sub: 'Publique mensagens que aparecem para os alunos na página inicial.' },
     admins: { kicker: 'Equipe', title: 'Administradores', sub: 'Gerencie quem tem acesso ao painel de administração do portal.' },
+    'tab-home': { kicker: 'Portal do Aluno', title: 'Aba <span>Home</span>', sub: 'Gerencie o conteúdo exibido na tela inicial do aluno.' },
+    'tab-daily': { kicker: 'Portal do Aluno', title: 'Aba <span>Daily Practice</span>', sub: 'Gerencie as atividades de prática diária dos alunos.' },
+    'tab-aulas': { kicker: 'Portal do Aluno', title: 'Aba <span>Aulas</span>', sub: 'Gerencie as aulas em vídeo, PDF ou link externo.' },
+    'tab-exercicios': { kicker: 'Portal do Aluno', title: 'Aba <span>Exercícios</span>', sub: 'Gerencie as listas de exercícios e quizzes.' },
+    'tab-materiais': { kicker: 'Portal do Aluno', title: 'Aba <span>Materiais</span>', sub: 'Gerencie livros, áudios, slides e recursos complementares.' },
+    'tab-gramatica': { kicker: 'Portal do Aluno', title: 'Aba <span>Ref. Gramatical</span>', sub: 'Gerencie o material de referência gramatical dos alunos.' },
+    'tab-prova': { kicker: 'Portal do Aluno', title: 'Aba <span>Prova</span>', sub: 'Gerencie as provas e avaliações do módulo.' },
+    'tab-chat': { kicker: 'Portal do Aluno', title: 'Aba <span>Chat com IA</span>', sub: 'Configure o assistente de IA disponível para os alunos.' },
+    'tab-comunidades': { kicker: 'Portal do Aluno', title: 'Aba <span>Comunidades</span>', sub: 'Gerencie os grupos e comunidades de estudo.' },
   };
   const t = titles[state.adminSubTab] || titles.students;
 
@@ -620,6 +651,15 @@ function renderAdminPanel() {
     case 'contents': d.appendChild(renderAdminContents()); break;
     case 'announcements': d.appendChild(renderAdminAnnouncements()); break;
     case 'admins': d.appendChild(renderAdminAdmins()); break;
+    case 'tab-home': d.appendChild(renderAdminTabHome()); break;
+    case 'tab-daily': d.appendChild(renderAdminTabDaily()); break;
+    case 'tab-aulas': d.appendChild(renderAdminTabAulas()); break;
+    case 'tab-exercicios': d.appendChild(renderAdminTabExercicios()); break;
+    case 'tab-materiais': d.appendChild(renderAdminTabMateriais()); break;
+    case 'tab-gramatica': d.appendChild(renderAdminTabGramatica()); break;
+    case 'tab-prova': d.appendChild(renderAdminTabProva()); break;
+    case 'tab-chat': d.appendChild(renderAdminTabChat()); break;
+    case 'tab-comunidades': d.appendChild(renderAdminTabComunidades()); break;
   }
 
   return d;

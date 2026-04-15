@@ -297,35 +297,10 @@ function renderSidebar(isAdmin) {
     // Admin sidebar: links principais + sub-navigation
     const adminLinks = [
       { id: 'students', label: 'Alunos', iconName: 'users' },
-      { id: 'sections', label: 'Seções', iconName: 'shape' },
-      { id: 'contents', label: 'Conteúdos', iconName: 'stack' },
-      { id: 'announcements', label: 'Avisos', iconName: 'announce' },
       { id: 'admins', label: 'Admins', iconName: 'cog' },
-    ];
-    const studentTabLinks = [
-      { id: 'tab-home', label: 'Home', iconName: 'home' },
-      { id: 'tab-daily', label: 'Daily Practice', iconName: 'spark' },
-      { id: 'tab-aulas', label: 'Aulas', iconName: 'book' },
-      { id: 'tab-exercicios', label: 'Exercícios', iconName: 'stack' },
-      { id: 'tab-materiais', label: 'Materiais', iconName: 'compass' },
-      { id: 'tab-gramatica', label: 'Ref. Gramatical', iconName: 'info' },
-      { id: 'tab-prova', label: 'Prova', iconName: 'sparkle' },
-      { id: 'tab-chat', label: 'Chat com IA', iconName: 'waveform' },
-      { id: 'tab-comunidades', label: 'Comunidades', iconName: 'users' },
     ];
 
     adminLinks.forEach(link => {
-      nav.appendChild(h('button', {
-        className: `sidebar-link ${state.adminSubTab === link.id ? 'active' : ''}`,
-        onClick: () => { state.adminSubTab = link.id; render(); }
-      },
-        icon(link.iconName),
-        h('span', {}, link.label)
-      ));
-    });
-    nav.appendChild(h('div', { className: 'sidebar-divider' }));
-    nav.appendChild(h('div', { className: 'sidebar-section-label' }, 'Portal do Aluno'));
-    studentTabLinks.forEach(link => {
       nav.appendChild(h('button', {
         className: `sidebar-link ${state.adminSubTab === link.id ? 'active' : ''}`,
         onClick: () => { state.adminSubTab = link.id; render(); }

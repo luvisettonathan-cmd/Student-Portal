@@ -1140,7 +1140,7 @@ function renderAdminStudents() {
     h('span', { className: 'info-panel-icon' }, icon('info')),
     h('div', {},
       h('div', { className: 'info-panel-title' }, 'Como funciona'),
-      h('div', { className: 'info-panel-text', innerHTML: 'Cada aluno precisa de <strong>login individual</strong> para acessar o portal. Use a unidade e o m\u00f3dulo certos \u2014 os conte\u00fados s\u00e3o filtrados automaticamente.' })
+      h('div', { className: 'info-panel-text', innerHTML: 'Cada aluno precisa de <strong>login individual</strong> para acessar o portal. Use o m\u00f3dulo certo \u2014 os conte\u00fados s\u00e3o filtrados automaticamente.' })
     )
   ));
 
@@ -1153,7 +1153,6 @@ function renderAdminStudents() {
     const modal = document.createElement('div');
     modal.className = 'modal-container';
 
-    // Helper: generate username from full name
     function generateUsername(name) {
       return name.trim().toLowerCase()
         .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -1161,7 +1160,6 @@ function renderAdminStudents() {
         .replace(/[^a-z0-9.]/g, '');
     }
 
-    // Helper: generate random password
     function generatePassword() {
       const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#!';
       let p = '';
@@ -1205,31 +1203,18 @@ function renderAdminStudents() {
 
           <div class="modal-section">
             <h3 class="modal-section-title">Configura\u00e7\u00e3o acad\u00eamica</h3>
-            <div class="modal-row-2">
-              <div class="modal-field">
-                <label class="modal-label" for="fieldModule">N\u00edvel <span class="required">*</span></label>
-                <select class="modal-select" id="fieldModule" required>
-                  <option value="">Selecione...</option>
-                  ${MODULES.map(m => `<option value="${m.id}" ${isEdit && student.module === m.id ? 'selected' : ''}>${m.label}</option>`).join('')}
-                </select>
-              </div>
-              <div class="modal-field">
-                <label class="modal-label" for="fieldUnit">Unidade <span class="required">*</span></label>
-                <select class="modal-select" id="fieldUnit" required>
-                  <option value="">Selecione...</option>
-                  ${UNITS.map(u => `<option value="${u.id}" ${isEdit && student.unit === u.id ? 'selected' : ''}>${u.label}</option>`).join('')}
-                </select>
-              </div>
+            <div class="modal-field">
+              <label class="modal-label" for="fieldModule">N\u00edvel <span class="required">*</span></label>
+              <select class="modal-select" id="fieldModule" required>
+                <option value="">Selecione...</option>
+                ${MODULES.map(m => `<option value="${m.id}" ${isEdit && student.module === m.id ? 'selected' : ''}>${m.label}</option>`).join('')}
+              </select>
             </div>
           </div>
 
           <div class="modal-section">
             <h3 class="modal-section-title">Configura\u00e7\u00f5es</h3>
             <div class="modal-checkboxes">
-              <label class="modal-checkbox-label">
-                <input type="checkbox" id="checkActive" ${!isEdit || student.active !== false ? 'checked' : ''} />
-                <span>Usu\u00e1rio ativo</span>
-              </label>
               <label class="modal-checkbox-label">
                 <input type="checkbox" id="checkForcePass" />
                 <span>For\u00e7ar troca de senha no primeiro login</span>
@@ -1247,7 +1232,6 @@ function renderAdminStudents() {
               <div class="summary-row"><span class="summary-label">Nome</span><span class="summary-value" id="summaryName">-</span></div>
               <div class="summary-row"><span class="summary-label">Username</span><span class="summary-value" id="summaryUsername">-</span></div>
               <div class="summary-row"><span class="summary-label">N\u00edvel</span><span class="summary-value" id="summaryModule">-</span></div>
-              <div class="summary-row"><span class="summary-label">Unidade</span><span class="summary-value" id="summaryUnit">-</span></div>
             </div>
           </div>
 
@@ -1272,7 +1256,6 @@ function renderAdminStudents() {
     const fieldPassword = modal.querySelector('#fieldPassword');
     const fieldEmail = modal.querySelector('#fieldEmail');
     const fieldModule = modal.querySelector('#fieldModule');
-    const fieldUnit = modal.querySelector('#fieldUnit');
     const btnGenPass = modal.querySelector('#btnGenPass');
     const modalError = modal.querySelector('#modalError');
 
@@ -1281,8 +1264,6 @@ function renderAdminStudents() {
       modal.querySelector('#summaryUsername').textContent = fieldUsername.value.trim() || '-';
       const modEl = fieldModule;
       modal.querySelector('#summaryModule').textContent = modEl.options[modEl.selectedIndex]?.text || '-';
-      const unitEl = fieldUnit;
-      modal.querySelector('#summaryUnit').textContent = unitEl.options[unitEl.selectedIndex]?.text || '-';
     }
 
     if (!isEdit) {
@@ -1295,7 +1276,6 @@ function renderAdminStudents() {
     }
     fieldUsername.addEventListener('input', updateSummary);
     fieldModule.addEventListener('change', updateSummary);
-    fieldUnit.addEventListener('change', updateSummary);
     btnGenPass.addEventListener('click', () => {
       fieldPassword.value = generatePassword();
     });
@@ -1317,12 +1297,10 @@ function renderAdminStudents() {
       const password = fieldPassword.value.trim();
       const email = fieldEmail.value.trim();
       const module = fieldModule.value;
-      const unit = fieldUnit.value;
-      const active = modal.querySelector('#checkActive').checked;
 
       modalError.style.display = 'none';
 
-      if (!name || !username || !module || !unit) {
+      if (!name || !username || !module) {
         modalError.textContent = 'Preencha todos os campos obrigat\u00f3rios.';
         modalError.style.display = 'block';
         return;
@@ -1340,7 +1318,7 @@ function renderAdminStudents() {
 
       try {
         if (isEdit) {
-          const updates = { name, module, unit, email, active };
+          const updates = { name, module, email };
           if (password) updates.password = password;
           await dbUpdate('students', student.id, updates);
         } else {
@@ -1349,9 +1327,7 @@ function renderAdminStudents() {
           await dbInsert('students', {
             username: username.toLowerCase(),
             password, name, email,
-            module: module.toLowerCase(),
-            unit: unit.toLowerCase(),
-            active
+            module: module.toLowerCase()
           });
         }
         await loadAll();
@@ -1404,8 +1380,7 @@ function renderAdminStudents() {
           )
         ),
         h('div', { className: 'student-details' },
-          h('div', {}, 'M\u00f3dulo', h('strong', {}, (s.module || '?').toUpperCase())),
-          h('div', {}, 'Unidade', h('strong', {}, UNITS.find(u => u.id === s.unit)?.label || '?'))
+          h('div', {}, 'M\u00f3dulo', h('strong', {}, (s.module || '?').toUpperCase()))
         ),
         h('div', { className: 'student-card-actions' },
           h('button', { className: 'btn btn-ghost btn-small', onClick: () => openStudentModal(s) }, 'Editar'),

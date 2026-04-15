@@ -72,6 +72,53 @@ let state = {
   data: { students: [], admins: [], sections: [], contents: [], announcements: [] },
 };
 
+// ── Session persistence ──
+function saveSession() {
+  try {
+    sessionStorage.setItem('nexus_session', JSON.stringify({
+      user: state.user,
+      userType: state.userType,
+      screen: state.screen,
+      tab: state.tab,
+    }));
+  } catch(e) {}
+}
+function clearSession() {
+  try { sessionStorage.removeItem('nexus_session'); } catch(e) {}
+}
+
+// ── Idle timer (15 min inactivity → logout) ──
+let _idleTimer = null;
+const IDLE_MS = 15 * 60 * 1000;
+function resetIdleTimer() {
+  if (_idleTimer) clearTimeout(_idleTimer);
+  _idleTimer = setTimeout(() => {
+    if (state.screen === 'portal') {
+      state.user = null; state.userType = null; state.screen = 'login';
+      state.tab = 'home'; state.currentSection = null;
+      clearSession();
+      ['mousemove','keydown','click','scroll','touchstart'].forEach(ev =>
+        document.removeEventListener(ev, resetIdleTimer)
+      );
+      render();
+    }
+  }, IDLE_MS);
+}
+function startIdleTimer() {
+  stopIdleTimer();
+  resetIdleTimer();
+  ['mousemove','keydown','click','scroll','touchstart'].forEach(ev =>
+    document.addEventListener(ev, resetIdleTimer, { passive: true })
+  );
+}
+function stopIdleTimer() {
+  if (_idleTimer) { clearTimeout(_idleTimer); _idleTimer = null; }
+  ['mousemove','keydown','click','scroll','touchstart'].forEach(ev =>
+    document.removeEventListener(ev, resetIdleTimer)
+  );
+}
+
+
 // ── DB ──
 async function dbSelect(table, order = 'id') {
   const { data, error } = await db.from(table).select('*').order(order);
@@ -203,6 +250,7 @@ function renderLogin() {
       state.screen = 'portal';
       state.tab = 'admin';
       await loadAll();
+      saveSession(); startIdleTimer();
       return;
     }
 
@@ -230,6 +278,7 @@ function renderLogin() {
       state.screen = 'portal';
       state.tab = 'home';
       await loadAll();
+      saveSession(); startIdleTimer();
       return;
     }
 
@@ -394,9 +443,31 @@ function renderSidebar(isAdmin) {
     onClick: () => {
       state.user = null; state.userType = null; state.screen = 'login';
       state.tab = 'home'; state.currentSection = null;
-      render();
+      stopIdleTimer(); clearSession(); render();
     }
   }, icon('logout'), 'Sair'));
+
+    // ── Card de Dúvidas (apenas aluno) ──
+  if (!isAdmin) {
+    const duv = h('div', { className: 'sidebar-duvidas' },
+      h('div', { className: 'sidebar-duvidas-title' }, '💬 Dúvidas?'),
+      h('div', { className: 'sidebar-duvidas-list' },
+        h('a', { className: 'sidebar-duvidas-item', href: 'https://wa.me/5549999999001', target: '_blank', rel: 'noopener' },
+          icon('waveform'), h('span', {}, 'Secretaria')
+        ),
+        h('a', { className: 'sidebar-duvidas-item', href: 'https://wa.me/5549999999002', target: '_blank', rel: 'noopener' },
+          icon('waveform'), h('span', {}, 'Coordenação')
+        ),
+        h('a', { className: 'sidebar-duvidas-item', href: 'https://wa.me/5549999999003', target: '_blank', rel: 'noopener' },
+          icon('waveform'), h('span', {}, 'Suporte')
+        ),
+        h('a', { className: 'sidebar-duvidas-item', href: 'https://wa.me/5549999999004', target: '_blank', rel: 'noopener' },
+          icon('waveform'), h('span', {}, 'Financeiro')
+        )
+      )
+    );
+    sb.appendChild(duv);
+  }
 
   sb.appendChild(footer);
   return sb;
@@ -1710,4 +1781,21 @@ function renderAdminAdmins() {
   return d;
 }
 
-render();
+// ── Session restore on page load ──
+(function() {
+  try {
+    const saved = sessionStorage.getItem('nexus_session');
+    if (saved) {
+      const s = JSON.parse(saved);
+      state.user     = s.user     || null;
+      state.userType = s.userType || null;
+      state.screen   = s.screen   || 'login';
+      state.tab      = s.tab      || 'home';
+      if (state.screen === 'portal' && state.user) {
+        loadAll().then(() => { render(); startIdleTimer(); });
+        return;
+      }
+    }
+  } catch(e) {}
+  render();
+})();

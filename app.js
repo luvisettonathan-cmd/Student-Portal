@@ -270,6 +270,7 @@ function renderPortal() {
     else if (state.tab === 'home') content.appendChild(renderHome());
     else if (state.tab === 'announcements') content.appendChild(renderAnnouncements());
     else if (state.tab === 'aulas') content.appendChild(renderAulas());
+    else if (state.tab === 'daily') content.appendChild(renderDaily());
   }
 
   wrap.appendChild(content);
@@ -877,6 +878,209 @@ function announcementNode(a) {
     a.pinned && h('div', { className: 'pinned-label' }, 'Fixado')
   );
 }
+
+// ══════════════════════════════════════════════════════════════
+// DAILY PRACTICE
+// ══════════════════════════════════════════════════════════════
+const DAILY_PRACTICES={
+  starter:[{topic:"Verb To Be — Present",explanation:"Use am/is/are to describe people and things. \"I am\", \"He is\", \"They are\".",exercises:[{ type:"mc",q:"She ___ a teacher.",opts:["am","is","are","be"],correct:1,exp:"\"She\" is 3rd person singular → use \"is\"."},{ type:"fill",q:"Complete: I ___ happy today.",answer:"am",exp:"With \"I\", always use \"am\"."},{ type:"error",q:"Find the error: \"They is my friends.\"",opts:["They → We","is → are","my → mine","No error"],correct:1,exp:"\"They\" takes \"are\", not \"is\"."}]},{topic:"Subject Pronouns",explanation:"I, you, he, she, it, we, they replace nouns as the subject of a sentence.",exercises:[{ type:"mc",q:"Maria is my sister. ___ is kind.",opts:["He","She","They","It"],correct:1,exp:"\"Maria\" is female → use \"She\"."},{ type:"mc",q:"John and I are students. ___ study every day.",opts:["He","She","We","They"],correct:2,exp:"\"John and I\" = \"We\"."},{ type:"fill",q:"My dog is big. ___ is also fast.",answer:"It",exp:"Non-human animals → \"It\"."}]},{topic:"Articles — A / An",explanation:"Use \"a\" before consonant sounds and \"an\" before vowel sounds (a, e, i, o, u).",exercises:[{ type:"mc",q:"She has ___ umbrella.",opts:["a","an","the","—"],correct:1,exp:"\"Umbrella\" starts with a vowel sound → \"an\"."},{ type:"mc",q:"He is ___ engineer.",opts:["a","an","the","—"],correct:1,exp:"\"Engineer\" starts with a vowel sound → \"an\"."},{ type:"error",q:"Find the error: \"I have a apple.\"",opts:["I → We","a → an","have → has","No error"],correct:1,exp:"\"Apple\" starts with a vowel → \"an apple\"."}]},{topic:"Plural Nouns",explanation:"Most nouns add -s or -es to form the plural. Some are irregular (child/children).",exercises:[{ type:"fill",q:"One cat, two ___",answer:"cats",exp:"Regular noun → add -s."},{ type:"mc",q:"What is the plural of \"bus\"?",opts:["bus","buss","buses","busis"],correct:2,exp:"Words ending in -s, -sh, -ch, -x add -es."},{ type:"mc",q:"What is the plural of \"child\"?",opts:["childs","childes","children","child"],correct:2,exp:"\"Child\" is an irregular plural → \"children\"."}]},{topic:"Numbers & Basic Greetings",explanation:"Learn numbers 1–20 and everyday greetings: Hello, Good morning, Thank you.",exercises:[{ type:"mc",q:"How do you say 15 in English?",opts:["fifty","fiveteen","fifteen","fiften"],correct:2,exp:"15 = fifteen."},{ type:"mc",q:"Which is the correct greeting for morning?",opts:["Good night","Good evening","Good morning","Good afternoon"],correct:2,exp:"\"Good morning\" is used before noon."},{ type:"fill",q:"10 + 5 = ___",answer:"fifteen",exp:"10 + 5 = 15 = fifteen."}]},{topic:"Verb To Have",explanation:"Use \"have\" with I/you/we/they and \"has\" with he/she/it.",exercises:[{ type:"mc",q:"She ___ a red car.",opts:["have","has","is","are"],correct:1,exp:"3rd person singular → \"has\"."},{ type:"error",q:"Find the error: \"They has two cats.\"",opts:["They → He","has → have","cats → cat","No error"],correct:1,exp:"\"They\" requires \"have\"."},{ type:"fill",q:"I ___ a big family.",answer:"have",exp:"\"I\" always uses \"have\"."}]},{topic:"Common Adjectives",explanation:"Adjectives describe nouns. In English, they go BEFORE the noun: \"a big house\".",exercises:[{ type:"mc",q:"Which sentence is correct?",opts:["A house big","A big house","Big a house","House big a"],correct:1,exp:"Adjective comes before the noun in English."},{ type:"mc",q:"She is a ___ girl. (happy)",opts:["girl happy","happy girl","happily girl","girl happily"],correct:1,exp:"Adjective before noun: \"a happy girl\"."},{ type:"fill",q:"The sky is ___. (blue)",answer:"blue",exp:"Adjectives also come after \"to be\"."}]},{topic:"Days of the Week",explanation:"Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday. Always capitalized in English.",exercises:[{ type:"mc",q:"Which day comes after Wednesday?",opts:["Tuesday","Friday","Thursday","Monday"],correct:2,exp:"Mon → Tue → Wed → Thu → Fri → Sat → Sun."},{ type:"error",q:"Find the error: \"I work on monday.\"",opts:["I → We","on → in","monday → Monday","work → works"],correct:2,exp:"Days of the week are always capitalized."},{ type:"mc",q:"Saturday and Sunday are the ___",opts:["workdays","weekdays","weekend","holidays"],correct:2,exp:"Saturday + Sunday = the weekend."}]},{topic:"Basic Questions — WH Words",explanation:"Who (person), What (thing), Where (place), When (time), Why (reason), How (manner).",exercises:[{ type:"mc",q:"___ is your name?",opts:["Where","When","What","Who"],correct:2,exp:"\"What\" is used for things/information like a name."},{ type:"mc",q:"___ do you live?",opts:["What","Who","When","Where"],correct:3,exp:"\"Where\" asks about a place."},{ type:"fill",q:"___ old are you?",answer:"How",exp:"\"How old\" asks about age."}]},{topic:"Colors in English",explanation:"Basic colors: red, blue, green, yellow, black, white, orange, purple, pink, brown.",exercises:[{ type:"mc",q:"The sky is usually ___ during the day.",opts:["green","red","blue","purple"],correct:2,exp:"The daytime sky is blue."},{ type:"fill",q:"Bananas are ___",answer:"yellow",exp:"Bananas are yellow."},{ type:"mc",q:"Which color do you get mixing red and white?",opts:["purple","orange","pink","brown"],correct:2,exp:"Red + White = Pink."}]}],
+  a1:[{topic:"Present Simple — Affirmative",explanation:"Use the base verb for I/you/we/they. Add -s/-es for he/she/it: \"She works\".",exercises:[{ type:"mc",q:"He ___ to school every day.",opts:["go","goes","going","gone"],correct:1,exp:"3rd person singular → add -es to \"go\" → \"goes\"."},{ type:"fill",q:"She ___ (like) coffee.",answer:"likes",exp:"3rd person singular → \"likes\"."},{ type:"error",q:"Find the error: \"They goes to the gym.\"",opts:["They → He","goes → go","to → at","No error"],correct:1,exp:"\"They\" takes the base form → \"go\"."}]},{topic:"Present Simple — Negative",explanation:"Use \"don't\" (I/you/we/they) or \"doesn't\" (he/she/it) + base verb.",exercises:[{ type:"mc",q:"She ___ like pizza.",opts:["don't","doesn't","isn't","aren't"],correct:1,exp:"She → \"doesn't\" + base verb."},{ type:"fill",q:"They ___ (not watch) TV.",answer:"don't watch",exp:"\"They\" → \"don't\" + base verb."},{ type:"error",q:"Find the error: \"He don't play football.\"",opts:["He → They","don't → doesn't","play → plays","No error"],correct:1,exp:"\"He\" requires \"doesn't\"."}]},{topic:"Present Simple — Questions",explanation:"Use Do/Does + subject + base verb. \"Do you play?\" / \"Does she work?\"",exercises:[{ type:"mc",q:"___ she speak French?",opts:["Do","Does","Is","Are"],correct:1,exp:"3rd person singular question → \"Does\"."},{ type:"fill",q:"___ you like music?",answer:"Do",exp:"\"You\" → use \"Do\"."},{ type:"mc",q:"Which question is correct?",opts:["Does they work?","Do she work?","Does he work?","Do he works?"],correct:2,exp:"\"He\" → \"Does he work?\""}]},{topic:"Prepositions of Time — In, On, At",explanation:"\"At\" for exact times, \"on\" for days/dates, \"in\" for months/years/seasons.",exercises:[{ type:"mc",q:"I wake up ___ 7 o'clock.",opts:["in","on","at","by"],correct:2,exp:"Exact time → \"at 7 o'clock\"."},{ type:"mc",q:"She was born ___ July.",opts:["at","on","in","by"],correct:2,exp:"Month → \"in July\"."},{ type:"fill",q:"We have class ___ Monday.",answer:"on",exp:"Days of the week → \"on Monday\"."}]},{topic:"Prepositions of Place — In, On, At",explanation:"\"At\" for specific locations, \"on\" for surfaces, \"in\" for enclosed spaces.",exercises:[{ type:"mc",q:"The book is ___ the table.",opts:["in","at","on","by"],correct:2,exp:"Surface → \"on the table\"."},{ type:"fill",q:"She is ___ home.",answer:"at",exp:"\"At home\" is a fixed expression."},{ type:"error",q:"Find the error: \"He is in the bus stop.\"",opts:["He → She","in → at","bus → buss","No error"],correct:1,exp:"Specific location → \"at the bus stop\"."}]},{topic:"There is / There are",explanation:"Use \"there is\" for singular and \"there are\" for plural to say something exists.",exercises:[{ type:"mc",q:"___ a cat in the garden.",opts:["There are","There is","There was","It is"],correct:1,exp:"Singular \"a cat\" → \"There is\"."},{ type:"fill",q:"___ three students in the room.",answer:"There are",exp:"Plural → \"There are\"."},{ type:"error",q:"Find the error: \"There is two books on the desk.\"",opts:["There is → There are","two → second","books → book","No error"],correct:0,exp:"\"Two books\" is plural → \"There are\"."}]},{topic:"Possessive Adjectives",explanation:"my, your, his, her, its, our, their — used before nouns to show ownership.",exercises:[{ type:"mc",q:"That is ___ car. (belongs to him)",opts:["my","your","his","her"],correct:2,exp:"Male possession → \"his\"."},{ type:"fill",q:"We love ___ school.",answer:"our",exp:"\"We\" → \"our\"."},{ type:"error",q:"Find the error: \"She forgot her's bag.\"",opts:["She → He","her's → her","forgot → forgets","No error"],correct:1,exp:"\"Her\" is already possessive — no apostrophe needed."}]},{topic:"Can / Can't for Ability",explanation:"Use \"can\" to say you are able to do something. \"Can't\" = cannot.",exercises:[{ type:"mc",q:"She ___ swim very well.",opts:["can","cans","is can","does can"],correct:0,exp:"\"Can\" never adds -s. \"She can swim\"."},{ type:"fill",q:"I ___ drive. I don't have a license.",answer:"can't",exp:"\"Can't\" = cannot."},{ type:"mc",q:"Which is correct?",opts:["He can to run fast","He cans run fast","He can run fast","He can runs fast"],correct:2,exp:"Can + base verb (no \"to\", no -s)."}]},{topic:"Object Pronouns",explanation:"me, you, him, her, it, us, them — used as the object of a verb or preposition.",exercises:[{ type:"mc",q:"Can you help ___? (me/I)",opts:["I","me","my","mine"],correct:1,exp:"After a verb → object pronoun \"me\"."},{ type:"mc",q:"I love ___. (him/he)",opts:["he","his","him","himself"],correct:2,exp:"After a verb → \"him\"."},{ type:"fill",q:"Tell ___ the truth.",answer:"me",exp:"\"Tell me\" → object pronoun."}]},{topic:"Imperatives",explanation:"Use the base verb to give commands or instructions. \"Open the door.\" / \"Don't talk!\"",exercises:[{ type:"mc",q:"How do you say \"Não fale!\" in English?",opts:["Not talk!","Don't talk!","No talk!","Doesn't talk!"],correct:1,exp:"Negative imperative = Don't + base verb."},{ type:"fill",q:"___ your homework! (do)",answer:"Do",exp:"Imperative: base verb \"Do\"."},{ type:"error",q:"Find the error: \"Please to close the window.\"",opts:["Please → Kindly","to close → close","window → windows","No error"],correct:1,exp:"Imperatives don't use \"to\": \"Please close\"."}]}],
+  a2:[{topic:"Past Simple — Regular Verbs",explanation:"Add -ed to regular verbs: walk→walked, play→played. Use \"did not\" for negatives.",exercises:[{ type:"mc",q:"She ___ (watch) TV last night.",opts:["watch","watches","watched","watching"],correct:2,exp:"Past simple regular → add -ed: \"watched\"."},{ type:"fill",q:"They ___ (play) football yesterday.",answer:"played",exp:"Past simple → \"played\"."},{ type:"error",q:"Find the error: \"He didn't went to school.\"",opts:["He → She","didn't went → didn't go","school → class","No error"],correct:1,exp:"After \"didn't\" always use the base form."}]},{topic:"Past Simple — Irregular Verbs",explanation:"Common irregulars: go→went, have→had, see→saw, come→came, take→took.",exercises:[{ type:"mc",q:"She ___ to Paris last summer.",opts:["go","goes","went","gone"],correct:2,exp:"Past of \"go\" → \"went\"."},{ type:"fill",q:"We ___ (see) a great movie.",answer:"saw",exp:"Past of \"see\" → \"saw\"."},{ type:"mc",q:"Which is the past of \"have\"?",opts:["haved","had","has","having"],correct:1,exp:"Irregular: have → had."}]},{topic:"Past Simple — Questions",explanation:"Use \"Did + subject + base verb\" for past questions. \"Did you go?\" / \"Did she eat?\"",exercises:[{ type:"mc",q:"___ you go to the party?",opts:["Do","Did","Was","Were"],correct:1,exp:"Past question → \"Did you go?\""},{ type:"fill",q:"___ she call you?",answer:"Did",exp:"\"Did\" starts past questions."},{ type:"error",q:"Find the error: \"Did she went to school?\"",opts:["Did → Does","went → go","school → work","No error"],correct:1,exp:"After \"Did\" → base verb \"go\"."}]},{topic:"Comparatives",explanation:"Short adjectives: add -er (bigger, taller). Long adjectives: use \"more\" (more expensive).",exercises:[{ type:"mc",q:"This book is ___ than that one. (interesting)",opts:["interestinger","more interesting","most interesting","interestingmore"],correct:1,exp:"Long adjective → \"more interesting\"."},{ type:"fill",q:"He is ___ than his brother. (tall)",answer:"taller",exp:"Short adjective → add -er: \"taller\"."},{ type:"error",q:"Find the error: \"She is more tall than me.\"",opts:["She → He","more tall → taller","than → as","No error"],correct:1,exp:"Short adjective \"tall\" → \"taller\", not \"more tall\"."}]},{topic:"Superlatives",explanation:"Short adjectives: add -est (biggest). Long adjectives: use \"the most\" (the most expensive).",exercises:[{ type:"mc",q:"She is ___ girl in the class. (smart)",opts:["smarter","the most smart","the smartest","most smartest"],correct:2,exp:"Short adjective + -est: \"the smartest\"."},{ type:"fill",q:"It is ___ movie I have ever seen. (good)",answer:"the best",exp:"Irregular superlative: good → the best."},{ type:"mc",q:"This is ___ building in the city. (tall)",opts:["the tallest","the most tall","taller","more taller"],correct:0,exp:"Short adjective → \"the tallest\"."}]},{topic:"Past Continuous",explanation:"Was/were + verb-ing. Describes an action in progress at a specific time in the past.",exercises:[{ type:"mc",q:"At 8 PM, she ___ (study).",opts:["studied","was studying","is studying","studies"],correct:1,exp:"Action in progress in the past → \"was studying\"."},{ type:"fill",q:"They ___ (play) when it started to rain.",answer:"were playing",exp:"\"They\" + past continuous → \"were playing\"."},{ type:"error",q:"Find the error: \"He were watching TV.\"",opts:["He → They","were → was","watching → watched","No error"],correct:1,exp:"\"He\" (singular) → \"was watching\"."}]},{topic:"Adverbs of Frequency",explanation:"Always(100%), usually, often, sometimes, rarely, never(0%) go before the main verb.",exercises:[{ type:"mc",q:"She ___ eats breakfast. (100% of the time)",opts:["never","sometimes","always","rarely"],correct:2,exp:"100% → \"always\"."},{ type:"fill",q:"I ___ go to bed late. I prefer sleeping early.",answer:"rarely",exp:"Almost never → \"rarely\"."},{ type:"error",q:"Find the error: \"He eats always lunch at noon.\"",opts:["He → She","always → never","eats always → always eats","No error"],correct:2,exp:"Adverb of frequency goes BEFORE the main verb."}]},{topic:"Going To — Future Plans",explanation:"Use \"am/is/are going to + base verb\" to talk about plans or intentions.",exercises:[{ type:"mc",q:"She ___ visit her parents next week.",opts:["going to","is going to","go to","will going"],correct:1,exp:"\"She\" → \"is going to visit\"."},{ type:"fill",q:"We ___ (study) tonight.",answer:"are going to study",exp:"\"We\" → \"are going to\" + base verb."},{ type:"error",q:"Find the error: \"He is go to travel tomorrow.\"",opts:["He → She","go → going","travel → traveling","No error"],correct:1,exp:"\"Is going to\" — needs \"going\", not \"go\"."}]},{topic:"Countable vs Uncountable Nouns",explanation:"Countable: can be counted (an apple, two apples). Uncountable: can't be counted (water, money).",exercises:[{ type:"mc",q:"Which is uncountable?",opts:["chair","book","water","car"],correct:2,exp:"\"Water\" cannot be counted individually."},{ type:"mc",q:"She wants ___ information.",opts:["an","a","some","one"],correct:2,exp:"\"Information\" is uncountable → \"some information\"."},{ type:"fill",q:"Could I have ___ water please?",answer:"some",exp:"Uncountable noun → \"some water\"."}]},{topic:"Questions with How — How long, How often, How far",explanation:"\"How long?\" = duration, \"How often?\" = frequency, \"How far?\" = distance.",exercises:[{ type:"mc",q:"___ does it take to get there? (1 hour)",opts:["How far","How often","How long","How much"],correct:2,exp:"\"1 hour\" is duration → \"How long?\""},{ type:"fill",q:"___ do you exercise? — Three times a week.",answer:"How often",exp:"Frequency → \"How often?\""},{ type:"mc",q:"___ is it from here? (5 km)",opts:["How long","How much","How often","How far"],correct:3,exp:"5 km is distance → \"How far?\""}]}],
+  b1:[{topic:"Present Perfect — Introduction",explanation:"Have/has + past participle. Connects past actions to the present. \"I have eaten.\"",exercises:[{ type:"mc",q:"She ___ (visit) Paris three times.",opts:["visited","has visited","have visited","visit"],correct:1,exp:"\"She\" (singular) → \"has visited\"."},{ type:"fill",q:"I ___ never ___ (eat) sushi.",answer:"have, eaten",exp:"\"I\" → \"have\" + past participle \"eaten\"."},{ type:"error",q:"Find the error: \"He have finished the report.\"",opts:["He → They","have → has","finished → finish","No error"],correct:1,exp:"\"He\" → \"has finished\"."}]},{topic:"Present Perfect — Since vs For",explanation:"\"Since\" = starting point (since 2020). \"For\" = duration (for 5 years).",exercises:[{ type:"mc",q:"She has lived here ___ 2018.",opts:["for","since","during","from"],correct:1,exp:"2018 is a starting point → \"since\"."},{ type:"fill",q:"He has worked there ___ ten years.",answer:"for",exp:"10 years is a duration → \"for\"."},{ type:"mc",q:"I have known her ___ we were children.",opts:["for","during","since","in"],correct:2,exp:"\"We were children\" is a starting point → \"since\"."}]},{topic:"Modal Verbs — Should / Shouldn't",explanation:"\"Should\" gives advice or recommendation. \"Shouldn't\" = it's not a good idea.",exercises:[{ type:"mc",q:"You look tired. You ___ go to bed early.",opts:["must","should","can","would"],correct:1,exp:"Advice → \"should\"."},{ type:"fill",q:"You ___ eat so much junk food. It's bad for you.",answer:"shouldn't",exp:"Negative advice → \"shouldn't\"."},{ type:"error",q:"Find the error: \"She should to study more.\"",opts:["She → He","should to → should","study → studies","No error"],correct:1,exp:"Modal verbs don't use \"to\": \"should study\"."}]},{topic:"Modal Verbs — Must / Mustn't",explanation:"\"Must\" = strong obligation. \"Mustn't\" = it is prohibited. NOT the same as \"don't have to\".",exercises:[{ type:"mc",q:"You ___ wear a seatbelt. It's the law.",opts:["should","must","can","might"],correct:1,exp:"Law = strong obligation → \"must\"."},{ type:"fill",q:"You ___ smoke in here. It's forbidden.",answer:"mustn't",exp:"\"Mustn't\" = prohibited."},{ type:"mc",q:"Which is correct? (exame amanhã)",opts:["I mustn't study","I must to study","I must study","I musts study"],correct:2,exp:"Must + base verb (no \"to\")."}]},{topic:"First Conditional",explanation:"If + present simple, will + base verb. Real/possible future situations.",exercises:[{ type:"mc",q:"If it rains, we ___ stay inside.",opts:["stayed","will stay","would stay","stay"],correct:1,exp:"1st conditional → \"will stay\"."},{ type:"fill",q:"If you study hard, you ___ (pass) the exam.",answer:"will pass",exp:"Result clause → \"will\" + base verb."},{ type:"error",q:"Find the error: \"If she will come, I will be happy.\"",opts:["If → When","will come → comes","will be → am","No error"],correct:1,exp:"After \"if\" → present simple, not \"will\"."}]},{topic:"Reported Speech — Statements",explanation:"Change tense back: say \"I am tired\" → reported as \"He said he was tired\".",exercises:[{ type:"mc",q:"Direct: \"I live in London.\" Reported: She said she ___ in London.",opts:["lives","lived","is living","will live"],correct:1,exp:"Present simple → past simple in reported speech."},{ type:"fill",q:"He said: \"I am hungry.\" → He said he ___ hungry.",answer:"was",exp:"\"Am\" → \"was\" in reported speech."},{ type:"mc",q:"\"I will help you.\" → She said she ___ help me.",opts:["will","would","should","could"],correct:1,exp:"\"Will\" → \"would\" in reported speech."}]},{topic:"Relative Clauses — Who, Which, That",explanation:"\"Who\" for people, \"which\" for things, \"that\" for both. They add information about nouns.",exercises:[{ type:"mc",q:"The man ___ lives next door is a doctor.",opts:["which","whose","who","that it"],correct:2,exp:"\"Man\" is a person → \"who\"."},{ type:"fill",q:"This is the book ___ I told you about.",answer:"that",exp:"\"That\" can refer to things."},{ type:"mc",q:"The car ___ she bought is very expensive.",opts:["who","whose","whom","which"],correct:3,exp:"\"Car\" is a thing → \"which\"."}]},{topic:"Phrasal Verbs — Common Ones",explanation:"Phrasal verbs = verb + preposition/adverb. \"Give up\" (quit), \"find out\" (discover).",exercises:[{ type:"mc",q:"Don't ___ (desistir)! Keep trying!",opts:["give out","give up","give in","give away"],correct:1,exp:"\"Give up\" = quit/desistir."},{ type:"fill",q:"I need to ___ what time the bus leaves. (discover)",answer:"find out",exp:"\"Find out\" = discover/discover."},{ type:"mc",q:"\"Turn off\" means:",opts:["increase","activate","deactivate/turn off","turn around"],correct:2,exp:"\"Turn off\" = deactivate (apagar/desligar)."}]},{topic:"Used To — Past Habits",explanation:"\"Used to + base verb\" describes past habits that no longer happen. \"I used to play football.\"",exercises:[{ type:"mc",q:"She ___ smoke, but she quit.",opts:["was use to","used to","uses to","use to"],correct:1,exp:"\"Used to\" expresses a past habit."},{ type:"fill",q:"I ___ (love) cartoons when I was a kid.",answer:"used to love",exp:"\"Used to\" + base verb."},{ type:"error",q:"Find the error: \"He used to played guitar.\"",opts:["He → She","used to played → used to play","guitar → drums","No error"],correct:1,exp:"\"Used to\" + base verb (not past tense)."}]},{topic:"Passive Voice — Introduction",explanation:"Be + past participle. Focus on the action, not who does it. \"The book was written by her.\"",exercises:[{ type:"mc",q:"The letter ___ (write) by her.",opts:["wrote","was writing","was written","is write"],correct:2,exp:"Passive → \"was written\" (by + agent)."},{ type:"fill",q:"English ___ (speak) all over the world.",answer:"is spoken",exp:"Present passive → \"is spoken\"."},{ type:"error",q:"Find the error: \"The cake was bake by my mom.\"",opts:["was → is","bake → baked","mom → mother","No error"],correct:1,exp:"Passive needs the past participle: \"baked\"."}]}],
+  b2:[{topic:"Passive Voice — All Tenses",explanation:"Passive works in all tenses: is done, was done, has been done, will be done.",exercises:[{ type:"mc",q:"The report ___ (write) by the team last week.",opts:["was writing","was written","has been written","were written"],correct:1,exp:"Past simple passive → \"was written\"."},{ type:"fill",q:"The new bridge ___ (build) by 2025.",answer:"will be built",exp:"Future passive → \"will be built\"."},{ type:"error",q:"Find the error: \"The windows have been broke.\"",opts:["The → These","have been broke → have been broken","windows → window","No error"],correct:1,exp:"Past participle of \"break\" → \"broken\"."}]},{topic:"Second Conditional",explanation:"If + past simple, would + base verb. Imaginary/unlikely situations in the present.",exercises:[{ type:"mc",q:"If I ___ a million dollars, I would travel the world.",opts:["have","will have","had","would have"],correct:2,exp:"2nd conditional → \"if\" + past simple."},{ type:"fill",q:"If she ___ harder, she would get better grades. (study)",answer:"studied",exp:"Past simple in the \"if\" clause."},{ type:"error",q:"Find the error: \"If I would be rich, I would buy a yacht.\"",opts:["would be → were/was","rich → wealthy","buy → bought","No error"],correct:0,exp:"2nd conditional: \"If I were rich\" (not \"would be\")."}]},{topic:"Third Conditional",explanation:"If + past perfect, would have + past participle. Imaginary past situations.",exercises:[{ type:"mc",q:"If she had studied, she ___ the exam.",opts:["passed","would pass","would have passed","had passed"],correct:2,exp:"3rd conditional → \"would have passed\"."},{ type:"fill",q:"If I had known, I ___ (tell) you.",answer:"would have told",exp:"\"Would have\" + past participle."},{ type:"mc",q:"Which sentence is a 3rd conditional?",opts:["If it rains, I'll stay.","If I were rich, I'd travel.","If she had come, we would have met.","If you want, we can go."],correct:2,exp:"Past perfect + would have = 3rd conditional."}]},{topic:"Mixed Conditionals",explanation:"3rd cond. \"if\" + 2nd cond. result (or vice versa) — mixes time references.",exercises:[{ type:"mc",q:"If she had taken the job, she ___ rich now.",opts:["would be","would have been","will be","had been"],correct:0,exp:"Past action → present result: \"would be\"."},{ type:"fill",q:"If I ___ (be) braver, I would have spoken up yesterday.",answer:"were",exp:"Present state affecting past event → \"were\"."},{ type:"mc",q:"Mixed conditional links:",opts:["two present events","past cause + present result","two future events","present cause + past result"],correct:1,exp:"Most common: past cause → present result."}]},{topic:"Advanced Passive — Reporting Verbs",explanation:"\"It is said that…\" / \"He is believed to be…\" — formal passive with reporting verbs.",exercises:[{ type:"mc",q:"People say he is a genius. → It ___ he is a genius.",opts:["is said that","said that","has said that","says that"],correct:0,exp:"Reporting passive → \"It is said that…\""},{ type:"fill",q:"Experts believe the economy will improve. → The economy ___ (believe) to improve.",answer:"is believed",exp:"Passive with infinitive → \"is believed to\"."},{ type:"mc",q:"\"It is thought that climate change is serious.\" This is:",opts:["Active voice","Passive reporting","Direct speech","A question"],correct:1,exp:"\"It is thought that\" = passive reporting structure."}]},{topic:"Inversion for Emphasis",explanation:"For formal/emphatic style: \"Never have I seen…\", \"Rarely does she…\", \"Not only did he…\"",exercises:[{ type:"mc",q:"\"Never I have seen such beauty.\" — What is wrong?",opts:["Never → Rarely","I have → have I","such → so much","Nothing"],correct:1,exp:"After \"Never\" → invert subject and auxiliary: \"Never have I\"."},{ type:"fill",q:"___ has she been this angry. (hardly ever)",answer:"Rarely",exp:"\"Rarely\" can replace \"hardly ever\" in inversion."},{ type:"mc",q:"\"Not only ___ he rude, but also aggressive.\"",opts:["is","was","were","did"],correct:0,exp:"\"Not only is he…\" — present inversion."}]},{topic:"Subjunctive Mood",explanation:"Used in formal English after \"suggest, recommend, demand, insist\" + that + base verb.",exercises:[{ type:"mc",q:"I suggest that he ___ the doctor. (formal)",opts:["sees","see","is seeing","will see"],correct:1,exp:"Subjunctive after \"suggest that\" → bare infinitive \"see\"."},{ type:"fill",q:"The committee demanded that the report ___ (submit) immediately.",answer:"be submitted",exp:"Passive subjunctive → \"be submitted\"."},{ type:"mc",q:"\"It is essential that every student ___ on time.\"",opts:["is","be","are","will be"],correct:1,exp:"After \"essential that\" → subjunctive \"be\"."}]},{topic:"Cleft Sentences for Emphasis",explanation:"\"It was X that/who…\" and \"What I need is…\" — structures to emphasize parts of a sentence.",exercises:[{ type:"mc",q:"\"I need a break.\" → Emphatic: ___ I need is a break.",opts:["That","What","It","Which"],correct:1,exp:"\"What I need\" cleft emphasizes the object."},{ type:"fill",q:"___ was John who broke the window. (emphasize subject)",answer:"It",exp:"\"It was John who…\" cleft emphasizes the subject."},{ type:"mc",q:"Which is a correct cleft sentence?",opts:["What he did was leave early.","That he did was leave early.","Which he did was leave early.","How he did was leave early."],correct:0,exp:"\"What he did was…\" is a correct cleft."}]},{topic:"Discourse Markers",explanation:"Words linking ideas: however, moreover, nevertheless, therefore, in contrast, on the other hand.",exercises:[{ type:"mc",q:"The price is high. ___, the quality is excellent.",opts:["Therefore","However","Moreover","So"],correct:1,exp:"\"However\" introduces a contrast."},{ type:"fill",q:"She was tired; ___, she kept working.",answer:"nevertheless",exp:"\"Nevertheless\" = despite this (formal \"but\")."},{ type:"mc",q:"\"___, the results confirm our hypothesis.\" (adding evidence)",opts:["However","In contrast","Furthermore","Nevertheless"],correct:2,exp:"\"Furthermore\" adds supporting information."}]},{topic:"Wish / If Only",explanation:"\"Wish + past simple\" for present regrets. \"Wish + past perfect\" for past regrets.",exercises:[{ type:"mc",q:"I wish I ___ taller. (I'm not tall)",opts:["am","was/were","have been","will be"],correct:1,exp:"Present wish → \"wish + past simple\": \"I wish I were taller\"."},{ type:"fill",q:"If only I ___ (study) harder — then I would have passed.",answer:"had studied",exp:"Past regret → \"if only + past perfect\"."},{ type:"mc",q:"\"I wish she would stop talking.\" This expresses:",opts:["a past regret","a present regret about the future","a hypothetical past","a real condition"],correct:1,exp:"\"Wish + would\" = annoyance about present/future behavior."}]}],
+};
+
+function renderDaily() {
+  // ── Estado local ──
+  if (!state.daily) state.daily = { answers: {}, submitted: {}, completed: false };
+  const ds = state.daily;
+
+  // ── Selecionar prática do dia com base na data ──
+  const now = new Date();
+  const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+  const mod = state.user.module || 'starter';
+  const practices = DAILY_PRACTICES[mod] || DAILY_PRACTICES.starter;
+  const todayIndex = dayOfYear % practices.length;
+  const practice = practices[todayIndex];
+
+  // ── Chave única do dia (para localStorage) ──
+  const todayKey = `nexus_daily_${now.getFullYear()}_${now.getMonth()}_${now.getDate()}_${mod}`;
+
+  function isDoneToday() {
+    try { return localStorage.getItem(todayKey) === 'done'; } catch { return false; }
+  }
+  function markDoneToday() {
+    try { localStorage.setItem(todayKey, 'done'); } catch {}
+  }
+
+  const alreadyDone = isDoneToday() || ds.completed;
+
+  const page = h('div', { className: 'daily-page' });
+
+  // ── Header ──
+  const dayNum = todayIndex + 1;
+  const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  page.appendChild(h('div', { className: 'daily-header' },
+    h('div', { className: 'daily-header-left' },
+      h('div', { className: 'daily-tag' }, '🔥 Day ' + dayNum),
+      h('h1', { className: 'daily-title' }, practice.topic),
+      h('p', { className: 'daily-date' }, dateStr)
+    ),
+    alreadyDone
+      ? h('div', { className: 'daily-done-badge' }, '✓ Completed today!')
+      : h('div', { className: 'daily-level-badge' }, mod.toUpperCase())
+  ));
+
+  // ── Explicação ──
+  page.appendChild(h('div', { className: 'daily-explanation' },
+    h('div', { className: 'daily-exp-icon' }, icon('info')),
+    h('p', { className: 'daily-exp-text' }, practice.explanation)
+  ));
+
+  // ── Exercícios ──
+  const exercisesWrap = h('div', { className: 'daily-exercises' });
+
+  practice.exercises.forEach((ex, ei) => {
+    const ansKey = 'ex_' + ei;
+    const answered = ds.answers[ansKey] !== undefined;
+    const userAns = ds.answers[ansKey];
+    const submitted = !!ds.submitted[ansKey];
+
+    const exCard = h('div', { className: `daily-ex-card ${submitted ? 'revealed' : ''}` });
+
+    // Tipo label
+    const typeLabel = ex.type === 'mc' ? 'Multiple choice'
+                    : ex.type === 'fill' ? 'Fill in the blank'
+                    : 'Correct the error';
+    exCard.appendChild(h('div', { className: 'daily-ex-type' }, typeLabel));
+    exCard.appendChild(h('p', { className: 'daily-ex-q' }, (ei + 1) + '. ' + ex.q));
+
+    if (ex.type === 'mc' || ex.type === 'error') {
+      // Multiple choice options
+      const optsWrap = h('div', { className: 'daily-opts' });
+      ex.opts.forEach((opt, oi) => {
+        let cls = 'daily-opt';
+        if (submitted) {
+          if (oi === ex.correct) cls += ' correct';
+          else if (userAns === oi && oi !== ex.correct) cls += ' wrong';
+        } else if (userAns === oi) cls += ' selected';
+
+        optsWrap.appendChild(h('button', {
+          className: cls,
+          disabled: submitted || alreadyDone,
+          onClick: () => {
+            if (!submitted && !alreadyDone) {
+              ds.answers[ansKey] = oi;
+              render();
+            }
+          }
+        }, opt));
+      });
+      exCard.appendChild(optsWrap);
+
+      if (!submitted && !alreadyDone) {
+        exCard.appendChild(h('button', {
+          className: `daily-check-btn ${answered ? '' : 'disabled'}`,
+          disabled: !answered,
+          onClick: () => {
+            if (answered) { ds.submitted[ansKey] = true; render(); }
+          }
+        }, 'Check answer'));
+      }
+    } else if (ex.type === 'fill') {
+      // Fill in the blank
+      if (!submitted && !alreadyDone) {
+        const inp = h('input', {
+          className: 'daily-fill-input',
+          type: 'text',
+          placeholder: 'Type your answer…',
+          value: ds.answers[ansKey] || '',
+          onInput: (e) => { ds.answers[ansKey] = e.target.value; },
+          onKeyDown: (e) => { if (e.key === 'Enter' && ds.answers[ansKey]) { ds.submitted[ansKey] = true; render(); } }
+        });
+        exCard.appendChild(inp);
+        exCard.appendChild(h('button', {
+          className: `daily-check-btn ${ds.answers[ansKey] ? '' : 'disabled'}`,
+          disabled: !ds.answers[ansKey],
+          onClick: () => {
+            if (ds.answers[ansKey]) { ds.submitted[ansKey] = true; render(); }
+          }
+        }, 'Check answer'));
+      } else {
+        const isCorrect = typeof userAns === 'string' &&
+          userAns.trim().toLowerCase() === ex.answer.toLowerCase();
+        exCard.appendChild(h('div', { className: `daily-fill-result ${isCorrect ? 'correct' : 'wrong'}` },
+          h('span', {}, 'Your answer: '),
+          h('strong', {}, userAns || ex.answer),
+          !isCorrect ? h('span', { className: 'daily-correct-ans' }, ' ✓ ' + ex.answer) : null
+        ));
+      }
+    }
+
+    // Feedback
+    if (submitted || alreadyDone) {
+      let isRight = false;
+      if (ex.type === 'fill') {
+        isRight = typeof userAns === 'string' && userAns.trim().toLowerCase() === ex.answer.toLowerCase();
+      } else {
+        isRight = userAns === ex.correct;
+      }
+      exCard.appendChild(h('div', { className: `daily-feedback ${isRight ? 'right' : 'wrong'}` },
+        h('span', { className: 'daily-feedback-icon' }, isRight ? '✓' : '✗'),
+        h('span', {}, ex.exp)
+      ));
+    }
+
+    exercisesWrap.appendChild(exCard);
+  });
+
+  page.appendChild(exercisesWrap);
+
+  // ── Botão Complete ──
+  const allSubmitted = practice.exercises.every((_, ei) => !!ds.submitted['ex_' + ei]);
+
+  if (!alreadyDone) {
+    if (allSubmitted) {
+      const score = practice.exercises.filter((ex, ei) => {
+        const ua = ds.answers['ex_' + ei];
+        return ex.type === 'fill'
+          ? typeof ua === 'string' && ua.trim().toLowerCase() === ex.answer.toLowerCase()
+          : ua === ex.correct;
+      }).length;
+      const pct = Math.round((score / practice.exercises.length) * 100);
+
+      page.appendChild(h('div', { className: 'daily-summary' },
+        h('div', { className: 'daily-summary-score' },
+          h('span', { className: 'daily-summary-num' }, score + '/' + practice.exercises.length),
+          h('span', { className: 'daily-summary-label' }, 'correct')
+        ),
+        h('button', {
+          className: 'daily-complete-btn',
+          onClick: () => {
+            markDoneToday();
+            ds.completed = true;
+            // Update streak
+            const p = JSON.parse(localStorage.getItem('nexus_aulas_progress') || '{}');
+            render();
+          }
+        }, '🔥 Complete Daily Practice')
+      ));
+    }
+  } else {
+    page.appendChild(h('div', { className: 'daily-done-msg' },
+      h('div', { className: 'daily-done-icon' }, '🎉'),
+      h('h2', { className: 'daily-done-title' }, "You're done for today!"),
+      h('p', { className: 'daily-done-sub' }, 'Come back tomorrow for a new practice.'),
+      h('button', {
+        className: 'daily-go-home',
+        onClick: () => { state.tab = 'home'; render(); }
+      }, '< Back to Home')
+    ));
+  }
+
+  return page;
+}
+
 
 // ══════════════════════════════════════════════════════════════
 // ADMIN PANEL

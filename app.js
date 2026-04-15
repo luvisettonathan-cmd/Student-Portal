@@ -305,6 +305,17 @@ function renderLogin() {
   return wrap;
 }
 
+function renderDuvidas() {
+  const wrap = h('div', { className: 'duvidas-page' },
+    h('div', { className: 'duvidas-header' },
+      icon('info'),
+      h('h2', {}, 'Dúvidas')
+    ),
+    h('p', { className: 'duvidas-sub' }, 'Entre em contato com a nossa equipe pelos canais abaixo.')
+  );
+  return wrap;
+}
+
 function renderPortal() {
   const wrap = h('div', { className: 'portal-layout' });
   const isAdmin = state.userType === 'admin';
@@ -320,6 +331,7 @@ function renderPortal() {
     else if (state.tab === 'announcements') content.appendChild(renderAnnouncements());
     else if (state.tab === 'aulas') content.appendChild(renderAulas());
     else if (state.tab === 'daily') content.appendChild(renderDaily());
+    else if (state.tab === 'duvidas') content.appendChild(renderDuvidas());
   }
 
   wrap.appendChild(content);
@@ -369,6 +381,7 @@ function renderSidebar(isAdmin) {
       { id: 'prova', label: 'Prova', iconName: 'sparkle' },
       { id: 'chat', label: 'Chat com IA', iconName: 'waveform' },
       { id: 'comunidades', label: 'Comunidades', iconName: 'users' },
+      { id: 'duvidas', label: 'Dúvidas', iconName: 'info' },
     ];
 
     mainLinks.forEach(link => {
@@ -446,29 +459,6 @@ function renderSidebar(isAdmin) {
       stopIdleTimer(); clearSession(); render();
     }
   }, icon('logout'), 'Sair'));
-
-    // ── Card de Dúvidas (apenas aluno) ──
-  if (!isAdmin) {
-    const duv = h('div', { className: 'sidebar-duvidas' },
-      h('div', { className: 'sidebar-duvidas-title' }, '💬 Dúvidas?'),
-      h('div', { className: 'sidebar-duvidas-list' },
-        h('a', { className: 'sidebar-duvidas-item', href: 'https://wa.me/5549999999001', target: '_blank', rel: 'noopener' },
-          icon('waveform'), h('span', {}, 'Secretaria')
-        ),
-        h('a', { className: 'sidebar-duvidas-item', href: 'https://wa.me/5549999999002', target: '_blank', rel: 'noopener' },
-          icon('waveform'), h('span', {}, 'Coordenação')
-        ),
-        h('a', { className: 'sidebar-duvidas-item', href: 'https://wa.me/5549999999003', target: '_blank', rel: 'noopener' },
-          icon('waveform'), h('span', {}, 'Suporte')
-        ),
-        h('a', { className: 'sidebar-duvidas-item', href: 'https://wa.me/5549999999004', target: '_blank', rel: 'noopener' },
-          icon('waveform'), h('span', {}, 'Financeiro')
-        )
-      )
-    );
-    sb.appendChild(duv);
-  }
-
   sb.appendChild(footer);
   return sb;
 }

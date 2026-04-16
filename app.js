@@ -305,6 +305,139 @@ function renderLogin() {
   return wrap;
 }
 
+function renderChat() {
+  // Chat state stored on window to persist across re-renders
+  if (!window._chatHistory) window._chatHistory = [];
+  if (!window._chatLoading) window._chatLoading = false;
+
+  const level = (state.user && state.user.module) ? state.user.module.toUpperCase() : 'A1';
+
+  function buildUI() {
+    const wrap = document.createElement('div');
+    wrap.className = 'chat-page';
+
+    // Header
+    const header = h('div', { className: 'chat-header' },
+      icon('waveform'),
+      h('div', { className: 'chat-header-text' },
+        h('h2', {}, 'Chat com IA'),
+        h('span', { className: 'chat-level-badge' }, 'Tutor de ingl\u00eas \u2022 N\u00edvel ' + level)
+      )
+    );
+    wrap.appendChild(header);
+
+    // Messages area
+    const msgs = document.createElement('div');
+    msgs.className = 'chat-messages';
+    msgs.id = 'chat-messages-area';
+
+    if (window._chatHistory.length === 0) {
+      msgs.appendChild(h('div', { className: 'chat-empty' },
+        h('p', {}, '\uD83D\uDCAC Ol\u00e1! Sou seu tutor de ingl\u00eas. Pode me perguntar sobre gram\u00e1tica, vocabul\u00e1rio, exerc\u00edcios ou qualquer d\u00favida sobre ingl\u00eas.'),
+        h('div', { className: 'chat-suggestions' },
+          h('button', { className: 'chat-suggestion-btn', onClick: () => sendMessage('What is the difference between "since" and "for"?') }, '"since" vs "for"'),
+          h('button', { className: 'chat-suggestion-btn', onClick: () => sendMessage('Explain Present Perfect vs Past Simple') }, 'Present Perfect vs Past Simple'),
+          h('button', { className: 'chat-suggestion-btn', onClick: () => sendMessage('How do I use modal verbs?') }, 'Modal verbs'),
+        )
+      ));
+    } else {
+      window._chatHistory.forEach(m => {
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-bubble ' + (m.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai');
+        bubble.textContent = m.content;
+        msgs.appendChild(bubble);
+      });
+      if (window._chatLoading) {
+        const typing = h('div', { className: 'chat-bubble chat-bubble-ai chat-typing' },
+          h('span', {}), h('span', {}), h('span', {})
+        );
+        msgs.appendChild(typing);
+      }
+    }
+    wrap.appendChild(msgs);
+
+    // Input area
+    const inputArea = h('div', { className: 'chat-input-area' },
+      h('textarea', {
+        className: 'chat-input',
+        id: 'chat-input-field',
+        placeholder: 'Ask your English question...',
+        rows: 1,
+        onKeyDown: (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            const val = document.getElementById('chat-input-field').value.trim();
+            if (val) sendMessage(val);
+          }
+        }
+      }),
+      h('button', {
+        className: 'chat-send-btn',
+        disabled: window._chatLoading,
+        onClick: () => {
+          const val = document.getElementById('chat-input-field').value.trim();
+          if (val) sendMessage(val);
+        }
+      }, icon('arrowRight'))
+    );
+    wrap.appendChild(inputArea);
+
+    // Clear button
+    if (window._chatHistory.length > 0) {
+      wrap.appendChild(h('button', {
+        className: 'chat-clear-btn',
+        onClick: () => { window._chatHistory = []; window._chatLoading = false; render(); state.tab = 'chat'; render(); }
+      }, 'Limpar conversa'));
+    }
+
+    return wrap;
+  }
+
+  async function sendMessage(text) {
+    if (window._chatLoading) return;
+    window._chatHistory.push({ role: 'user', content: text });
+    window._chatLoading = true;
+
+    // Re-render to show user message + typing
+    const container = document.querySelector('.content');
+    if (container) {
+      const old = container.querySelector('.chat-page');
+      if (old) container.replaceChild(buildUI(), old);
+    }
+    // Scroll to bottom
+    const area = document.getElementById('chat-messages-area');
+    if (area) area.scrollTop = area.scrollHeight;
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: window._chatHistory,
+          level: level
+        })
+      });
+      const data = await res.json();
+      window._chatHistory.push({ role: 'assistant', content: data.reply || 'Sorry, I could not process that.' });
+    } catch (e) {
+      window._chatHistory.push({ role: 'assistant', content: 'Error connecting to AI. Please try again.' });
+    }
+
+    window._chatLoading = false;
+
+    // Re-render
+    const container2 = document.querySelector('.content');
+    if (container2) {
+      const old2 = container2.querySelector('.chat-page');
+      if (old2) container2.replaceChild(buildUI(), old2);
+    }
+    const area2 = document.getElementById('chat-messages-area');
+    if (area2) area2.scrollTop = area2.scrollHeight;
+  }
+
+  return buildUI();
+}
+
 function renderDuvidas() {
   const wrap = h('div', { className: 'duvidas-page' },
     h('div', { className: 'duvidas-header' },
@@ -332,6 +465,7 @@ function renderPortal() {
     else if (state.tab === 'aulas') content.appendChild(renderAulas());
     else if (state.tab === 'daily') content.appendChild(renderDaily());
     else if (state.tab === 'duvidas') content.appendChild(renderDuvidas());
+    else if (state.tab === 'chat') content.appendChild(renderChat());
   }
 
   wrap.appendChild(content);

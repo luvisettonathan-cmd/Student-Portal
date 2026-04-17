@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 
   const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
-          return res.status(500).json({ error: 'API key not configured' });
+          return res.status(500).json({ error: 'API key not chonfigured' });
     }
 
   const systemPrompt = `You are an English tutor assistant for Nexus English Center.
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
       ];
 
   const body = {
-        model: 'llama3-8b-8192',
+                model: 'llama-3.3-70b-versatile',
         messages: groqMessages,
         temperature: 0.7,
         max_tokens: 1024

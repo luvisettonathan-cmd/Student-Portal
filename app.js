@@ -306,9 +306,18 @@ function renderLogin() {
 }
 
 function renderChat() {
-  // Chat state stored on window to persist across re-renders
-  if (!window._chatHistory) window._chatHistory = [];
+  // Chat state por usuario - persistido no localStorage com chave unica por user.id
+  const _chatKey = 'nexus_chat_' + (state.user ? state.user.id : 'guest');
   if (!window._chatLoading) window._chatLoading = false;
+  if (!window._chatUserKey || window._chatUserKey !== _chatKey) {
+    window._chatUserKey = _chatKey;
+    try {
+      const _saved = localStorage.getItem(_chatKey);
+      window._chatHistory = _saved ? JSON.parse(_saved) : [];
+    } catch(e) {
+      window._chatHistory = [];
+    }
+  }
 
   const level = (state.user && state.user.module) ? state.user.module.toUpperCase() : 'A1';
 
@@ -386,7 +395,7 @@ function renderChat() {
     if (window._chatHistory.length > 0) {
       wrap.appendChild(h('button', {
         className: 'chat-clear-btn',
-        onClick: () => { window._chatHistory = []; window._chatLoading = false; render(); state.tab = 'chat'; render(); }
+        onClick: () => { window._chatHistory = []; window._chatLoading = false; try { localStorage.removeItem(window._chatUserKey); } catch(e) {} render(); state.tab = 'chat'; render(); }
       }, 'Limpar conversa'));
     }
 
@@ -396,6 +405,7 @@ function renderChat() {
   async function sendMessage(text) {
     if (window._chatLoading) return;
     window._chatHistory.push({ role: 'user', content: text });
+    try { localStorage.setItem(window._chatUserKey, JSON.stringify(window._chatHistory)); } catch(e) {}
     window._chatLoading = true;
 
     // Re-render to show user message + typing
@@ -419,8 +429,10 @@ function renderChat() {
       });
       const data = await res.json();
       window._chatHistory.push({ role: 'assistant', content: data.reply || 'Sorry, I could not process that.' });
+      try { localStorage.setItem(window._chatUserKey, JSON.stringify(window._chatHistory)); } catch(e) {}
     } catch (e) {
       window._chatHistory.push({ role: 'assistant', content: 'Error connecting to AI. Please try again.' });
+      try { localStorage.setItem(window._chatUserKey, JSON.stringify(window._chatHistory)); } catch(e) {}
     }
 
     window._chatLoading = false;

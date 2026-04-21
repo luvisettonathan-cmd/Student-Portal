@@ -346,7 +346,6 @@ input:focus, textarea:focus, select:focus { outline: none; }
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  position: relative;
 }
 
 .sidebar::before {

@@ -559,7 +559,7 @@ function renderSidebar(isAdmin) {
 
     // Seções dinâmicas
     const mod = state.user.module || 'starter';
-    const visibleSections = state.data.sections.filter(s => s.name !== 'Materiais do Curso' && s.name !== 'Atividades Extras' &&
+    const visibleSections = state.data.sections.filter(s => s.name !== 'Materiais do Curso' && s.name !== 'Atividades Extras' && s.name !== 'Biblioteca' &&
       s.visible && (!s.target_modules || s.target_modules.length === 0 || s.target_modules.includes(mod))
     );
 
@@ -834,6 +834,9 @@ function renderAulas() {
   function markComplete(lessonId) {
     const p = getProgress(); p[lessonId] = 'completed'; saveProgress(p);
   }
+  function markUncomplete(lessonId) {
+      const p = getProgress(); p[lessonId] = 'not-started'; saveProgress(p);
+  }
   function getStatus(lessonId) {
     const p = getProgress(); return p[lessonId] || 'not-started';
   }
@@ -898,7 +901,7 @@ function renderAulas() {
             status !== 'completed' ? h('button', {
               className: 'aulas-complete-btn',
               onClick: () => { markComplete(lesson.id); render(); }
-            }, '✓ Marcar como concluída') : h('span', { className: 'aulas-complete-badge' }, '✓ Concluída'),
+            }, '✓ Marcar como concluída') : h('button', { className: 'aulas-uncomplete-btn', onClick: () => { markUncomplete(lesson.id); render(); } }, '\u21a9 Desconcluir'),
             h('button', { className: 'aulas-close-btn', onClick: () => { as.openLesson = null; render(); } }, '✕ Fechar')
           )
         )

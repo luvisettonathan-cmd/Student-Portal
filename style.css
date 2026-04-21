@@ -2077,6 +2077,22 @@ body {
   background: rgba(74, 222, 128, 0.2);
 }
 
+.aulas-uncomplete-btn {
+     padding: 7px 16px;
+     background: rgba(217, 98, 45, 0.1);
+     border: 1.5px solid rgba(217, 98, 45, 0.4);
+     color: #d9622d;
+     border-radius: 999px;
+     font-size: 12px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 0.18s;
+}
+
+.aulas-uncomplete-btn:hover {
+     background: rgba(217, 98, 45, 0.2);
+}
+
 .aulas-complete-badge {
   padding: 7px 16px;
   background: rgba(74, 222, 128, 0.1);

@@ -12,7 +12,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 if (!window.supabase) { document.getElementById('app').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#c23616;font-size:1rem;">Erro ao carregar Supabase. Verifique sua conexão e recarregue a página.</div>'; throw new Error('Supabase SDK não carregou'); }
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const MODULES = [
+const MODULES = [h
   { id: 'starter', label: 'Starter' },
   { id: 'a1', label: 'A1' },
   { id: 'a2', label: 'A2' },
@@ -901,7 +901,7 @@ function renderAulas() {
             status !== 'completed' ? h('button', {
               className: 'aulas-complete-btn',
               onClick: () => { markComplete(lesson.id); render(); }
-            }, '✓ Marcar como concluída') : h('button', { className: 'aulas-uncomplete-btn', onClick: () => { markUncomplete(lesson.id); render(); } }, '\u21a9 Desconcluir'),
+            }, '✓ Marcar como concluída') : h('button', { className: 'aulas-uncomplete-btn', onClick: () => { markUncomplete(lesson.id); render(); } }, '\u21a9 Marcar como não concluída'),
             h('button', { className: 'aulas-close-btn', onClick: () => { as.openLesson = null; render(); } }, '✕ Fechar')
           )
         )

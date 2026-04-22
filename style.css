@@ -1700,167 +1700,99 @@ body {
 }
 
 /* — Next Step Card — */
+/* == NEXT STEP CARD (único card dominante na Home) == */
 .home-nextstep-card {
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-     gap: 16px;
-     background: linear-gradient(135deg, rgba(217,98,45,0.12) 0%, rgba(217,98,45,0.04) 100%);
-     border: 1.5px solid rgba(217,98,45,0.35);
-     border-radius: 18px;
-     padding: 20px 24px;
-     margin-bottom: 16px;
-     transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
-     cursor: default;
-}
-
-.home-nextstep-card:hover {
-     border-color: rgba(217,98,45,0.6);
-     box-shadow: 0 4px 24px rgba(217,98,45,0.13);
-     transform: translateY(-1px);
-}
-
-.home-nextstep-left {
-     display: flex;
-     flex-direction: column;
-     gap: 4px;
-     flex: 1;
-     min-width: 0;
-}
-
-.home-nextstep-tag {
-     font-size: 11px;
-     font-weight: 700;
-     color: var(--dark-orange);
-     text-transform: uppercase;
-     letter-spacing: 0.07em;
-     margin-bottom: 2px;
-}
-
-.home-nextstep-title {
-     font-family: var(--font-display);
-     font-size: 18px;
-     font-weight: 700;
-     color: var(--dark-text);
-     line-height: 1.2;
-     white-space: nowrap;
-     overflow: hidden;
-     text-overflow: ellipsis;
-}
-
-.home-nextstep-sub {
-     font-size: 12px;
-     color: var(--dark-muted);
-     margin-top: 2px;
-}
-
-.home-nextstep-btn {
-     flex-shrink: 0;
-     padding: 11px 24px;
-     background: var(--dark-orange);
-     color: #fff;
-     border: none;
-     border-radius: 999px;
-     font-size: 13px;
-     font-weight: 700;
-     cursor: pointer;
-     transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
-     box-shadow: 0 2px 10px rgba(217,98,45,0.25);
-     letter-spacing: 0.01em;
-}
-
-.home-nextstep-btn:hover {
-     background: var(--dark-orange-hover);
-     transform: scale(1.04);
-     box-shadow: 0 4px 16px rgba(217,98,45,0.35);
-}
-
-.home-nextstep-btn:active {
-     transform: scale(0.97);
-}
-
-
-/* ── Daily Practice Card ── */
-.home-daily-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  background: linear-gradient(135deg, rgba(232,73,30,0.15) 0%, rgba(232,73,30,0.05) 100%);
-  border: 1px solid rgba(232, 73, 30, 0.35);
+  background: linear-gradient(135deg, rgba(217,98,45,0.18) 0%, rgba(217,98,45,0.06) 100%);
+  border: 1.5px solid rgba(217,98,45,0.45);
   border-radius: 20px;
   padding: 28px 32px;
+  margin-bottom: 16px;
   cursor: pointer;
   transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
   position: relative;
   overflow: hidden;
 }
 
-.home-daily-card::before {
+.home-nextstep-card::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 20px;
-  background: radial-gradient(ellipse at 10% 50%, rgba(232,73,30,0.12) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 10% 50%, rgba(217,98,45,0.14) 0%, transparent 70%);
   pointer-events: none;
 }
 
-.home-daily-card:hover {
-  border-color: rgba(232, 73, 30, 0.7);
+.home-nextstep-card:hover {
+  border-color: rgba(217,98,45,0.75);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(232, 73, 30, 0.18);
+  box-shadow: 0 8px 32px rgba(217,98,45,0.22);
 }
 
-.home-daily-tag {
+.home-nextstep-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.home-nextstep-tag {
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--dark-orange);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
-.home-daily-title {
+.home-nextstep-title {
   font-family: var(--font-display);
   font-size: 22px;
   font-weight: 700;
   color: var(--dark-text);
   letter-spacing: -0.02em;
-  margin-bottom: 6px;
   line-height: 1.2;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.home-daily-sub {
+.home-nextstep-sub {
   font-size: 13px;
   color: var(--dark-muted);
 }
 
-.home-daily-btn {
+.home-nextstep-btn {
   background: var(--dark-orange);
   color: #fff;
   border: none;
   border-radius: 12px;
   padding: 14px 28px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
-  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-  letter-spacing: -0.01em;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  box-shadow: 0 4px 16px rgba(217,98,45,0.30);
 }
 
-.home-daily-btn:hover {
-  background: var(--dark-orange-hover);
+.home-nextstep-btn:hover {
   transform: scale(1.04);
-  box-shadow: 0 4px 16px rgba(232, 73, 30, 0.35);
+  box-shadow: 0 6px 24px rgba(217,98,45,0.42);
+  background: #e8642d;
 }
 
-.home-daily-btn:active {
+.home-nextstep-btn:active {
   transform: scale(0.97);
 }
 
-/* ── Section Label ── */
+
 .home-section-label {
   font-size: 11px;
   font-weight: 600;
@@ -1960,17 +1892,6 @@ body {
 
   .home-stat {
     flex: 1;
-  }
-
-  .home-daily-card {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 24px;
-  }
-
-  .home-daily-btn {
-    width: 100%;
-    text-align: center;
   }
 
   .home-quick-grid {

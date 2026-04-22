@@ -612,6 +612,40 @@ function renderSidebar(isAdmin) {
 // ══════════════════════════════════════════════════════════════
 // STUDENT: HOME
 // ══════════════════════════════════════════════════════════════
+function getNextStep() {
+    const prog = getProgress();
+    const mod = state.user ? (state.user.module || 'starter') : 'starter';
+    const activeCourse = COURSES.find(c => c.id === mod);
+  
+    if (activeCourse) {
+          const nextLesson = activeCourse.lessons.find(l => prog[l.id] !== 'completed');
+          const doneCount = activeCourse.lessons.filter(l => prog[l.id] === 'completed').length;
+      
+          if (nextLesson) {
+                  const isFirst = doneCount === 0;
+                  return {
+                            tag: isFirst ? '\uD83C\uDF1F Start your first lesson' : '\uD83C\uDFAF Your next step',
+                            title: nextLesson.label,
+                            sub: 'Aula \u2022 ' + activeCourse.label,
+                            btnLabel: isFirst ? 'Start now' : 'Continue',
+                            action: () => {
+                                        if (!state.aulas) state.aulas = { level: mod, openLesson: null, quizAnswers: {}, quizSubmitted: {} };
+                                        state.tab = 'aulas';
+                                        state.aulas.openLesson = nextLesson.id;
+                            }
+                  };
+          }
+    }
+  
+    return {
+          tag: '\uD83D\uDD25 Keep your streak going',
+          title: 'Daily Practice',
+          sub: 'Practice \u2022 5 min to keep your streak going',
+          btnLabel: 'Start now',
+          action: () => { state.tab = 'daily'; }
+    };
+}
+
 function renderHome() {
   const d = h('div', { className: 'home-page' });
   const mod = state.user.module || 'starter';
@@ -647,6 +681,21 @@ function renderHome() {
   );
   d.appendChild(topBar);
 
+      // — 2. NEXT STEP CARD —
+      const nextStep = getNextStep();
+      const nextStepCard = h('div', { className: 'home-nextstep-card' },
+                                   h('div', { className: 'home-nextstep-left' },
+                                             h('div', { className: 'home-nextstep-tag' }, nextStep.tag),
+                                             h('div', { className: 'home-nextstep-title' }, nextStep.title),
+                                             h('div', { className: 'home-nextstep-sub' }, nextStep.sub)
+                                           ),
+                                   h('button', {
+                                             className: 'home-nextstep-btn',
+                                             onClick: () => { nextStep.action(); render(); }
+                                   }, nextStep.btnLabel)
+                                 );
+      d.appendChild(nextStepCard);
+  
   // ── 2. DAILY PRACTICE CARD ──
   const dailyCard = h('div', { className: 'home-daily-card' },
     h('div', { className: 'home-daily-left' },

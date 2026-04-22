@@ -1154,7 +1154,7 @@ function renderDaily() {
     try { return localStorage.getItem(todayKey) === 'done'; } catch { return false; }
   }
   function markDoneToday() {
-    try { localStorage.setItem(todayKey, 'done'); } catch {}
+    try { localStorage.setItem(todayKey, 'done'); localStorage.setItem('nexus_daily_done', new Date().toDateString()); } catch {}
   }
 
   const alreadyDone = isDoneToday() || ds.completed;

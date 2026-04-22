@@ -3475,3 +3475,251 @@ body {
 .chat-clear-btn:hover {
   color: var(--dark-text);
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   GAMIFICATION — XP, MODALS, BADGES
+══════════════════════════════════════════════════════════════ */
+
+/* ── XP Bar in Aulas page ── */
+.gami-xp-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(232, 73, 30, 0.08);
+  border: 1px solid rgba(232, 73, 30, 0.2);
+  border-radius: 12px;
+  padding: 10px 18px;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.gami-xp-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gami-xp-bar-icon {
+  font-size: 1.1rem;
+}
+
+.gami-xp-bar-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--dark-orange);
+}
+
+.gami-module-badge-inline {
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: rgba(232, 73, 30, 0.15);
+  color: var(--dark-orange);
+  border: 1px solid rgba(232, 73, 30, 0.3);
+  border-radius: 99px;
+  padding: 3px 10px;
+}
+
+.gami-xp-bar-right {
+  font-size: 0.82rem;
+  color: #888888;
+  font-weight: 500;
+}
+
+/* ── Module Complete Banner ── */
+.gami-module-complete-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.08), rgba(232, 73, 30, 0.06));
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 14px;
+  padding: 16px 22px;
+  margin-bottom: 24px;
+  font-size: 1.4rem;
+}
+
+.gami-module-complete-banner strong {
+  font-size: 1rem;
+  color: #f0f0f0;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.gami-module-complete-banner p {
+  font-size: 0.82rem;
+  color: #888888;
+  margin: 0;
+}
+
+.gami-banner-badge {
+  font-size: 1.8rem;
+  margin-left: auto;
+}
+
+/* ── Completion Modal Overlay ── */
+.gami-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  backdrop-filter: blur(4px);
+}
+
+.gami-overlay.show {
+  opacity: 1;
+}
+
+.gami-modal {
+  background: #1e1e1e;
+  border: 1.5px solid #333;
+  border-radius: 22px;
+  padding: 36px 40px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+}
+
+.gami-overlay.show .gami-modal {
+  transform: translateY(0) scale(1);
+}
+
+.gami-modal.module-complete {
+  border-color: rgba(234, 179, 8, 0.4);
+  background: linear-gradient(160deg, #1e1e1e 0%, #1a1500 100%);
+}
+
+.gami-emoji {
+  font-size: 3.5rem;
+  margin-bottom: 12px;
+  animation: gami-bounce 0.6s ease 0.2s both;
+}
+
+@keyframes gami-bounce {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+.gami-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #f0f0f0;
+  margin: 0 0 6px 0;
+}
+
+.gami-sub {
+  font-size: 0.9rem;
+  color: #888888;
+  margin: 0 0 22px 0;
+  line-height: 1.5;
+}
+
+.gami-xp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(232, 73, 30, 0.12);
+  border: 1px solid rgba(232, 73, 30, 0.3);
+  border-radius: 99px;
+  padding: 8px 20px;
+  margin-bottom: 16px;
+}
+
+.gami-xp-gain {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--dark-orange);
+}
+
+.gami-xp-total {
+  font-size: 0.82rem;
+  color: #888888;
+  font-weight: 500;
+}
+
+.gami-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  color: #eab308;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.gami-social {
+  font-size: 0.88rem;
+  color: #888888;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 10px 16px;
+  margin-bottom: 22px;
+}
+
+.gami-btn-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gami-btn-primary {
+  background: var(--dark-orange);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 13px 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.15s;
+}
+
+.gami-btn-primary:hover {
+  background: #c9500f;
+  transform: scale(1.02);
+}
+
+.gami-btn-secondary {
+  background: transparent;
+  color: #888888;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 11px 24px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.gami-btn-secondary:hover {
+  border-color: #555;
+  color: #f0f0f0;
+}
+
+/* ── Home XP stat ── */
+.home-stat-icon {
+  font-size: 1.4rem;
+}
+
+/* ── Responsive modal ── */
+@media (max-width: 480px) {
+  .gami-modal {
+    padding: 28px 22px;
+    border-radius: 18px;
+  }
+  .gami-title { font-size: 1.2rem; }
+  .gami-emoji { font-size: 2.8rem; }
+}

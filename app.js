@@ -853,11 +853,20 @@ function renderAnnouncements() {
 // AULAS
 // ══════════════════════════════════════════════════════════════
 function renderAulas() {
-  // ── Dados dos cursos gerados automaticamente ──
+  // ── Dados dos cursos ──
   const COURSES = [
     {
       id: 'starter', label: 'Starter',
-      lessons: Array.from({ length: 8 }, (_, i) => ({ id: `starter-${i+1}`, label: `Lesson ${i+1}`, num: i+1 }))
+      lessons: [
+        { id: 'starter-1', label: 'Hello & Introductions', num: 1 },
+        { id: 'starter-2', label: 'Simple Present', num: 2 },
+        { id: 'starter-3', label: 'Daily Routine', num: 3 },
+        { id: 'starter-4', label: 'Questions', num: 4 },
+        { id: 'starter-5', label: 'Likes & Dislikes', num: 5 },
+        { id: 'starter-6', label: 'Food & Drinks', num: 6 },
+        { id: 'starter-7', label: 'Family & People', num: 7 },
+        { id: 'starter-8', label: 'Places & Directions', num: 8 },
+      ]
     },
     {
       id: 'a1', label: 'A1',
@@ -879,11 +888,11 @@ function renderAulas() {
     },
   ];
 
-  // ── Estado local (persiste em state.aulas) ──
+  // ── Estado local ──
   if (!state.aulas) state.aulas = { level: 'starter', openLesson: null, quizAnswers: {}, quizSubmitted: {} };
   const as = state.aulas;
 
-  // ── Progresso salvo no localStorage ──
+  // ── Progresso ──
   function getProgress() {
     try { return JSON.parse(localStorage.getItem('nexus_aulas_progress') || '{}'); } catch { return {}; }
   }
@@ -896,9 +905,6 @@ function renderAulas() {
   function markUncomplete(lessonId) {
       const p = getProgress(); p[lessonId] = 'not-started'; saveProgress(p);
   }
-  function getStatus(lessonId) {
-    const p = getProgress(); return p[lessonId] || 'not-started';
-  }
   function getLevelProgress(course) {
     const p = getProgress();
     const total = course.lessons.length;
@@ -906,14 +912,25 @@ function renderAulas() {
     return { done, total, pct: total > 0 ? Math.round((done / total) * 100) : 0 };
   }
 
-  // ── Wrapper principal ──
-  const page = h('div', { className: 'aulas-page' });
+  // ── Status por aula (completed / current / available / locked) ──
+  function getLessonStatus(course, index) {
+    const p = getProgress();
+    const lesson = course.lessons[index];
+    if (p[lesson.id] === 'completed') return 'completed';
+    // Primeira aula sempre disponível
+    if (index === 0) return 'current';
+    const prevLesson = course.lessons[index - 1];
+    if (p[prevLesson.id] !== 'completed') return 'locked';
+    // Aula anterior completada: se for a próxima após todas completadas = current, senão = available
+    const allBefore = course.lessons.slice(0, index).every(l => p[l.id] === 'completed');
+    // Verifica se há alguma aula "current" antes desta
+    const hasCurrentBefore = course.lessons.slice(0, index).some((l, i) => getLessonStatus(course, i) === 'current');
+    if (allBefore && !hasCurrentBefore) return 'current';
+    return 'available';
+  }
 
-  // ── Título ──
-  page.appendChild(h('div', { className: 'aulas-header' },
-    h('h1', { className: 'aulas-title' }, 'Aulas'),
-    h('p', { className: 'aulas-subtitle' }, 'Selecione um nível e acompanhe seu progresso')
-  ));
+  // ── Página principal ──
+  const page = h('div', { className: 'aulas-page' });
 
   // ── Level Tabs ──
   const tabs = h('div', { className: 'aulas-tabs' });
@@ -922,7 +939,7 @@ function renderAulas() {
     const prog = getLevelProgress(course);
     tabs.appendChild(h('button', {
       className: `aulas-tab ${active ? 'active' : ''}`,
-      onClick: () => { as.level = course.id; as.openLesson = null; as.quizAnswers = {}; as.quizSubmitted = {}; render(); }
+      onClick: () => { as.level = course.id; as.openLesson = null; render(); }
     },
       h('span', { className: 'aulas-tab-label' }, course.label),
       h('span', { className: `aulas-tab-badge ${prog.pct === 100 ? 'done' : ''}` }, prog.pct + '%')
@@ -933,40 +950,65 @@ function renderAulas() {
   const activeCourse = COURSES.find(c => c.id === as.level);
   const prog = getLevelProgress(activeCourse);
 
-  // ── Progress bar do nível ──
-  const progBar = h('div', { className: 'aulas-level-progress' },
-    h('div', { className: 'aulas-level-progress-info' },
-      h('span', {}, activeCourse.label + ' — ' + prog.done + ' de ' + prog.total + ' aulas concluídas'),
-      h('span', { className: 'aulas-level-progress-pct' }, prog.pct + '%')
+  // ── Your Next Step Card ──
+  const p = getProgress();
+  const nextLesson = activeCourse.lessons.find((l, i) => getLessonStatus(activeCourse, i) !== 'completed');
+  const nextLessonIndex = nextLesson ? activeCourse.lessons.indexOf(nextLesson) : -1;
+  const nextStatus = nextLesson ? getLessonStatus(activeCourse, nextLessonIndex) : null;
+  const isFirstLesson = prog.done === 0;
+  if (nextLesson) {
+    const nextStepCard = h('div', { className: 'path-nextstep-card',
+      onClick: () => { as.openLesson = nextLesson.id; as.quizAnswers = {}; as.quizSubmitted = {}; render(); setTimeout(() => { const panel = document.querySelector('.aulas-lesson-panel'); if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50); }
+    },
+      h('div', { className: 'path-nextstep-icon' },
+        h('div', { className: 'path-nextstep-icon-circle' }, '🎯')
+      ),
+      h('div', { className: 'path-nextstep-content' },
+        h('span', { className: 'path-nextstep-label' }, 'YOUR NEXT STEP'),
+        h('h2', { className: 'path-nextstep-title' }, 'Lesson ' + nextLesson.num + ' – ' + nextLesson.label),
+        h('p', { className: 'path-nextstep-sub' }, isFirstLesson ? 'Start your journey!' : 'Keep going! You\'re doing great.')
+      ),
+      h('button', { className: 'path-nextstep-btn',
+        onClick: (e) => { e.stopPropagation(); as.openLesson = nextLesson.id; as.quizAnswers = {}; as.quizSubmitted = {}; render(); setTimeout(() => { const panel = document.querySelector('.aulas-lesson-panel'); if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50); }
+      }, isFirstLesson ? 'Start lesson →' : 'Continue lesson →')
+    );
+    page.appendChild(nextStepCard);
+  }
+
+  // ── Learning Path Header ──
+  const pathHeader = h('div', { className: 'path-header' },
+    h('div', { className: 'path-header-top' },
+      h('h2', { className: 'path-header-title' }, activeCourse.label + ' Path'),
+      h('span', { className: 'path-header-count' }, prog.done + ' / ' + prog.total + ' lessons completed')
     ),
-    h('div', { className: 'aulas-progress-track' },
-      h('div', { className: 'aulas-progress-fill', style: `width:${prog.pct}%` })
+    h('p', { className: 'path-header-sub' }, 'Complete the lessons in order to unlock new content and level up your English.'),
+    h('div', { className: 'path-progress-bar' },
+      h('div', { className: 'path-progress-fill', style: `width:${prog.pct}%` })
     )
   );
-  page.appendChild(progBar);
+  page.appendChild(pathHeader);
 
-  // ── Painel de aula aberta ──
+  // ── Lesson Panel (when open) ──
   if (as.openLesson) {
     const lesson = activeCourse.lessons.find(l => l.id === as.openLesson);
     if (lesson) {
-      const status = getStatus(lesson.id);
+      const lessonIndex = activeCourse.lessons.indexOf(lesson);
+      const status = getLessonStatus(activeCourse, lessonIndex);
       const panel = h('div', { className: 'aulas-lesson-panel' });
 
-      // Cabeçalho do painel
       panel.appendChild(h('div', { className: 'aulas-panel-header' },
+        h('button', { className: 'aulas-panel-back', onClick: () => { as.openLesson = null; render(); } }, '← Back'),
         h('div', { className: 'aulas-panel-title-row' },
           h('h2', { className: 'aulas-panel-title' }, lesson.label),
           h('div', { className: 'aulas-panel-actions' },
             status !== 'completed' ? h('button', {
               className: 'aulas-complete-btn',
-              onClick: () => { markComplete(lesson.id); render(); }
-            }, '✓ Marcar como concluída') : h('button', { className: 'aulas-uncomplete-btn', onClick: () => { markUncomplete(lesson.id); render(); } }, '\u21a9 Marcar como não concluída'),
-            h('button', { className: 'aulas-close-btn', onClick: () => { as.openLesson = null; render(); } }, '✕ Fechar')
+              onClick: () => { markComplete(lesson.id); as.openLesson = null; render(); }
+            }, '✓ Marcar como concluída') : h('button', { className: 'aulas-uncomplete-btn', onClick: () => { markUncomplete(lesson.id); render(); } }, '↺ Marcar como não concluída')
           )
         )
       ));
 
-      // Player de vídeo (placeholder)
       panel.appendChild(h('div', { className: 'aulas-video-wrapper' },
         h('div', { className: 'aulas-video-placeholder' },
           h('div', { className: 'aulas-video-icon' }, icon('book')),
@@ -975,28 +1017,16 @@ function renderAulas() {
         )
       ));
 
-      // Quiz
       const quizKey = lesson.id;
       const submitted = !!as.quizSubmitted[quizKey];
-
-      // Perguntas placeholder — serão substituídas por dados reais depois
-      const questions = [
-        {
-          id: 'q1', text: `Quiz: ${lesson.label} — Pergunta 1`,
-          options: ['Opção A', 'Opção B', 'Opção C', 'Opção D'], correct: 0
-        },
-        {
-          id: 'q2', text: `Quiz: ${lesson.label} — Pergunta 2`,
-          options: ['Opção A', 'Opção B', 'Opção C', 'Opção D'], correct: 1
-        },
-        {
-          id: 'q3', text: `Quiz: ${lesson.label} — Pergunta 3`,
-          options: ['Opção A', 'Opção B', 'Opção C', 'Opção D'], correct: 2
-        },
-      ];
-
       const quizSection = h('div', { className: 'aulas-quiz' });
       quizSection.appendChild(h('h3', { className: 'aulas-quiz-title' }, '📝 Quiz'));
+
+      const questions = [
+        { id: 'q1', text: `Quiz: ${lesson.label} — Pergunta 1`, options: ['Opção A', 'Opção B', 'Opção C', 'Opção D'], correct: 0 },
+        { id: 'q2', text: `Quiz: ${lesson.label} — Pergunta 2`, options: ['Opção A', 'Opção B', 'Opção C', 'Opção D'], correct: 1 },
+        { id: 'q3', text: `Quiz: ${lesson.label} — Pergunta 3`, options: ['Opção A', 'Opção B', 'Opção C', 'Opção D'], correct: 2 },
+      ];
 
       questions.forEach((q, qi) => {
         const qBlock = h('div', { className: 'aulas-quiz-question' });
@@ -1009,16 +1039,9 @@ function renderAulas() {
             if (oi === q.correct) optClass += ' correct';
             else if (selected && oi !== q.correct) optClass += ' wrong';
           } else if (selected) optClass += ' selected';
-
           opts.appendChild(h('button', {
-            className: optClass,
-            disabled: submitted,
-            onClick: () => {
-              if (!submitted) {
-                as.quizAnswers[quizKey + '_' + q.id] = oi;
-                render();
-              }
-            }
+            className: optClass, disabled: submitted,
+            onClick: () => { if (!submitted) { as.quizAnswers[quizKey + '_' + q.id] = oi; render(); } }
           }, opt));
         });
         qBlock.appendChild(opts);
@@ -1028,15 +1051,8 @@ function renderAulas() {
       if (!submitted) {
         const allAnswered = questions.every(q => as.quizAnswers[quizKey + '_' + q.id] !== undefined);
         quizSection.appendChild(h('button', {
-          className: `aulas-quiz-submit ${allAnswered ? '' : 'disabled'}`,
-          disabled: !allAnswered,
-          onClick: () => {
-            if (allAnswered) {
-              as.quizSubmitted[quizKey] = true;
-              markComplete(lesson.id);
-              render();
-            }
-          }
+          className: `aulas-quiz-submit ${allAnswered ? '' : 'disabled'}`, disabled: !allAnswered,
+          onClick: () => { if (allAnswered) { as.quizSubmitted[quizKey] = true; markComplete(lesson.id); render(); } }
         }, 'Enviar respostas'));
       } else {
         const score = questions.filter(q => as.quizAnswers[quizKey + '_' + q.id] === q.correct).length;
@@ -1047,13 +1063,7 @@ function renderAulas() {
           h('span', { className: 'aulas-quiz-pct' }, pct + '%'),
           pct < 70 ? h('button', {
             className: 'aulas-quiz-retry',
-            onClick: () => {
-              as.quizAnswers = Object.fromEntries(
-                Object.entries(as.quizAnswers).filter(([k]) => !k.startsWith(quizKey + '_'))
-              );
-              as.quizSubmitted[quizKey] = false;
-              render();
-            }
+            onClick: () => { as.quizAnswers = Object.fromEntries(Object.entries(as.quizAnswers).filter(([k]) => !k.startsWith(quizKey + '_'))); as.quizSubmitted[quizKey] = false; render(); }
           }, '↺ Tentar novamente') : h('span', { className: 'aulas-quiz-congrats' }, '🎉 Parabéns!')
         ));
       }
@@ -1063,47 +1073,88 @@ function renderAulas() {
     }
   }
 
-  // ── Grade de aulas ──
-  const grid = h('div', { className: 'aulas-grid' });
-  activeCourse.lessons.forEach(lesson => {
-    const status = getStatus(lesson.id);
-    const isOpen = as.openLesson === lesson.id;
-    const card = h('div', {
-      className: `aulas-card ${status} ${isOpen ? 'open' : ''}`,
-      onClick: () => {
-        as.openLesson = isOpen ? null : lesson.id;
-        as.quizAnswers = {};
-        as.quizSubmitted = {};
-        render();
-        // Scroll suave ao painel
-        setTimeout(() => {
-          const panel = document.querySelector('.aulas-lesson-panel');
-          if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 50);
-      }
-    },
-      h('div', { className: 'aulas-card-top' },
-        h('span', { className: 'aulas-card-num' }, lesson.num),
-        h('span', { className: `aulas-status-dot ${status}` })
-      ),
-      h('div', { className: 'aulas-card-title' }, lesson.label),
-      h('div', { className: 'aulas-card-icons' },
-        h('span', { className: 'aulas-card-icon-item' }, icon('book'), h('span', {}, 'Vídeo')),
-        h('span', { className: 'aulas-card-icon-item' }, icon('shape'), h('span', {}, 'Quiz'))
-      ),
-      h('div', { className: `aulas-status-label ${status}` },
-        status === 'completed' ? '✓ Concluída' :
-        status === 'in-progress' ? '▶ Em andamento' : '○ Não iniciada'
-      )
-    );
-    grid.appendChild(card);
-  });
-  page.appendChild(grid);
+  // ── Learning Path Timeline ──
+  const timeline = h('div', { className: 'path-timeline' });
 
+  activeCourse.lessons.forEach((lesson, index) => {
+    const status = getLessonStatus(activeCourse, index);
+    const isLast = index === activeCourse.lessons.length - 1;
+    const isOpen = as.openLesson === lesson.id;
+
+    const item = h('div', { className: `path-item ${status}` });
+
+    // Connector line (above the node, except first)
+    if (index > 0) {
+      const prevStatus = getLessonStatus(activeCourse, index - 1);
+      const lineClass = prevStatus === 'completed' ? 'path-line completed' : 'path-line';
+      item.appendChild(h('div', { className: lineClass }));
+    }
+
+    // Row: node + card
+    const row = h('div', { className: 'path-row' });
+
+    // Node circle
+    let nodeContent = '';
+    if (status === 'completed') nodeContent = '✓';
+    else if (status === 'current') nodeContent = '▶';
+    else if (status === 'locked') nodeContent = '🔒';
+    const node = h('div', { className: `path-node ${status}` }, nodeContent);
+    row.appendChild(node);
+
+    // Card
+    const card = h('div', {
+      className: `path-card ${status} ${isOpen ? 'open' : ''}`,
+      onClick: () => {
+        if (status === 'locked') {
+          const toast = document.querySelector('.path-toast');
+          if (toast) { toast.textContent = 'Complete the previous lessons to unlock this one.'; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
+          return;
+        }
+        if (status === 'completed' || status === 'current' || status === 'available') {
+          as.openLesson = isOpen ? null : lesson.id;
+          as.quizAnswers = {};
+          as.quizSubmitted = {};
+          render();
+          setTimeout(() => { const panel = document.querySelector('.aulas-lesson-panel'); if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+        }
+      }
+    });
+
+    // Card left: lesson info
+    const cardLeft = h('div', { className: 'path-card-left' },
+      h('span', { className: 'path-card-num' }, 'Lesson ' + lesson.num),
+      h('span', { className: 'path-card-title' }, lesson.label)
+    );
+    card.appendChild(cardLeft);
+
+    // Card right: badge + chevron
+    let badge;
+    if (status === 'completed') {
+      badge = h('span', { className: 'path-badge completed' }, '✓ Completed');
+    } else if (status === 'current') {
+      badge = h('button', { className: 'path-continue-btn',
+        onClick: (e) => { e.stopPropagation(); as.openLesson = lesson.id; as.quizAnswers = {}; as.quizSubmitted = {}; render(); setTimeout(() => { const panel = document.querySelector('.aulas-lesson-panel'); if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50); }
+      }, 'Continue →');
+    } else if (status === 'available') {
+      badge = h('span', { className: 'path-badge available' }, '🔓 Available soon');
+    } else {
+      badge = h('span', { className: 'path-badge locked' }, '🔒 Locked');
+    }
+
+    const cardRight = h('div', { className: 'path-card-right' }, badge, h('span', { className: 'path-chevron' }, '⌄'));
+    card.appendChild(cardRight);
+    row.appendChild(card);
+    item.appendChild(row);
+    timeline.appendChild(item);
+  });
+
+  // Toast notification
+  const toast = h('div', { className: 'path-toast' }, '');
+  timeline.appendChild(toast);
+
+  page.appendChild(timeline);
   return page;
 }
-
-
 function announcementNode(a) {
   const dt = new Date(a.created_at);
   const day = dt.getDate();

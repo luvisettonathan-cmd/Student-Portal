@@ -1239,7 +1239,7 @@ function renderDaily() {
           type: 'text',
           placeholder: 'Type your answer…',
           value: ds.answers[ansKey] || '',
-          onInput: (e) => { ds.answers[ansKey] = e.target.value; const _pos = e.target.selectionStart; render(); const _inp = document.querySelectorAll('.daily-fill-input')[ei]; if (_inp) { _inp.focus(); _inp.setSelectionRange(_pos, _pos); } },
+          onInput: (e) => { ds.answers[ansKey] = e.target.value; const _btn = e.target.nextElementSibling; if (_btn) { const _has = !!e.target.value; _btn.disabled = !_has; _btn.className = 'daily-check-btn' + (_has ? '' : ' disabled'); } },
           onKeyDown: (e) => { if (e.key === 'Enter' && ds.answers[ansKey]) { ds.submitted[ansKey] = true; render(); } }
         });
         exCard.appendChild(inp);

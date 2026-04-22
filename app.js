@@ -620,65 +620,86 @@ function getNextStep() {
     { id: 'b1', label: 'B1', lessons: Array.from({ length: 10 }, (_, i) => ({ id: 'b1-' + (i+21), label: 'Lesson ' + (i+21) })) },
     { id: 'b2', label: 'B2', lessons: [1,2,3,4,6,7,8,9,11,12,13,14,16,17,18,19].map(function(n){ return { id: 'b2-' + n, label: 'Unit ' + n }; }) },
   ];
-    const prog = JSON.parse(localStorage.getItem('nexus_aulas_progress') || '{}');
-    const mod = state.user ? (state.user.module || 'starter') : 'starter';
-    const activeCourse = COURSES.find(c => c.id === mod);
-  
-    if (activeCourse) {
-          const nextLesson = activeCourse.lessons.find(l => prog[l.id] !== 'completed');
-          const doneCount = activeCourse.lessons.filter(l => prog[l.id] === 'completed').length;
-      
-          if (nextLesson) {
-                  const isFirst = doneCount === 0;
-                  return {
-                            tag: isFirst ? '\uD83C\uDF1F Start your first lesson' : '\uD83C\uDFAF Your next step',
-                            title: nextLesson.label,
-                            sub: 'Aula \u2022 ' + activeCourse.label,
-                            btnLabel: isFirst ? 'Start now' : 'Continue',
-                            action: () => {
-                                        if (!state.aulas) state.aulas = { level: mod, openLesson: null, quizAnswers: {}, quizSubmitted: {} };
-                                        state.tab = 'aulas';
-                                        state.aulas.openLesson = nextLesson.id;
-                            }
-                  };
-          }
-    }
-  
+  const prog = JSON.parse(localStorage.getItem('nexus_aulas_progress') || '{}');
+  const mod  = state.user ? (state.user.module || 'starter') : 'starter';
+
+  // 1. Check if daily practice was done today
+  const today = new Date().toDateString();
+  const dailyDone = localStorage.getItem('nexus_daily_done') === today;
+
+  // 2. Daily NOT done → show Daily Practice as the main action
+  if (!dailyDone) {
     return {
-          tag: '\uD83D\uDD25 Keep your streak going',
-          title: 'Daily Practice',
-          sub: 'Practice \u2022 5 min to keep your streak going',
-          btnLabel: 'Start now',
-          action: () => { state.tab = 'daily'; }
+      tag: '\uD83D\uDD25 Daily Practice',
+      title: "Complete today's challenge",
+      sub: '5 min \u2022 Quick exercises to keep your streak going',
+      btnLabel: 'Start now',
+      action: function() { state.tab = 'daily'; }
     };
+  }
+
+  // 3. Daily done → show next lesson
+  const activeCourse = COURSES.find(function(c) { return c.id === mod; });
+  if (activeCourse) {
+    const nextLesson = activeCourse.lessons.find(function(l) { return prog[l.id] !== 'completed'; });
+    const doneCount  = activeCourse.lessons.filter(function(l) { return prog[l.id] === 'completed'; }).length;
+    if (nextLesson) {
+      var isFirst = doneCount === 0;
+      return {
+        tag: isFirst ? '\uD83C\uDF1F Start your first lesson' : '\uD83C\uDFAF Continue learning',
+        title: nextLesson.label,
+        sub: 'Aula \u2022 ' + activeCourse.label,
+        btnLabel: isFirst ? 'Start now' : 'Continue',
+        action: function() {
+          if (!state.aulas) state.aulas = { level: mod, openLesson: null, quizAnswers: {}, quizSubmitted: {} };
+          state.tab = 'aulas';
+          state.aulas.openLesson = nextLesson.id;
+        }
+      };
+    }
+    return {
+      tag: '\uD83C\uDFC6 Course complete!',
+      title: 'All lessons done',
+      sub: 'Keep practising to maintain your streak',
+      btnLabel: 'Practice again',
+      action: function() { state.tab = 'daily'; }
+    };
+  }
+
+  return {
+    tag: '\uD83D\uDD25 Keep going',
+    title: 'Daily Practice',
+    sub: '5 min \u2022 Quick exercises',
+    btnLabel: 'Start now',
+    action: function() { state.tab = 'daily'; }
+  };
 }
 
 function renderHome() {
   const d = h('div', { className: 'home-page' });
   const mod = state.user.module || 'starter';
-  const modLabel = MODULES.find(m => m.id === mod)?.label || '—';
+  const modLabel = MODULES.find(function(m) { return m.id === mod; })?.label || '\u2014';
   const firstName = state.user.name ? state.user.name.split(' ')[0] : 'Aluno';
 
-  // Streak e progresso (calculados localmente por ora)
-  const streak = state.user.streak || 0;
+  const streak   = state.user.streak || 0;
   const progress = state.user.progress || 0;
 
-  // ── 1. TOPO ──
+  // \u2500\u2500 1. TOPO \u2500\u2500
   const topBar = h('div', { className: 'home-topbar' },
     h('div', { className: 'home-welcome' },
-      h('h1', { className: 'home-welcome-title' }, 'Welcome back, ' + firstName + ' 👋'),
-      h('p', { className: 'home-welcome-sub' }, "You're on: ", h('strong', {}, modLabel))
+      h('h1', { className: 'home-welcome-title' }, 'Welcome back, ' + firstName + ' \uD83D\uDC4B'),
+      h('p',  { className: 'home-welcome-sub'   }, "You're on: ", h('strong', {}, modLabel))
     ),
     h('div', { className: 'home-stats' },
       h('div', { className: 'home-stat' },
-        h('span', { className: 'home-stat-icon' }, '🔥'),
+        h('span', { className: 'home-stat-icon' }, '\uD83D\uDD25'),
         h('div', {},
           h('div', { className: 'home-stat-value' }, streak + (streak === 1 ? ' day' : ' days')),
           h('div', { className: 'home-stat-label' }, 'Streak')
         )
       ),
       h('div', { className: 'home-stat' },
-        h('span', { className: 'home-stat-icon' }, '📊'),
+        h('span', { className: 'home-stat-icon' }, '\uD83D\uDCCA'),
         h('div', {},
           h('div', { className: 'home-stat-value' }, progress + '%'),
           h('div', { className: 'home-stat-label' }, 'Progress')
@@ -688,66 +709,48 @@ function renderHome() {
   );
   d.appendChild(topBar);
 
-      // — 2. NEXT STEP CARD —
-      const nextStep = getNextStep();
-      const nextStepCard = h('div', { className: 'home-nextstep-card' },
-                                   h('div', { className: 'home-nextstep-left' },
-                                             h('div', { className: 'home-nextstep-tag' }, nextStep.tag),
-                                             h('div', { className: 'home-nextstep-title' }, nextStep.title),
-                                             h('div', { className: 'home-nextstep-sub' }, nextStep.sub)
-                                           ),
-                                   h('button', {
-                                             className: 'home-nextstep-btn',
-                                             onClick: () => { nextStep.action(); render(); }
-                                   }, nextStep.btnLabel)
-                                 );
-      d.appendChild(nextStepCard);
-  
-  // ── 2. DAILY PRACTICE CARD ──
-  const dailyCard = h('div', { className: 'home-daily-card' },
-    h('div', { className: 'home-daily-left' },
-      h('div', { className: 'home-daily-tag' }, '🔥 Daily Practice'),
-      h('h2', { className: 'home-daily-title' }, "Complete today's challenge"),
-      h('p', { className: 'home-daily-sub' }, '5 min • Quick exercises to keep your streak going')
+  // \u2500\u2500 2. NEXT STEP \u2014 \u00danico card dominante \u2500\u2500
+  const ns = getNextStep();
+  const nsCard = h('div', { className: 'home-nextstep-card' },
+    h('div', { className: 'home-nextstep-left' },
+      h('div', { className: 'home-nextstep-tag'   }, ns.tag),
+      h('div', { className: 'home-nextstep-title' }, ns.title),
+      h('div', { className: 'home-nextstep-sub'   }, ns.sub)
     ),
     h('button', {
-      className: 'home-daily-btn',
-      onClick: () => { state.tab = 'daily'; render(); }
-    }, 'Start now →')
+      className: 'home-nextstep-btn',
+      onClick: function() { ns.action(); render(); }
+    }, ns.btnLabel)
   );
-  d.appendChild(dailyCard);
+  d.appendChild(nsCard);
 
-  // ── 3. QUICK ACCESS GRID ──
-  const quickLabel = h('div', { className: 'home-section-label' }, 'Quick access');
-  d.appendChild(quickLabel);
+  // \u2500\u2500 3. QUICK ACCESS GRID \u2500\u2500
+  d.appendChild(h('div', { className: 'home-section-label' }, 'Quick access'));
 
   const quickItems = [
-    { iconName: 'book',     title: 'Aulas',       desc: 'Watch your lessons',        tab: 'aulas' },
-    { iconName: 'stack',    title: 'Exercícios',  desc: 'Practice what you learned', tab: 'exercicios' },
-    { iconName: 'compass',  title: 'Materiais',   desc: 'Access extra content',      tab: 'materiais' },
-    { iconName: 'waveform', title: 'Chat com IA', desc: 'Ask questions anytime',     tab: 'chat' },
+    { iconName: 'book',     title: 'Aulas',       desc: 'Watch your lessons',        tab: 'aulas'      },
+    { iconName: 'stack',    title: 'Exerc\u00edcios',  desc: 'Practice what you learned', tab: 'exercicios' },
+    { iconName: 'compass',  title: 'Materiais',   desc: 'Access extra content',      tab: 'materiais'  },
+    { iconName: 'waveform', title: 'Chat com IA', desc: 'Ask questions anytime',     tab: 'chat'       },
   ];
-
   const grid = h('div', { className: 'home-quick-grid' });
-  quickItems.forEach(item => {
-    const iconEl = icon(item.iconName);
-    if (iconEl) {
-      iconEl.removeAttribute('class');
-      iconEl.setAttribute('class', 'home-quick-svg');
-    }
+  quickItems.forEach(function(item) {
+    var iconEl = icon(item.iconName);
+    if (iconEl) { iconEl.removeAttribute('class'); iconEl.setAttribute('class', 'home-quick-svg'); }
     grid.appendChild(h('div', {
       className: 'home-quick-card',
-      onClick: () => { state.tab = item.tab; render(); }
+      onClick: function() { state.tab = item.tab; render(); }
     },
-      h('div', { className: 'home-quick-icon' }, iconEl || ''),
+      h('div', { className: 'home-quick-icon'  }, iconEl || ''),
       h('div', { className: 'home-quick-title' }, item.title),
-      h('div', { className: 'home-quick-desc' }, item.desc)
+      h('div', { className: 'home-quick-desc'  }, item.desc)
     ));
   });
   d.appendChild(grid);
 
   return d;
 }
+
 function waveIconSvg() {
   const w = document.createElement('span');
   w.style.display = 'inline-flex';

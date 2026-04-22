@@ -12,7 +12,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 if (!window.supabase) { document.getElementById('app').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#c23616;font-size:1rem;">Erro ao carregar Supabase. Verifique sua conexão e recarregue a página.</div>'; throw new Error('Supabase SDK não carregou'); }
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const MODULES = [h
+const MODULES = [
   { id: 'starter', label: 'Starter' },
   { id: 'a1', label: 'A1' },
   { id: 'a2', label: 'A2' },

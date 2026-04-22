@@ -2285,6 +2285,78 @@ body {
   line-height: 1;
 }
 
+/* ── Inline Expanded Panel ── */
+.path-panel-wrap {
+  display: flex;
+  gap: 0;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.path-panel-spacer {
+  width: 44px;
+  flex-shrink: 0;
+  margin-right: 16px;
+}
+
+.path-panel-content {
+  flex: 1;
+}
+
+.path-inline-panel {
+  background: #252525;
+  border: 1px solid #3a3a3a;
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin-bottom: 4px;
+}
+
+.path-inline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.path-inline-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f0f0f0;
+  margin: 0;
+}
+
+.path-inline-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Badge current (open/close label) */
+.path-badge.current {
+  background: rgba(232, 73, 30, 0.15);
+  color: var(--dark-orange);
+  border: 1px solid rgba(232, 73, 30, 0.35);
+}
+
+/* Chevron open rotation */
+.path-chevron {
+  color: #888888;
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: transform 0.2s;
+}
+
+.path-chevron.open {
+  color: var(--dark-orange);
+}
+
+/* Card open state — stronger border highlight */
+.path-card.open {
+  border-color: var(--dark-orange);
+  background: rgba(232, 73, 30, 0.07);
+}
+
 /* Toast notification */
 .path-toast {
   position: fixed;

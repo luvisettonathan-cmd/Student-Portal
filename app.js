@@ -613,7 +613,7 @@ function renderSidebar(isAdmin) {
 // STUDENT: HOME
 // ══════════════════════════════════════════════════════════════
 function getNextStep() {
-    const prog = getProgress();
+    const prog = JSON.parse(localStorage.getItem('nexus_aulas_progress') || '{}');
     const mod = state.user ? (state.user.module || 'starter') : 'starter';
     const activeCourse = COURSES.find(c => c.id === mod);
   

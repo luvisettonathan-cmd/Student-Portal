@@ -1,4 +1,4 @@
-h// ══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 // NEXUS ENGLISH CENTER - PORTAL DO ALUNO
 // ══════════════════════════════════════════════════════════════
 //
@@ -1309,9 +1309,11 @@ function renderAulas() {
 
   function buildRankingCard() {
     const allStudents = (state.data && state.data.students) ? [...state.data.students] : [];
-    allStudents.sort((a, b) => (b.xp || 0) - (a.xp || 0));
     const myId = state.user && state.user.id;
     const myXP = getXP();
+    const myStudent = allStudents.find(s => s.id === myId);
+    if (myStudent) myStudent.xp = myXP;
+    allStudents.sort((a, b) => (b.xp || 0) - (a.xp || 0));
     const myIdx = allStudents.findIndex(s => s.id === myId);
     const myPos = myIdx === -1 ? allStudents.length + 1 : myIdx + 1;
     const total = allStudents.length || 1;

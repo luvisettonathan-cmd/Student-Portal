@@ -3738,6 +3738,7 @@ body {
   max-width: 1200px !important;
   padding: 32px 40px !important;
   align-items: start !important;
+     grid-auto-flow: row dense !important;
 }
 
 .aulas-page-with-ranking .aulas-tabs {

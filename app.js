@@ -620,7 +620,13 @@ const XP_PER_LESSON = 10;
 function getXP() {
   try { return parseInt(localStorage.getItem('nexus_xp') || '0', 10); } catch { return 0; }
 }
-function addXP(amount) {
+function addXP(amount, lessonId) {
+  if (lessonId) {
+    const awarded = JSON.parse(localStorage.getItem('nexus_xp_awarded') || '[]');
+    if (awarded.includes(lessonId)) return;
+    awarded.push(lessonId);
+    localStorage.setItem('nexus_xp_awarded', JSON.stringify(awarded));
+  }
   const current = getXP();
   localStorage.setItem('nexus_xp', String(current + amount));
 }
@@ -731,6 +737,8 @@ function showCompletionModal(lessonLabel, nextLessonLabel, moduleComplete, modul
   requestAnimationFrame(() => overlay.classList.add('show'));
 }
 
+const COURSE_TOTALS = { starter: 8, a1: 10, a2: 10, b1: 10, b2: 10 };
+
 function getNextStep() {
   const COURSES = [
     { id: 'starter', label: 'Starter', lessons: Array.from({ length: 8 }, (_, i) => ({ id: 'starter-' + (i+1), label: 'Lesson ' + (i+1) })) },
@@ -801,7 +809,11 @@ function renderHome() {
   const firstName = state.user.name ? state.user.name.split(' ')[0] : 'Aluno';
 
   const streak   = state.user.streak || 0;
-  const progress = state.user.progress || 0;
+  const _progData = getProgress();
+  const _modId = state.user.module || state.user.level || 'starter';
+  const _modTotal = COURSE_TOTALS[_modId] || 8;
+  const _modDone = Object.values(_progData).filter(v => v === 'completed').length;
+  const progress = _modTotal > 0 ? Math.round(Math.min(_modDone, _modTotal) / _modTotal * 100) : 0;
 
   // \u2500\u2500 1. TOPO \u2500\u2500
   const topBar = h('div', { className: 'home-topbar' },
@@ -1012,7 +1024,7 @@ function renderAulas() {
     if (p[lessonId] === 'completed') return; // already done, no XP
     p[lessonId] = 'completed';
     saveProgress(p);
-    addXP(XP_PER_LESSON);
+    addXP(XP_PER_LESSON, lessonId);
 
     // Check module completion
     const allDone = course.lessons.every(l => p[l.id] === 'completed');

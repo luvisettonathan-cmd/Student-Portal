@@ -1,15 +1,15 @@
-// ══════════════════════════════════════════════════════════════
+h// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // NEXUS ENGLISH CENTER - PORTAL DO ALUNO
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 //
-// ⚠️ SUBSTITUA AS 2 LINHAS ABAIXO COM OS DADOS DO SEU SUPABASE
+// â ï¸ SUBSTITUA AS 2 LINHAS ABAIXO COM OS DADOS DO SEU SUPABASE
 //
 const SUPABASE_URL = 'https://aqlnihunzthcilrabasp.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxbG5paHVuenRoY2lscmFiYXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwNDMxOTQsImV4cCI6MjA5MTYxOTE5NH0.Dth5evj04iA9X9V68QfbSJ9qFC2PSCdetXNOG5MKg7c';
 //
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
-if (!window.supabase) { document.getElementById('app').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#c23616;font-size:1rem;">Erro ao carregar Supabase. Verifique sua conexão e recarregue a página.</div>'; throw new Error('Supabase SDK não carregou'); }
+if (!window.supabase) { document.getElementById('app').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#c23616;font-size:1rem;">Erro ao carregar Supabase. Verifique sua conexÃ£o e recarregue a pÃ¡gina.</div>'; throw new Error('Supabase SDK nÃ£o carregou'); }
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const MODULES = [
@@ -21,12 +21,12 @@ const MODULES = [
 ];
 
 const UNITS = [
-  { id: 'chapeco', label: 'Chapecó' },
+  { id: 'chapeco', label: 'ChapecÃ³' },
   { id: 'passo-fundo', label: 'Passo Fundo' },
   { id: 'online', label: 'Online' },
 ];
 
-// ── ICONES SVG CUSTOMIZADOS (traço fino, não padrão AI) ──
+// ââ ICONES SVG CUSTOMIZADOS (traÃ§o fino, nÃ£o padrÃ£o AI) ââ
 const ICONS = {
   home: '<svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1v-9z" stroke-linejoin="round"/></svg>',
   announce: '<svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 8L3 11v3l15 3V8z" stroke-linejoin="round"/><path d="M18 6v14"/><circle cx="20" cy="13" r="1.5"/><path d="M7 14l1 5h3l-1-5"/></svg>',
@@ -72,7 +72,7 @@ let state = {
   data: { students: [], admins: [], sections: [], contents: [], announcements: [] },
 };
 
-// ── Session persistence ──
+// ââ Session persistence ââ
 function saveSession() {
   try {
     sessionStorage.setItem('nexus_session', JSON.stringify({
@@ -87,7 +87,7 @@ function clearSession() {
   try { sessionStorage.removeItem('nexus_session'); } catch(e) {}
 }
 
-// ── Idle timer (15 min inactivity → logout) ──
+// ââ Idle timer (15 min inactivity â logout) ââ
 let _idleTimer = null;
 const IDLE_MS = 15 * 60 * 1000;
 function resetIdleTimer() {
@@ -119,7 +119,7 @@ function stopIdleTimer() {
 }
 
 
-// ── DB ──
+// ââ DB ââ
 async function dbSelect(table, order = 'id') {
   const { data, error } = await db.from(table).select('*').order(order);
   if (error) { console.error(table, error); return []; }
@@ -175,11 +175,11 @@ function render() {
   else app.appendChild(renderPortal());
 }
 
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // LOGIN
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // LOGIN
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function renderLogin() {
   const wrap = h('div', { className: 'login-wrap' });
 
@@ -191,11 +191,11 @@ function renderLogin() {
 </svg>` });
   const heroText = h('div', { className: 'login-left-hero' },
     h('h1', { innerHTML: 'Bem-vindo ao<br><span>Portal do Aluno</span>' }),
-    h('p', {}, 'Acesse suas aulas, materiais e acompanhe sua evolução no inglês.')
+    h('p', {}, 'Acesse suas aulas, materiais e acompanhe sua evoluÃ§Ã£o no inglÃªs.')
   );
   left.append(logoLeft, heroText);
 
-  // Coluna direita com formulário
+  // Coluna direita com formulÃ¡rio
   const right = h('div', { className: 'login-right' });
   const form = h('div', { className: 'login-form' });
 
@@ -204,8 +204,8 @@ function renderLogin() {
     h('span', {}, 'PORTAL DO ALUNO')
   );
   form.appendChild(kicker);
-  form.appendChild(h('h2', { className: 'login-form-title', innerHTML: 'Área do <span>aluno</span>' }));
-  form.appendChild(h('p', { className: 'login-form-sub' }, 'Acesse seu portal e continue sua jornada no inglês.'));
+  form.appendChild(h('h2', { className: 'login-form-title', innerHTML: 'Ãrea do <span>aluno</span>' }));
+  form.appendChild(h('p', { className: 'login-form-sub' }, 'Acesse seu portal e continue sua jornada no inglÃªs.'));
 
   const errBox = h('div', { className: 'login-error', style: { display: 'none' } });
 
@@ -219,7 +219,7 @@ function renderLogin() {
   const pwInput = h('input', {
     className: 'field-input',
     type: 'password',
-    placeholder: '••••••',
+    placeholder: 'â¢â¢â¢â¢â¢â¢',
     autocomplete: 'current-password'
   });
 
@@ -228,7 +228,7 @@ function renderLogin() {
     const password = pwInput.value;
 
     if (!username || !password) {
-      errBox.textContent = 'Preencha usuário e senha';
+      errBox.textContent = 'Preencha usuÃ¡rio e senha';
       errBox.style.display = 'flex';
       return;
     }
@@ -273,7 +273,7 @@ function renderLogin() {
 
     if (studentData) {
       state.user = studentData;
-      // Sync XP from DB to localStorage on login
+      // Sync XP from Supabase to localStorage on login
       if (studentData && typeof studentData.xp === 'number') {
         localStorage.setItem('nexus_xp', studentData.xp.toString());
       }
@@ -286,7 +286,7 @@ function renderLogin() {
       return;
     }
 
-    errBox.textContent = 'Usuário ou senha incorretos';
+    errBox.textContent = 'UsuÃ¡rio ou senha incorretos';
     errBox.style.display = 'flex';
   };pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   userInput.addEventListener('keydown', e => { if (e.key === 'Enter') pwInput.focus(); });
@@ -294,7 +294,7 @@ function renderLogin() {
   form.append(
     errBox,
     h('div', { className: 'field' },
-      h('label', { className: 'field-label' }, 'USUÁRIO'),
+      h('label', { className: 'field-label' }, 'USUÃRIO'),
       userInput
     ),
     h('div', { className: 'field' },
@@ -458,7 +458,7 @@ function renderDuvidas() {
   const wrap = h('div', { className: 'duvidas-page' },
     h('div', { className: 'duvidas-header' },
       icon('info'),
-      h('h2', {}, 'Dúvidas')
+      h('h2', {}, 'DÃºvidas')
     ),
     h('p', { className: 'duvidas-sub' }, 'Entre em contato com a nossa equipe pelos canais abaixo.')
   );
@@ -488,9 +488,9 @@ function renderPortal() {
   return wrap;
 }
 
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // SIDEBAR
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function renderSidebar(isAdmin) {
   const sb = h('aside', { className: 'sidebar' });
 
@@ -525,13 +525,13 @@ function renderSidebar(isAdmin) {
     const mainLinks = [
       { id: 'home', label: 'Home', iconName: 'home' },      { id: 'daily', label: 'Daily practice', iconName: 'spark' },
       { id: 'aulas', label: 'Aulas', iconName: 'book' },
-      { id: 'exercicios', label: 'Exercícios', iconName: 'stack' },
+      { id: 'exercicios', label: 'ExercÃ­cios', iconName: 'stack' },
       { id: 'materiais', label: 'Materiais', iconName: 'compass' },
-      { id: 'gramatica', label: 'Referência gramatical', iconName: 'info' },
+      { id: 'gramatica', label: 'ReferÃªncia gramatical', iconName: 'info' },
       { id: 'prova', label: 'Prova', iconName: 'sparkle' },
       { id: 'chat', label: 'Chat com IA', iconName: 'waveform' },
       { id: 'comunidades', label: 'Comunidades', iconName: 'users' },
-      { id: 'duvidas', label: 'Dúvidas', iconName: 'info' },
+      { id: 'duvidas', label: 'DÃºvidas', iconName: 'info' },
     ];
 
     mainLinks.forEach(link => {
@@ -561,7 +561,7 @@ function renderSidebar(isAdmin) {
       ));
     });
 
-    // Seções dinâmicas
+    // SeÃ§Ãµes dinÃ¢micas
     const mod = state.user.module || 'starter';
     const visibleSections = state.data.sections.filter(s => s.name !== 'Materiais do Curso' && s.name !== 'Atividades Extras' && s.name !== 'Biblioteca' &&
       s.visible && (!s.target_modules || s.target_modules.length === 0 || s.target_modules.includes(mod))
@@ -591,7 +591,7 @@ function renderSidebar(isAdmin) {
   const initials = state.user.name.split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
   const userMeta = isAdmin
     ? 'Admin'
-    : ((state.user.module || '').toUpperCase() + ' · ' + (UNITS.find(u => u.id === state.user.unit)?.label || '—'));
+    : ((state.user.module || '').toUpperCase() + ' Â· ' + (UNITS.find(u => u.id === state.user.unit)?.label || 'â'));
 
   footer.appendChild(h('div', { className: 'sidebar-user' },
     h('div', { className: 'sidebar-user-avatar' }, initials),
@@ -613,12 +613,12 @@ function renderSidebar(isAdmin) {
   return sb;
 }
 
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // STUDENT: HOME
-// ══════════════════════════════════════════════════════════════
-// ══════════════════════════════════════════════════════════════
-// GAMIFICATION — XP + BADGES
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// GAMIFICATION â XP + BADGES
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const XP_PER_LESSON = 10;
 
 function getXP() {
@@ -633,10 +633,10 @@ function addXP(amount, lessonId) {
   }
   const current = getXP();
   localStorage.setItem('nexus_xp', String(current + amount));
-  // Save XP to Supabase so ranking is real-time
+  // Persist XP to Supabase so ranking is real across all students
   if (state.user && state.user.id) {
-    const newXP = parseInt(localStorage.getItem('nexus_xp') || '0', 10) + amount;
-    dbUpdate('students', state.user.id, { xp: newXP });
+    const savedXP = parseInt(localStorage.getItem('nexus_xp') || '0', 10) + amount;
+    dbUpdate('students', state.user.id, { xp: savedXP });
   }
 }
 
@@ -651,7 +651,7 @@ function awardBadge(badgeId) {
 function getSocialMessage(doneCount) {
   if (doneCount < 1) return null;
   const pct = doneCount >= 6 ? 82 : doneCount >= 4 ? 74 : doneCount >= 3 ? 68 : doneCount >= 2 ? 62 : 55;
-  return 'You are ahead of ' + pct + '% of students 🚀';
+  return 'You are ahead of ' + pct + '% of students ð';
 }
 
 function showCompletionModal(lessonLabel, nextLessonLabel, moduleComplete, moduleName) {
@@ -677,7 +677,7 @@ function showCompletionModal(lessonLabel, nextLessonLabel, moduleComplete, modul
   // Header emoji
   const emoji = document.createElement('div');
   emoji.className = 'gami-emoji';
-  emoji.textContent = moduleComplete ? '🏆' : '🎉';
+  emoji.textContent = moduleComplete ? 'ð' : 'ð';
   modal.appendChild(emoji);
 
   // Title
@@ -691,7 +691,7 @@ function showCompletionModal(lessonLabel, nextLessonLabel, moduleComplete, modul
   sub.className = 'gami-sub';
   sub.textContent = moduleComplete
     ? 'Amazing! You finished all lessons in ' + moduleName + '. Keep going!'
-    : 'Nice work! Keep the momentum going. 👏';
+    : 'Nice work! Keep the momentum going. ð';
   modal.appendChild(sub);
 
   // XP pill
@@ -704,7 +704,7 @@ function showCompletionModal(lessonLabel, nextLessonLabel, moduleComplete, modul
   if (moduleComplete) {
     const badge = document.createElement('div');
     badge.className = 'gami-badge';
-    badge.innerHTML = '🏅 <strong>' + moduleName + '</strong> Badge Unlocked';
+    badge.innerHTML = 'ð <strong>' + moduleName + '</strong> Badge Unlocked';
     modal.appendChild(badge);
   }
 
@@ -723,7 +723,7 @@ function showCompletionModal(lessonLabel, nextLessonLabel, moduleComplete, modul
   if (nextLessonLabel) {
     const continueBtn = document.createElement('button');
     continueBtn.className = 'gami-btn-primary';
-    continueBtn.textContent = 'Continue to next lesson →';
+    continueBtn.textContent = 'Continue to next lesson â';
     continueBtn.addEventListener('click', () => {
       overlay.remove();
       state.tab = 'aulas';
@@ -763,7 +763,7 @@ function getNextStep() {
   const today = new Date().toDateString();
   const dailyDone = localStorage.getItem('nexus_daily_done') === today;
 
-  // 2. Daily NOT done → show Daily Practice as the main action
+  // 2. Daily NOT done â show Daily Practice as the main action
   if (!dailyDone) {
     return {
       tag: '\uD83D\uDD25 Daily Practice',
@@ -774,7 +774,7 @@ function getNextStep() {
     };
   }
 
-  // 3. Daily done → show next lesson
+  // 3. Daily done â show next lesson
   const activeCourse = COURSES.find(function(c) { return c.id === mod; });
   if (activeCourse) {
     const nextLesson = activeCourse.lessons.find(function(l) { return prog[l.id] !== 'completed'; });
@@ -906,9 +906,9 @@ function waveIconSvg() {
   return w.firstElementChild;
 }
 
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // STUDENT: SECTION DETAIL
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function renderSectionDetail() {
   const d = h('div');
   const sec = state.data.sections.find(s => s.id === state.currentSection);
@@ -923,11 +923,11 @@ function renderSectionDetail() {
   const backBtn = h('button', { className: 'back-link', onClick: () => { state.currentSection = null; state.tab = 'home'; render(); } });
   backBtn.appendChild(icon('arrowUp'));
   backBtn.firstElementChild.style.transform = 'rotate(-90deg)';
-  backBtn.appendChild(h('span', {}, 'Voltar ao início'));h
+  backBtn.appendChild(h('span', {}, 'Voltar ao inÃ­cio'));h
   d.appendChild(backBtn);
 
   d.appendChild(h('div', { className: 'page-header' },
-    h('div', { className: 'page-kicker' }, 'Seção'),
+    h('div', { className: 'page-kicker' }, 'SeÃ§Ã£o'),
     h('h1', { className: 'page-title' }, sec.name),
     sec.description && h('p', { className: 'page-subtitle' }, sec.description)
   ));
@@ -935,8 +935,8 @@ function renderSectionDetail() {
   if (items.length === 0) {
     d.appendChild(h('div', { className: 'empty-state' },
       h('div', { className: 'empty-state-icon' }, icon('sparkle')),
-      h('div', { className: 'empty-state-title', innerHTML: 'Nenhum conteúdo <span>ainda</span>' }),
-      h('div', { className: 'empty-state-text' }, 'Esta seção será atualizada em breve pela coordenação.')
+      h('div', { className: 'empty-state-title', innerHTML: 'Nenhum conteÃºdo <span>ainda</span>' }),
+      h('div', { className: 'empty-state-text' }, 'Esta seÃ§Ã£o serÃ¡ atualizada em breve pela coordenaÃ§Ã£o.')
     ));
   } else {
     const list = h('div', { className: 'content-list' });
@@ -962,9 +962,9 @@ function renderSectionDetail() {
   return d;
 }
 
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // STUDENT: ANNOUNCEMENTS
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function renderAnnouncements() {
   const d = h('div');
   const mod = state.user.module || 'starter';
@@ -974,15 +974,15 @@ function renderAnnouncements() {
 
   d.appendChild(h('div', { className: 'page-header' },
     h('div', { className: 'page-kicker' }, 'Comunicados'),
-    h('h1', { className: 'page-title', innerHTML: 'Avisos da <span>coordenação</span>' }),
-    h('p', { className: 'page-subtitle' }, 'Acompanhe aqui todas as comunicações importantes da escola, eventos e atualizações do seu curso.')
+    h('h1', { className: 'page-title', innerHTML: 'Avisos da <span>coordenaÃ§Ã£o</span>' }),
+    h('p', { className: 'page-subtitle' }, 'Acompanhe aqui todas as comunicaÃ§Ãµes importantes da escola, eventos e atualizaÃ§Ãµes do seu curso.')
   ));
 
   if (filtered.length === 0) {
     d.appendChild(h('div', { className: 'empty-state' },
       h('div', { className: 'empty-state-icon' }, icon('announce')),
       h('div', { className: 'empty-state-title', innerHTML: 'Sem <span>novidades</span>' }),
-      h('div', { className: 'empty-state-text' }, 'Quando houver avisos, eles aparecerão aqui.')
+      h('div', { className: 'empty-state-text' }, 'Quando houver avisos, eles aparecerÃ£o aqui.')
     ));
   } else {
     const sorted = [...filtered].sort((a, b) => {
@@ -997,9 +997,9 @@ function renderAnnouncements() {
   return d;
 }
 
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // AULAS
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function renderAulas() {
   const COURSES = [
     {
@@ -1070,7 +1070,7 @@ function renderAulas() {
 
   const page = h('div', { className: 'aulas-page aulas-page-with-ranking' });
 
-  // ── Tabs ──
+  // ââ Tabs ââ
   const tabs = h('div', { className: 'aulas-tabs' });
   COURSES.forEach(course => {
     const active = as.level === course.id;
@@ -1080,7 +1080,7 @@ function renderAulas() {
       className: `aulas-tab ${active ? 'active' : ''}`,
       onClick: () => { as.level = course.id; as.openLesson = null; render(); }
     },
-      h('span', { className: 'aulas-tab-label' }, course.label + (hasBadge ? ' 🏅' : '')),
+      h('span', { className: 'aulas-tab-label' }, course.label + (hasBadge ? ' ð' : '')),
       h('span', { className: `aulas-tab-badge ${prog.pct === 100 ? 'done' : ''}` }, prog.pct + '%')
     ));
   });
@@ -1090,30 +1090,24 @@ function renderAulas() {
   const prog = getLevelProgress(activeCourse);
   const hasBadge = getBadges().includes(activeCourse.id);
 
-  // ── XP Bar ──
+  // ââ XP Bar ââ
   const totalXP = getXP();
   const xpBar = h('div', { className: 'gami-xp-bar' },
     h('div', { className: 'gami-xp-bar-left' },
-      h('span', { className: 'gami-xp-bar-icon' }, '⚡'),
+      h('span', { className: 'gami-xp-bar-icon' }, 'â¡'),
       h('span', { className: 'gami-xp-bar-value' }, totalXP + ' XP'),
-      hasBadge ? h('span', { className: 'gami-module-badge-inline' }, '🏅 ' + activeCourse.label) : null
+      hasBadge ? h('span', { className: 'gami-module-badge-inline' }, 'ð ' + activeCourse.label) : null
     ),
     h('div', { className: 'gami-xp-bar-right' }, prog.done + ' / ' + prog.total + ' lessons')
   );
   page.appendChild(xpBar)
-  // ── Ranking Stats Bar ──
+  // ââ Ranking Stats Bar ââ
   const totalXPReal = getXP();
   const aheadPct = (() => {
     const all = (state.data && state.data.students) ? state.data.students : [];
     if (all.length < 2) return 0;
     const below = all.filter(s => (s.xp || 0) < totalXPReal).length;
     return Math.round((below / (all.length - 1)) * 100);
-  })();
-  const rankPos = (() => {
-    const all = (state.data && state.data.students) ? [...state.data.students] : [];
-    all.sort((a, b) => (b.xp || 0) - (a.xp || 0));
-    const idx = all.findIndex(s => s.id === state.user.id);
-    return idx === -1 ? all.length : idx + 1;
   })();
   const statsBar = h('div', { className: 'ranking-stats-bar' },
     h('div', { className: 'ranking-stat-card' },
@@ -1138,31 +1132,193 @@ function renderAulas() {
       )
     )
   );
-  page.appendChild(statsBar);
+  page.appendChild(statsBar);;
 
-  // ── Ranking Card (sidebar) — real students from Supabase ──
+  // ââ Your Next Step Card ââ
+  const nextLesson = activeCourse.lessons.find((l, i) => getLessonStatus(activeCourse, i) !== 'completed');
+  const isFirstLesson = prog.done === 0;
+  if (nextLesson) {
+    const nextStepCard = h('div', { className: 'path-nextstep-card',
+      onClick: () => { as.openLesson = as.openLesson === nextLesson.id ? null : nextLesson.id; as.quizAnswers = {}; as.quizSubmitted = {}; render(); }
+    },
+      h('div', { className: 'path-nextstep-icon' }, h('div', { className: 'path-nextstep-icon-circle' }, 'ð¯')),
+      h('div', { className: 'path-nextstep-content' },
+        h('span', { className: 'path-nextstep-label' }, 'YOUR NEXT STEP'),
+        h('h2', { className: 'path-nextstep-title' }, 'Lesson ' + nextLesson.num + ' â ' + nextLesson.label),
+        h('p', { className: 'path-nextstep-sub' }, isFirstLesson ? 'Start your journey!' : 'Keep going! You\'re doing great.')
+      ),
+      h('button', { className: 'path-nextstep-btn',
+        onClick: (e) => { e.stopPropagation(); as.openLesson = as.openLesson === nextLesson.id ? null : nextLesson.id; as.quizAnswers = {}; as.quizSubmitted = {}; render(); }
+      }, isFirstLesson ? 'Start lesson â' : 'Continue lesson â')
+    );
+    page.appendChild(nextStepCard);
+  }
+
+  // ââ Module complete badge ââ
+  if (hasBadge) {
+    page.appendChild(h('div', { className: 'gami-module-complete-banner' },
+      h('span', {}, 'ð'),
+      h('div', {},
+        h('strong', {}, activeCourse.label + ' Completed!'),
+        h('p', {}, 'You earned the ' + activeCourse.label + ' badge. Well done!')
+      ),
+      h('span', { className: 'gami-banner-badge' }, 'ð')
+    ));
+  }
+
+  // ââ Path Header ââ
+  page.appendChild(h('div', { className: 'path-header' },
+    h('div', { className: 'path-header-top' },
+      h('h2', { className: 'path-header-title' }, activeCourse.label + ' Path'),
+      h('span', { className: 'path-header-count' }, prog.done + ' / ' + prog.total + ' lessons completed')
+    ),
+    h('p', { className: 'path-header-sub' }, 'Complete the lessons in order to unlock new content and level up your English.'),
+    h('div', { className: 'path-progress-bar' },
+      h('div', { className: 'path-progress-fill', style: `width:${prog.pct}%` })
+    )
+  ));
+
+  // ââ Inline panel builder ââ
+  function buildLessonPanel(lesson, lessonIndex) {
+    const status = getLessonStatus(activeCourse, lessonIndex);
+    const panel = h('div', { className: 'path-inline-panel' });
+    panel.appendChild(h('div', { className: 'path-inline-header' },
+      h('h3', { className: 'path-inline-title' }, lesson.label),
+      h('div', { className: 'path-inline-actions' },
+        status !== 'completed'
+          ? h('button', { className: 'aulas-complete-btn', onClick: () => { markComplete(lesson.id, lesson.label, activeCourse); render(); } }, 'â Mark as completed')
+          : h('button', { className: 'aulas-uncomplete-btn', onClick: () => { markUncomplete(lesson.id); render(); } }, 'âº Mark as not completed')
+      )
+    ));
+    panel.appendChild(h('div', { className: 'aulas-video-wrapper' },
+      h('div', { className: 'aulas-video-placeholder' },
+        h('div', { className: 'aulas-video-icon' }, icon('book')),
+        h('p', { className: 'aulas-video-text' }, 'Video: ' + lesson.label),
+        h('p', { className: 'aulas-video-hint' }, 'The video will be embedded here')
+      )
+    ));
+    const quizKey = lesson.id;
+    const submitted = !!as.quizSubmitted[quizKey];
+    const quizSection = h('div', { className: 'aulas-quiz' });
+    quizSection.appendChild(h('h3', { className: 'aulas-quiz-title' }, 'ð Quiz'));
+    const questions = [
+      { id: 'q1', text: `Quiz: ${lesson.label} â Question 1`, options: ['Option A', 'Option B', 'Option C', 'Option D'], correct: 0 },
+      { id: 'q2', text: `Quiz: ${lesson.label} â Question 2`, options: ['Option A', 'Option B', 'Option C', 'Option D'], correct: 1 },
+      { id: 'q3', text: `Quiz: ${lesson.label} â Question 3`, options: ['Option A', 'Option B', 'Option C', 'Option D'], correct: 2 },
+    ];
+    questions.forEach((q, qi) => {
+      const qBlock = h('div', { className: 'aulas-quiz-question' });
+      qBlock.appendChild(h('p', { className: 'aulas-quiz-q-text' }, (qi+1) + '. ' + q.text));
+      const opts = h('div', { className: 'aulas-quiz-options' });
+      q.options.forEach((opt, oi) => {
+        const selected = as.quizAnswers[quizKey+'_'+q.id] === oi;
+        let optClass = 'aulas-quiz-opt';
+        if (submitted) { if (oi === q.correct) optClass += ' correct'; else if (selected) optClass += ' wrong'; }
+        else if (selected) optClass += ' selected';
+        opts.appendChild(h('button', { className: optClass, disabled: submitted,
+          onClick: () => { if (!submitted) { as.quizAnswers[quizKey+'_'+q.id] = oi; render(); } }
+        }, opt));
+      });
+      qBlock.appendChild(opts);
+      quizSection.appendChild(qBlock);
+    });
+    if (!submitted) {
+      const allAnswered = questions.every(q => as.quizAnswers[quizKey+'_'+q.id] !== undefined);
+      quizSection.appendChild(h('button', {
+        className: `aulas-quiz-submit ${allAnswered ? '' : 'disabled'}`, disabled: !allAnswered,
+        onClick: () => { if (allAnswered) { as.quizSubmitted[quizKey] = true; markComplete(lesson.id, lesson.label, activeCourse); render(); } }
+      }, 'Submit answers'));
+    } else {
+      const score = questions.filter(q => as.quizAnswers[quizKey+'_'+q.id] === q.correct).length;
+      const pct = Math.round((score/questions.length)*100);
+      const resultClass = pct >= 70 ? 'great' : pct >= 40 ? 'ok' : 'retry';
+      quizSection.appendChild(h('div', { className: `aulas-quiz-result ${resultClass}` },
+        h('span', { className: 'aulas-quiz-score' }, score+'/'+questions.length+' correct'),
+        h('span', { className: 'aulas-quiz-pct' }, pct+'%'),
+        pct < 70
+          ? h('button', { className: 'aulas-quiz-retry', onClick: () => { as.quizAnswers = Object.fromEntries(Object.entries(as.quizAnswers).filter(([k]) => !k.startsWith(quizKey+'_'))); as.quizSubmitted[quizKey] = false; render(); } }, 'âº Try again')
+          : h('span', { className: 'aulas-quiz-congrats' }, 'ð Congrats!')
+      ));
+    }
+    panel.appendChild(quizSection);
+    return panel;
+  }
+
+  // ââ Timeline ââ
+  const timeline = h('div', { className: 'path-timeline' });
+  activeCourse.lessons.forEach((lesson, index) => {
+    const status = getLessonStatus(activeCourse, index);
+    const isOpen = as.openLesson === lesson.id;
+    const item = h('div', { className: `path-item ${status}` });
+    if (index > 0) {
+      const prevStatus = getLessonStatus(activeCourse, index-1);
+      item.appendChild(h('div', { className: `path-line ${prevStatus === 'completed' ? 'completed' : ''}` }));
+    }
+    const row = h('div', { className: 'path-row' });
+    let nodeContent = '';
+    if (status === 'completed') nodeContent = 'â';
+    else if (status === 'current') nodeContent = 'â¶';
+    else nodeContent = 'ð';
+    row.appendChild(h('div', { className: `path-node ${status}` }, nodeContent));
+    const card = h('div', {
+      className: `path-card ${status} ${isOpen ? 'open' : ''}`,
+      onClick: () => {
+        if (status === 'locked') {
+          const toast = document.querySelector('.path-toast');
+          if (toast) { toast.textContent = 'Complete the previous lessons to unlock this one.'; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
+          return;
+        }
+        as.openLesson = isOpen ? null : lesson.id;
+        if (!isOpen) { as.quizAnswers = {}; as.quizSubmitted = {}; }
+        render();
+      }
+    });
+    card.appendChild(h('div', { className: 'path-card-left' },
+      h('span', { className: 'path-card-num' }, 'Lesson ' + lesson.num),
+      h('span', { className: 'path-card-title' }, lesson.label)
+    ));
+    let badge;
+    if (status === 'completed') badge = h('span', { className: 'path-badge completed' }, 'â Completed');
+    else if (status === 'current') badge = h('span', { className: 'path-badge current' }, isOpen ? 'Close â²' : 'Continue â');
+    else if (status === 'available') badge = h('span', { className: 'path-badge available' }, 'ð Available');
+    else badge = h('span', { className: 'path-badge locked' }, 'ð Locked');
+    card.appendChild(h('div', { className: 'path-card-right' }, badge, status !== 'locked' ? h('span', { className: `path-chevron ${isOpen ? 'open' : ''}` }, isOpen ? 'â²' : 'â¼') : null));
+    row.appendChild(card);
+    item.appendChild(row);
+    if (isOpen && status !== 'locked') {
+      const panelWrap = h('div', { className: 'path-panel-wrap' });
+      panelWrap.appendChild(h('div', { className: 'path-panel-spacer' }));
+      const panelContent = h('div', { className: 'path-panel-content' });
+      panelContent.appendChild(buildLessonPanel(lesson, index));
+      panelWrap.appendChild(panelContent);
+      item.appendChild(panelWrap);
+    }
+    timeline.appendChild(item);
+  });
+  timeline.appendChild(h('div', { className: 'path-toast' }, ''));
+
+  // ââ Ranking Card (sidebar) ââ
+  const aheadPct2 = (() => {
+    const all = (state.data && state.data.students) ? [...state.data.students] : [];
+    if (all.length < 2) return 0;
+    all.sort((a, b) => (b.xp || 0) - (a.xp || 0));
+    const idx = all.findIndex(s => s.id === state.user.id);
+    return idx === -1 ? 0 : Math.round((idx / (all.length - 1 || 1)) * 100);
+  })();
+
   function buildRankingCard() {
     const allStudents = (state.data && state.data.students) ? [...state.data.students] : [];
-    // Sort by XP descending (xp field in DB, 0 if not yet set)
     allStudents.sort((a, b) => (b.xp || 0) - (a.xp || 0));
-
     const myId = state.user && state.user.id;
     const myXP = getXP();
     const myIdx = allStudents.findIndex(s => s.id === myId);
     const myPos = myIdx === -1 ? allStudents.length + 1 : myIdx + 1;
-    const totalStudents = allStudents.length || 1;
-    const aheadPct2 = myIdx === -1 ? 0 : Math.round((myIdx / (totalStudents - 1 || 1)) * 100);
-
-    // Get 2 above, me, 2 below
-    const startIdx = Math.max(0, myIdx - 2);
-    const endIdx = Math.min(allStudents.length - 1, myIdx + 2);
+    const total = allStudents.length || 1;
+    const startIdx = Math.max(0, myIdx === -1 ? 0 : myIdx - 2);
+    const endIdx = Math.min(allStudents.length - 1, myIdx === -1 ? 4 : myIdx + 2);
     const neighbors = allStudents.slice(startIdx, endIdx + 1);
-
-    // Color palette for avatars
     const COLORS = ['#6366f1','#0ea5e9','#8b5cf6','#ec4899','#10b981','#f97316','#14b8a6','#f59e0b'];
-    const colorFor = (id) => COLORS[Math.abs((id || '').toString().split('').reduce((a,c)=>a+c.charCodeAt(0),0)) % COLORS.length];
-    const initialFor = (name) => (name || '?')[0].toUpperCase();
-
+    const colorFor = (id) => COLORS[Math.abs((id||'').toString().split('').reduce((a,c)=>a+c.charCodeAt(0),0))%COLORS.length];
     const card = h('div', { className: 'ranking-card', id: 'ranking-sidebar-card' },
       h('div', { className: 'ranking-card-header' },
         h('div', { className: 'ranking-card-trophy' }, '\uD83C\uDFC6'),
@@ -1172,16 +1328,16 @@ function renderAulas() {
         ? h('div', { className: 'ranking-card-hero' },
             h('div', { className: 'ranking-card-ahead-label' }, 'Seja o primeiro!'),
             h('span', { className: 'ranking-card-percent' }, '-'),
-            h('div', { className: 'ranking-card-students-label' }, 'Complete aulas para entrar no ranking \uD83D\uDE80')
+            h('div', { className: 'ranking-card-students-label' }, 'Complete aulas para entrar \uD83D\uDE80')
           )
         : h('div', { className: 'ranking-card-hero' },
-            h('div', { className: 'ranking-card-ahead-label' }, 'You\'re ahead of'),
+            h('div', { className: 'ranking-card-ahead-label' }, "You're ahead of"),
             h('span', { className: 'ranking-card-percent' }, aheadPct2 + '%'),
             h('div', { className: 'ranking-card-students-label' }, 'of students \uD83D\uDE80')
           ),
       h('div', { className: 'ranking-card-week-progress' },
         h('span', { className: 'arrow' }, '\u25B2'),
-        h('span', {}, '#' + myPos + ' de ' + totalStudents + ' alunos')
+        h('span', {}, '#' + myPos + ' de ' + total + ' alunos')
       ),
       h('div', { className: 'ranking-mini-list' },
         ...neighbors.map((s, i) => {
@@ -1190,11 +1346,10 @@ function renderAulas() {
           const sXP = isMe ? myXP : (s.xp || 0);
           return h('div', { className: 'ranking-mini-item' + (isMe ? ' you' : '') },
             h('span', { className: 'ranking-mini-pos' }, '#' + pos),
-            h('div', {
-              className: 'ranking-mini-avatar',
-              style: 'background:' + colorFor(s.id)
-            }, initialFor(s.name)),
-            h('span', { className: 'ranking-mini-name' }, isMe ? 'Voc\u00EA' : (s.name || s.username || '?')),
+            h('div', { className: 'ranking-mini-avatar', style: 'background:' + colorFor(s.id) },
+              (s.name||s.username||'?')[0].toUpperCase()
+            ),
+            h('span', { className: 'ranking-mini-name' }, isMe ? 'Voc\u00EA' : (s.name||s.username||'?')),
             h('span', { className: 'ranking-mini-xp' }, sXP + ' XP')
           );
         })
@@ -1205,8 +1360,8 @@ function renderAulas() {
           const overlay = h('div', { className: 'ranking-modal-overlay' });
           const all2 = (state.data && state.data.students) ? [...state.data.students] : [];
           all2.sort((a, b) => (b.xp || 0) - (a.xp || 0));
-          const COLORS2 = ['#6366f1','#0ea5e9','#8b5cf6','#ec4899','#10b981','#f97316','#14b8a6','#f59e0b'];
-          const colorFor2 = (id) => COLORS2[Math.abs((id||'').toString().split('').reduce((a,c)=>a+c.charCodeAt(0),0)) % COLORS2.length];
+          const COLS = ['#6366f1','#0ea5e9','#8b5cf6','#ec4899','#10b981','#f97316','#14b8a6','#f59e0b'];
+          const cFor2 = (id) => COLS[Math.abs((id||'').toString().split('').reduce((a,c)=>a+c.charCodeAt(0),0))%COLS.length];
           const modal = h('div', { className: 'ranking-modal' },
             h('div', { className: 'ranking-modal-header' },
               h('div', { className: 'ranking-modal-title' }, '\uD83C\uDFC6 Ranking Completo'),
@@ -1219,23 +1374,22 @@ function renderAulas() {
                     const pos = i + 1;
                     const isMe = s.id === myId;
                     const sXP = isMe ? myXP : (s.xp || 0);
-                    const medal = pos === 1 ? '\uD83E\uDD47 ' : pos === 2 ? '\uD83E\uDD48 ' : pos === 3 ? '\uD83E\uDD49 ' : '';
+                    const medal = pos===1?'\uD83E\uDD47 ':pos===2?'\uD83E\uDD48 ':pos===3?'\uD83E\uDD49 ':'';
                     return h('div', { className: 'ranking-modal-item' + (isMe ? ' you' : '') },
                       h('span', { className: 'ranking-modal-rank' }, '#' + pos),
-                      h('div', { className: 'ranking-modal-avatar', style: 'background:' + colorFor2(s.id) }, (s.name||s.username||'?')[0].toUpperCase()),
-                      h('span', { className: 'ranking-modal-name' }, medal + (isMe ? 'Voc\u00EA \uD83D\uDC48' : (s.name || s.username || '?'))),
+                      h('div', { className: 'ranking-modal-avatar', style: 'background:' + cFor2(s.id) },
+                        (s.name||s.username||'?')[0].toUpperCase()
+                      ),
+                      h('span', { className: 'ranking-modal-name' }, medal + (isMe ? 'Voc\u00EA \uD83D\uDC48' : (s.name||s.username||'?'))),
                       h('span', { className: 'ranking-modal-xp' }, sXP + ' XP')
                     );
                   })
                 )
           );
           overlay.appendChild(modal);
-          overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+          overlay.addEventListener('click', e => { if(e.target===overlay) overlay.remove(); });
           document.body.appendChild(overlay);
-          setTimeout(() => {
-            const u = modal.querySelector('.ranking-modal-item.you');
-            if (u) u.scrollIntoView({ block: 'center', behavior: 'smooth' });
-          }, 100);
+          setTimeout(() => { const u = modal.querySelector('.ranking-modal-item.you'); if(u) u.scrollIntoView({block:'center',behavior:'smooth'}); }, 100);
         }
       }, 'Ver ranking completo \u2192')
     );
@@ -1243,7 +1397,6 @@ function renderAulas() {
   }
   page.appendChild(buildRankingCard());
 
-  // ── Motivation card ──
   const motivCard = h('div', { className: 'ranking-motivation-card' },
     h('div', { className: 'ranking-motivation-icon' }, '\u2B50'),
     h('div', {},
@@ -1252,6 +1405,7 @@ function renderAulas() {
     )
   );
   page.appendChild(motivCard);
+
 
   page.appendChild(timeline);
   return page;
@@ -1269,29 +1423,29 @@ function announcementNode(a) {
     h('div', { className: 'announcement-body' },
       h('h3', {}, a.title),
       a.content && h('p', {}, a.content),
-      h('div', { className: 'announcement-author' }, '— ' + (a.author || 'Coordenação'))
+      h('div', { className: 'announcement-author' }, 'â ' + (a.author || 'CoordenaÃ§Ã£o'))
     ),
     a.pinned && h('div', { className: 'pinned-label' }, 'Fixado')
   );
 }
 
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // DAILY PRACTICE
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const DAILY_PRACTICES={
-  starter:[{topic:"Verb To Be — Present",explanation:"Use am/is/are to describe people and things. \"I am\", \"He is\", \"They are\".",exercises:[{type:"mc",q:"She ___ a teacher.",opts:["am","is","are","be"],correct:1,exp:"\"She\" is 3rd person singular → use \"is\"."},{type:"fill",q:"Complete: I ___ happy today.",answer:"am",exp:"With \"I\", always use \"am\"."},{type:"error",q:"Find the error: \"They is my friends.\"",opts:["They → We","is → are","my → mine","No error"],correct:1,exp:"\"They\" takes \"are\", not \"is\"."},{type:"mc",q:"We ___ students.",opts:["am","is","are","be"],correct:2,exp:"\"We\" is plural → use \"are\"."},{type:"fill",q:"The dog ___ very big.",answer:"is",exp:"\"The dog\" is 3rd person singular → \"is\"."}]},{topic:"Subject Pronouns",explanation:"I, you, he, she, it, we, they replace nouns as the subject of a sentence.",exercises:[{type:"mc",q:"Maria is my sister. ___ is kind.",opts:["He","She","They","It"],correct:1,exp:"\"Maria\" is female → use \"She\"."},{type:"mc",q:"John and I are students. ___ study every day.",opts:["He","She","We","They"],correct:2,exp:"\"John and I\" = \"We\"."},{type:"fill",q:"My dog is big. ___ is also fast.",answer:"It",exp:"Non-human animals → \"It\"."},{type:"error",q:"Find the error: \"Him is my brother.\"",opts:["Him → He","is → are","my → mine","No error"],correct:0,exp:"Subject pronoun needed → \"He\"."},{type:"mc",q:"The books are on the table. ___ are new.",opts:["It","He","She","They"],correct:3,exp:"Plural things → \"They\"."}]},{topic:"Articles — A / An",explanation:"Use \"a\" before consonant sounds and \"an\" before vowel sounds (a, e, i, o, u).",exercises:[{type:"mc",q:"She has ___ umbrella.",opts:["a","an","the","—"],correct:1,exp:"\"Umbrella\" starts with a vowel sound → \"an\"."},{type:"mc",q:"He is ___ engineer.",opts:["a","an","the","—"],correct:1,exp:"\"Engineer\" starts with a vowel sound → \"an\"."},{type:"error",q:"Find the error: \"I have a apple.\"",opts:["I → We","a → an","have → has","No error"],correct:1,exp:"\"Apple\" starts with a vowel → \"an apple\"."},{type:"fill",q:"I want ___ orange juice.",answer:"an",exp:"\"Orange\" starts with a vowel sound → \"an\"."},{type:"mc",q:"She drives ___ old car.",opts:["a","an","the","—"],correct:1,exp:"\"Old\" starts with a vowel sound → \"an\"."}]},{topic:"Plural Nouns",explanation:"Most nouns add -s or -es to form the plural. Some are irregular (child/children).",exercises:[{type:"fill",q:"One cat, two ___",answer:"cats",exp:"Regular noun → add -s."},{type:"mc",q:"What is the plural of \"bus\"?",opts:["bus","buss","buses","busis"],correct:2,exp:"Words ending in -s, -sh, -ch, -x add -es."},{type:"mc",q:"What is the plural of \"child\"?",opts:["childs","childes","children","child"],correct:2,exp:"\"Child\" is an irregular plural → \"children\"."},{type:"error",q:"Find the error: \"She has two boxs.\"",opts:["She → He","boxs → boxes","has → have","No error"],correct:1,exp:"\"Box\" ends in -x → add -es: \"boxes\"."},{type:"fill",q:"One man, two ___",answer:"men",exp:"Irregular plural: man → men."}]},{topic:"Numbers & Basic Greetings",explanation:"Learn numbers 1–20 and everyday greetings: Hello, Good morning, Thank you.",exercises:[{type:"mc",q:"How do you say 15 in English?",opts:["fifty","fiveteen","fifteen","fiften"],correct:2,exp:"15 = fifteen."},{type:"mc",q:"Which is the correct greeting for morning?",opts:["Good night","Good evening","Good morning","Good afternoon"],correct:2,exp:"\"Good morning\" is used before noon."},{type:"fill",q:"10 + 5 = ___",answer:"fifteen",exp:"10 + 5 = 15 = fifteen."},{type:"mc",q:"How do you say 12 in English?",opts:["twelfth","twelve","twentee","twelf"],correct:1,exp:"12 = twelve."},{type:"error",q:"Find the error: \"Good Night! How are you?\" (morning context)",opts:["Good Night → Good Morning","How → What","you → u","No error"],correct:0,exp:"\"Good Night\" is for the evening, not morning."}]},{topic:"Verb To Have",explanation:"Use \"have\" with I/you/we/they and \"has\" with he/she/it.",exercises:[{type:"mc",q:"She ___ a red car.",opts:["have","has","is","are"],correct:1,exp:"3rd person singular → \"has\"."},{type:"error",q:"Find the error: \"They has two cats.\"",opts:["They → He","has → have","cats → cat","No error"],correct:1,exp:"\"They\" requires \"have\"."},{type:"fill",q:"I ___ a big family.",answer:"have",exp:"\"I\" always uses \"have\"."},{type:"mc",q:"My parents ___ a new house.",opts:["has","is","have","are"],correct:2,exp:"\"My parents\" = plural → \"have\"."},{type:"fill",q:"He ___ two brothers and one sister.",answer:"has",exp:"\"He\" is 3rd person singular → \"has\"."}]},{topic:"Common Adjectives",explanation:"Adjectives describe nouns. In English, they go BEFORE the noun: \"a big house\".",exercises:[{type:"mc",q:"Which sentence is correct?",opts:["A house big","A big house","Big a house","House big a"],correct:1,exp:"Adjective comes before the noun in English."},{type:"mc",q:"She is a ___ girl. (happy)",opts:["girl happy","happy girl","happily girl","girl happily"],correct:1,exp:"Adjective before noun: \"a happy girl\"."},{type:"fill",q:"The sky is ___. (blue)",answer:"blue",exp:"Adjectives also come after \"to be\"."},{type:"error",q:"Find the error: \"It is a day beautiful.\"",opts:["It → This","a day beautiful → a beautiful day","is → are","No error"],correct:1,exp:"Adjective goes BEFORE the noun."},{type:"mc",q:"Opposite of \"hot\" is:",opts:["warm","cool","cold","freezing"],correct:2,exp:"The direct opposite of \"hot\" is \"cold\"."}]},{topic:"Days of the Week",explanation:"Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday. Always capitalized in English.",exercises:[{type:"mc",q:"Which day comes after Wednesday?",opts:["Tuesday","Friday","Thursday","Monday"],correct:2,exp:"Mon → Tue → Wed → Thu → Fri → Sat → Sun."},{type:"error",q:"Find the error: \"I work on monday.\"",opts:["I → We","on → in","monday → Monday","work → works"],correct:2,exp:"Days of the week are always capitalized."},{type:"mc",q:"Saturday and Sunday are the ___",opts:["workdays","weekdays","weekend","holidays"],correct:2,exp:"Saturday + Sunday = the weekend."},{type:"fill",q:"The day after Sunday is ___",answer:"Monday",exp:"The week starts again with Monday."},{type:"mc",q:"Which day comes BEFORE Friday?",opts:["Saturday","Wednesday","Sunday","Thursday"],correct:3,exp:"Thu comes right before Fri."}]},{topic:"Basic Questions — WH Words",explanation:"Who (person), What (thing), Where (place), When (time), Why (reason), How (manner).",exercises:[{type:"mc",q:"___ is your name?",opts:["Where","When","What","Who"],correct:2,exp:"\"What\" is used for things/information like a name."},{type:"mc",q:"___ do you live?",opts:["What","Who","When","Where"],correct:3,exp:"\"Where\" asks about a place."},{type:"fill",q:"___ old are you?",answer:"How",exp:"\"How old\" asks about age."},{type:"mc",q:"___ is your birthday?",opts:["Where","What","When","Who"],correct:2,exp:"\"When\" asks about time/date."},{type:"error",q:"Find the error: \"Where is your name?\"",opts:["Where → What","is → are","your → you","No error"],correct:0,exp:"\"What is your name?\" — not \"Where\"."}]},{topic:"Colors in English",explanation:"Basic colors: red, blue, green, yellow, black, white, orange, purple, pink, brown.",exercises:[{type:"mc",q:"The sky is usually ___ during the day.",opts:["green","red","blue","purple"],correct:2,exp:"The daytime sky is blue."},{type:"fill",q:"Bananas are ___",answer:"yellow",exp:"Bananas are yellow."},{type:"mc",q:"Which color do you get mixing red and white?",opts:["purple","orange","pink","brown"],correct:2,exp:"Red + White = Pink."},{type:"error",q:"Find the error: \"Grass is usually red.\"",opts:["Grass → Trees","usually → always","red → green","No error"],correct:2,exp:"Grass is green, not red."},{type:"fill",q:"The opposite of black is ___",answer:"white",exp:"Black and white are opposites."}]}],
-  a1:[{topic:"Present Simple — Affirmative",explanation:"Use the base verb for I/you/we/they. Add -s/-es for he/she/it: \"She works\".",exercises:[{type:"mc",q:"He ___ to school every day.",opts:["go","goes","going","gone"],correct:1,exp:"3rd person singular → add -es to \"go\" → \"goes\"."},{type:"fill",q:"She ___ (like) coffee.",answer:"likes",exp:"3rd person singular → \"likes\"."},{type:"error",q:"Find the error: \"They goes to the gym.\"",opts:["They → He","goes → go","to → at","No error"],correct:1,exp:"\"They\" takes the base form → \"go\"."},{type:"mc",q:"My sister ___ in London.",opts:["live","lives","is living","lived"],correct:1,exp:"\"My sister\" = 3rd person singular → \"lives\"."},{type:"fill",q:"I ___ (study) English every morning.",answer:"study",exp:"\"I\" takes the base form → \"study\"."}]},{topic:"Present Simple — Negative",explanation:"Use \"don't\" (I/you/we/they) or \"doesn't\" (he/she/it) + base verb.",exercises:[{type:"mc",q:"She ___ like pizza.",opts:["don't","doesn't","isn't","aren't"],correct:1,exp:"She → \"doesn't\" + base verb."},{type:"fill",q:"They ___ (not watch) TV.",answer:"don't watch",exp:"\"They\" → \"don't\" + base verb."},{type:"error",q:"Find the error: \"He don't play football.\"",opts:["He → They","don't → doesn't","play → plays","No error"],correct:1,exp:"\"He\" requires \"doesn't\"."},{type:"mc",q:"We ___ live in Paris.",opts:["doesn't","don't","aren't","isn't"],correct:1,exp:"\"We\" → \"don't\"."},{type:"fill",q:"She ___ (not like) horror films.",answer:"doesn't like",exp:"\"She\" → \"doesn't\" + base verb."}]},{topic:"Present Simple — Questions",explanation:"Use Do/Does + subject + base verb. \"Do you play?\" / \"Does she work?\"",exercises:[{type:"mc",q:"___ she speak French?",opts:["Do","Does","Is","Are"],correct:1,exp:"3rd person singular question → \"Does\"."},{type:"fill",q:"___ you like music?",answer:"Do",exp:"\"You\" → use \"Do\"."},{type:"mc",q:"Which question is correct?",opts:["Does they work?","Do she work?","Does he work?","Do he works?"],correct:2,exp:"\"He\" → \"Does he work?\""},{type:"error",q:"Find the error: \"Do she live here?\"",opts:["Do → Does","she → he","live → lives","No error"],correct:0,exp:"\"She\" is 3rd singular → \"Does she live here?\""},{type:"fill",q:"___ your parents work on Saturdays?",answer:"Do",exp:"\"Your parents\" = plural → \"Do\"."}]},{topic:"Prepositions of Time — In, On, At",explanation:"\"At\" for exact times, \"on\" for days/dates, \"in\" for months/years/seasons.",exercises:[{type:"mc",q:"I wake up ___ 7 o'clock.",opts:["in","on","at","by"],correct:2,exp:"Exact time → \"at 7 o'clock\"."},{type:"mc",q:"She was born ___ July.",opts:["at","on","in","by"],correct:2,exp:"Month → \"in July\"."},{type:"fill",q:"We have class ___ Monday.",answer:"on",exp:"Days of the week → \"on Monday\"."},{type:"mc",q:"He started working here ___ 2019.",opts:["on","at","in","by"],correct:2,exp:"Years → \"in 2019\"."},{type:"error",q:"Find the error: \"The party is in Friday.\"",opts:["The → A","in → on","party → parties","No error"],correct:1,exp:"Days of the week → \"on Friday\"."}]},{topic:"Prepositions of Place — In, On, At",explanation:"\"At\" for specific locations, \"on\" for surfaces, \"in\" for enclosed spaces.",exercises:[{type:"mc",q:"The book is ___ the table.",opts:["in","at","on","by"],correct:2,exp:"Surface → \"on the table\"."},{type:"fill",q:"She is ___ home.",answer:"at",exp:"\"At home\" is a fixed expression."},{type:"error",q:"Find the error: \"He is in the bus stop.\"",opts:["He → She","in → at","bus → buss","No error"],correct:1,exp:"Specific location → \"at the bus stop\"."},{type:"mc",q:"The keys are ___ my bag.",opts:["at","on","in","by"],correct:2,exp:"Inside an enclosed space → \"in my bag\"."},{type:"fill",q:"There is a picture ___ the wall.",answer:"on",exp:"Surface → \"on the wall\"."}]},{topic:"There is / There are",explanation:"Use \"there is\" for singular and \"there are\" for plural to say something exists.",exercises:[{type:"mc",q:"___ a cat in the garden.",opts:["There are","There is","There was","It is"],correct:1,exp:"Singular \"a cat\" → \"There is\"."},{type:"fill",q:"___ three students in the room.",answer:"There are",exp:"Plural → \"There are\"."},{type:"error",q:"Find the error: \"There is two books on the desk.\"",opts:["There is → There are","two → second","books → book","No error"],correct:0,exp:"\"Two books\" is plural → \"There are\"."},{type:"mc",q:"___ a problem with the computer.",opts:["There are","There is","There were","They are"],correct:1,exp:"Singular \"a problem\" → \"There is\"."},{type:"fill",q:"___ many people at the party.",answer:"There are",exp:"\"Many people\" is plural → \"There are\"."}]},{topic:"Possessive Adjectives",explanation:"my, your, his, her, its, our, their — used before nouns to show ownership.",exercises:[{type:"mc",q:"That is ___ car. (belongs to him)",opts:["my","your","his","her"],correct:2,exp:"Male possession → \"his\"."},{type:"fill",q:"We love ___ school.",answer:"our",exp:"\"We\" → \"our\"."},{type:"error",q:"Find the error: \"She forgot hers bag.\"",opts:["She → He","hers → her","forgot → forgets","No error"],correct:1,exp:"\"Her\" is already possessive — no -s needed."},{type:"mc",q:"The dog wagged ___ tail.",opts:["his","her","their","its"],correct:3,exp:"For animals/things → \"its\"."},{type:"fill",q:"They sold ___ house last year.",answer:"their",exp:"\"They\" → \"their\"."}]},{topic:"Can / Can't for Ability",explanation:"Use \"can\" to say you are able to do something. \"Can't\" = cannot.",exercises:[{type:"mc",q:"She ___ swim very well.",opts:["can","cans","is can","does can"],correct:0,exp:"\"Can\" never adds -s. \"She can swim\"."},{type:"fill",q:"I ___ drive. I don't have a license.",answer:"can't",exp:"\"Can't\" = cannot."},{type:"mc",q:"Which is correct?",opts:["He can to run fast","He cans run fast","He can run fast","He can runs fast"],correct:2,exp:"Can + base verb (no \"to\", no -s)."},{type:"error",q:"Find the error: \"Can you to help me?\"",opts:["Can → Could","you → I","to help → help","No error"],correct:2,exp:"After \"can\" → base verb (no \"to\")."},{type:"fill",q:"Birds ___ fly, but penguins ___.",answer:"can, can't",exp:"Most birds can fly; penguins cannot."}]},{topic:"Object Pronouns",explanation:"me, you, him, her, it, us, them — used as the object of a verb or preposition.",exercises:[{type:"mc",q:"Can you help ___? (me/I)",opts:["I","me","my","mine"],correct:1,exp:"After a verb → object pronoun \"me\"."},{type:"mc",q:"I love ___. (him/he)",opts:["he","his","him","himself"],correct:2,exp:"After a verb → \"him\"."},{type:"fill",q:"Tell ___ the truth.",answer:"me",exp:"\"Tell me\" → object pronoun."},{type:"error",q:"Find the error: \"She called I yesterday.\"",opts:["She → He","called → called","I → me","No error"],correct:2,exp:"Object of verb → \"me\", not \"I\"."},{type:"mc",q:"They invited ___ to the party.",opts:["we","our","us","ours"],correct:2,exp:"Object pronoun for \"we\" → \"us\"."}]},{topic:"Imperatives",explanation:"Use the base verb to give commands or instructions. \"Open the door.\" / \"Don't talk!\"",exercises:[{type:"mc",q:"How do you say \"Nao fale!\" in English?",opts:["Not talk!","Don't talk!","No talk!","Doesn't talk!"],correct:1,exp:"Negative imperative = Don't + base verb."},{type:"fill",q:"___ your homework! (do)",answer:"Do",exp:"Imperative: base verb \"Do\"."},{type:"error",q:"Find the error: \"Please to close the window.\"",opts:["Please → Kindly","to close → close","window → windows","No error"],correct:1,exp:"Imperatives don't use \"to\": \"Please close\"."},{type:"mc",q:"Which is a correct imperative?",opts:["You sit down.","Please sits down.","Sit down, please.","Sitting down."],correct:2,exp:"Imperative: \"Sit down\" (base verb first)."},{type:"fill",q:"___ quiet, please! (be)",answer:"Be",exp:"\"Be quiet\" — imperative of \"to be\"."}]}],
-  a2:[{topic:"Past Simple — Regular Verbs",explanation:"Add -ed to regular verbs: walk→walked, play→played. Use \"did not\" for negatives.",exercises:[{type:"mc",q:"She ___ (watch) TV last night.",opts:["watch","watches","watched","watching"],correct:2,exp:"Past simple regular → add -ed: \"watched\"."},{type:"fill",q:"They ___ (play) football yesterday.",answer:"played",exp:"Past simple → \"played\"."},{type:"error",q:"Find the error: \"He didn't went to school.\"",opts:["He → She","didn't went → didn't go","school → class","No error"],correct:1,exp:"After \"didn't\" always use the base form."},{type:"mc",q:"We ___ (visit) Rome last summer.",opts:["visit","visited","visits","visiting"],correct:1,exp:"Regular past simple → \"visited\"."},{type:"fill",q:"She ___ (clean) her room this morning.",answer:"cleaned",exp:"Regular verb → add -ed: \"cleaned\"."}]},{topic:"Past Simple — Irregular Verbs",explanation:"Common irregulars: go→went, have→had, see→saw, come→came, take→took.",exercises:[{type:"mc",q:"She ___ to Paris last summer.",opts:["go","goes","went","gone"],correct:2,exp:"Past of \"go\" → \"went\"."},{type:"fill",q:"We ___ (see) a great movie.",answer:"saw",exp:"Past of \"see\" → \"saw\"."},{type:"mc",q:"Which is the past of \"have\"?",opts:["haved","had","has","having"],correct:1,exp:"Irregular: have → had."},{type:"error",q:"Find the error: \"I taked the bus yesterday.\"",opts:["I → She","taked → took","bus → train","No error"],correct:1,exp:"Irregular: take → took (not \"taked\")."},{type:"fill",q:"He ___ (come) to the party late.",answer:"came",exp:"Irregular: come → came."}]},{topic:"Past Simple — Questions",explanation:"Use \"Did + subject + base verb\" for past questions. \"Did you go?\" / \"Did she eat?\"",exercises:[{type:"mc",q:"___ you go to the party?",opts:["Do","Did","Was","Were"],correct:1,exp:"Past question → \"Did you go?\""},{type:"fill",q:"___ she call you?",answer:"Did",exp:"\"Did\" starts past questions."},{type:"error",q:"Find the error: \"Did she went to school?\"",opts:["Did → Does","went → go","school → work","No error"],correct:1,exp:"After \"Did\" → base verb \"go\"."},{type:"mc",q:"Where ___ you go last night?",opts:["do","does","did","was"],correct:2,exp:"Past question → \"did you go\"."},{type:"fill",q:"___ he study for the exam?",answer:"Did",exp:"\"Did\" + subject + base verb."}]},{topic:"Comparatives",explanation:"Short adjectives: add -er (bigger, taller). Long adjectives: use \"more\" (more expensive).",exercises:[{type:"mc",q:"This book is ___ than that one. (interesting)",opts:["interestinger","more interesting","most interesting","interestingmore"],correct:1,exp:"Long adjective → \"more interesting\"."},{type:"fill",q:"He is ___ than his brother. (tall)",answer:"taller",exp:"Short adjective → add -er: \"taller\"."},{type:"error",q:"Find the error: \"She is more tall than me.\"",opts:["She → He","more tall → taller","than → as","No error"],correct:1,exp:"Short adjective \"tall\" → \"taller\", not \"more tall\"."},{type:"mc",q:"This car is ___ than mine. (expensive)",opts:["expensiver","most expensive","more expensive","expensivest"],correct:2,exp:"Long adjective → \"more expensive\"."},{type:"fill",q:"Summer is ___ than winter. (hot)",answer:"hotter",exp:"Short adjective + double consonant → \"hotter\"."}]},{topic:"Superlatives",explanation:"Short adjectives: add -est (biggest). Long adjectives: use \"the most\" (the most expensive).",exercises:[{type:"mc",q:"She is ___ girl in the class. (smart)",opts:["smarter","the most smart","the smartest","most smartest"],correct:2,exp:"Short adjective + -est: \"the smartest\"."},{type:"fill",q:"It is ___ movie I have ever seen. (good)",answer:"the best",exp:"Irregular superlative: good → the best."},{type:"mc",q:"This is ___ building in the city. (tall)",opts:["the tallest","the most tall","taller","more taller"],correct:0,exp:"Short adjective → \"the tallest\"."},{type:"error",q:"Find the error: \"He is the most fast runner.\"",opts:["He → She","most fast → fastest","runner → runners","No error"],correct:1,exp:"Short adjective \"fast\" → \"the fastest\"."},{type:"fill",q:"Brazil is ___ country in South America. (big)",answer:"the biggest",exp:"Short adj + -est: big → biggest (double consonant)."}]},{topic:"Past Continuous",explanation:"Was/were + verb-ing. Describes an action in progress at a specific time in the past.",exercises:[{type:"mc",q:"At 8 PM, she ___ (study).",opts:["studied","was studying","is studying","studies"],correct:1,exp:"Action in progress in the past → \"was studying\"."},{type:"fill",q:"They ___ (play) when it started to rain.",answer:"were playing",exp:"\"They\" + past continuous → \"were playing\"."},{type:"error",q:"Find the error: \"He were watching TV.\"",opts:["He → They","were → was","watching → watched","No error"],correct:1,exp:"\"He\" (singular) → \"was watching\"."},{type:"mc",q:"I ___ (sleep) when you called.",opts:["slept","was sleeping","am sleeping","sleep"],correct:1,exp:"Past continuous for interrupted action → \"was sleeping\"."},{type:"fill",q:"We ___ (have) dinner at 7 o'clock.",answer:"were having",exp:"\"We\" + past continuous → \"were having\"."}]},{topic:"Adverbs of Frequency",explanation:"Always(100%), usually, often, sometimes, rarely, never(0%) go before the main verb.",exercises:[{type:"mc",q:"She ___ eats breakfast. (100% of the time)",opts:["never","sometimes","always","rarely"],correct:2,exp:"100% → \"always\"."},{type:"fill",q:"I ___ go to bed late. I prefer sleeping early.",answer:"rarely",exp:"Almost never → \"rarely\"."},{type:"error",q:"Find the error: \"He eats always lunch at noon.\"",opts:["He → She","always → never","eats always → always eats","No error"],correct:2,exp:"Adverb of frequency goes BEFORE the main verb."},{type:"mc",q:"Which adverb means \"about 50% of the time\"?",opts:["always","never","often","sometimes"],correct:3,exp:"\"Sometimes\" = approximately 50% frequency."},{type:"fill",q:"She ___ brushes her teeth before bed. (every time)",answer:"always",exp:"100% → \"always\"."}]},{topic:"Going To — Future Plans",explanation:"Use \"am/is/are going to + base verb\" to talk about plans or intentions.",exercises:[{type:"mc",q:"She ___ visit her parents next week.",opts:["going to","is going to","go to","will going"],correct:1,exp:"\"She\" → \"is going to visit\"."},{type:"fill",q:"We ___ (study) tonight.",answer:"are going to study",exp:"\"We\" → \"are going to\" + base verb."},{type:"error",q:"Find the error: \"He is go to travel tomorrow.\"",opts:["He → She","go → going","travel → traveling","No error"],correct:1,exp:"\"Is going to\" — needs \"going\", not \"go\"."},{type:"mc",q:"I ___ buy a new phone. (I have already decided)",opts:["am going to","is going to","are going to","go to"],correct:0,exp:"\"I\" → \"am going to\"."},{type:"fill",q:"___ they ___ (move) to a new city?",answer:"Are, going to move",exp:"\"They\" → \"Are they going to move?\""}]},{topic:"Countable vs Uncountable Nouns",explanation:"Countable: can be counted (an apple, two apples). Uncountable: can't be counted (water, money).",exercises:[{type:"mc",q:"Which is uncountable?",opts:["chair","book","water","car"],correct:2,exp:"\"Water\" cannot be counted individually."},{type:"mc",q:"She wants ___ information.",opts:["an","a","some","one"],correct:2,exp:"\"Information\" is uncountable → \"some information\"."},{type:"fill",q:"Could I have ___ water please?",answer:"some",exp:"Uncountable noun → \"some water\"."},{type:"error",q:"Find the error: \"I need an advice.\"",opts:["I → We","an → some","advice → advices","No error"],correct:1,exp:"\"Advice\" is uncountable → \"some advice\" (no \"an\")."},{type:"mc",q:"Which word is countable?",opts:["music","furniture","idea","equipment"],correct:2,exp:"\"Idea\" is countable (one idea, two ideas)."}]},{topic:"Questions with How",explanation:"\"How long?\" = duration, \"How often?\" = frequency, \"How far?\" = distance.",exercises:[{type:"mc",q:"___ does it take to get there? (1 hour)",opts:["How far","How often","How long","How much"],correct:2,exp:"\"1 hour\" is duration → \"How long?\""},{type:"fill",q:"___ do you exercise? — Three times a week.",answer:"How often",exp:"Frequency → \"How often?\""},{type:"mc",q:"___ is it from here? (5 km)",opts:["How long","How much","How often","How far"],correct:3,exp:"5 km is distance → \"How far?\""},{type:"error",q:"Find the error: \"How long do you go to the gym?\" (3 days/week)",opts:["How long → How often","do → does","go → went","No error"],correct:0,exp:"Frequency (3 days/week) → \"How often?\""},{type:"fill",q:"___ does the flight take? — About 10 hours.",answer:"How long",exp:"Duration (10 hours) → \"How long?\""}]}],
-  b1:[{topic:"Present Perfect — Introduction",explanation:"Have/has + past participle. Connects past actions to the present. \"I have eaten.\"",exercises:[{type:"mc",q:"She ___ (visit) Paris three times.",opts:["visited","has visited","have visited","visit"],correct:1,exp:"\"She\" (singular) → \"has visited\"."},{type:"fill",q:"I have never ___ (eat) sushi.",answer:"eaten",exp:"\"Eat\" irregular past participle → \"eaten\"."},{type:"error",q:"Find the error: \"He have finished the report.\"",opts:["He → They","have → has","finished → finish","No error"],correct:1,exp:"\"He\" → \"has finished\"."},{type:"mc",q:"They ___ just ___ the film. (watch)",opts:["have watched","has watched","watched","are watching"],correct:0,exp:"\"They\" → \"have watched\"."},{type:"fill",q:"We ___ (never / be) to Australia.",answer:"have never been",exp:"\"Have never been\" = never visited."}]},{topic:"Present Perfect — Since vs For",explanation:"\"Since\" = starting point (since 2020). \"For\" = duration (for 5 years).",exercises:[{type:"mc",q:"She has lived here ___ 2018.",opts:["for","since","during","from"],correct:1,exp:"2018 is a starting point → \"since\"."},{type:"fill",q:"He has worked there ___ ten years.",answer:"for",exp:"10 years is a duration → \"for\"."},{type:"mc",q:"I have known her ___ we were children.",opts:["for","during","since","in"],correct:2,exp:"\"We were children\" is a starting point → \"since\"."},{type:"error",q:"Find the error: \"They have lived here since five years.\"",opts:["They → We","since → for","lived → live","No error"],correct:1,exp:"\"Five years\" is a duration → \"for five years\"."},{type:"fill",q:"I have had this phone ___ March.",answer:"since",exp:"March is a starting point → \"since\"."}]},{topic:"Modal Verbs — Should / Shouldn't",explanation:"\"Should\" gives advice or recommendation. \"Shouldn't\" = it's not a good idea.",exercises:[{type:"mc",q:"You look tired. You ___ go to bed early.",opts:["must","should","can","would"],correct:1,exp:"Advice → \"should\"."},{type:"fill",q:"You ___ eat so much junk food. It's bad for you.",answer:"shouldn't",exp:"Negative advice → \"shouldn't\"."},{type:"error",q:"Find the error: \"She should to study more.\"",opts:["She → He","should to → should","study → studies","No error"],correct:1,exp:"Modal verbs don't use \"to\": \"should study\"."},{type:"mc",q:"Which sentence gives advice?",opts:["I can swim.","You should drink more water.","She is tired.","They played football."],correct:1,exp:"\"Should\" gives advice."},{type:"fill",q:"You ___ worry so much. Try to relax!",answer:"shouldn't",exp:"Negative advice → \"shouldn't worry\"."}]},{topic:"Modal Verbs — Must / Mustn't",explanation:"\"Must\" = strong obligation. \"Mustn't\" = it is prohibited. NOT the same as \"don't have to\".",exercises:[{type:"mc",q:"You ___ wear a seatbelt. It's the law.",opts:["should","must","can","might"],correct:1,exp:"Law = strong obligation → \"must\"."},{type:"fill",q:"You ___ smoke in here. It's forbidden.",answer:"mustn't",exp:"\"Mustn't\" = prohibited."},{type:"mc",q:"Which is correct? (exam tomorrow)",opts:["I mustn't study","I must to study","I must study","I musts study"],correct:2,exp:"Must + base verb (no \"to\")."},{type:"error",q:"Find the error: \"You musts leave now.\"",opts:["You → He","musts → must","leave → leaving","No error"],correct:1,exp:"\"Must\" never adds -s."},{type:"fill",q:"Children ___ touch electrical sockets. It's dangerous.",answer:"mustn't",exp:"\"Mustn't\" = prohibition for safety."}]},{topic:"First Conditional",explanation:"If + present simple, will + base verb. Real/possible future situations.",exercises:[{type:"mc",q:"If it rains, we ___ stay inside.",opts:["stayed","will stay","would stay","stay"],correct:1,exp:"1st conditional → \"will stay\"."},{type:"fill",q:"If you study hard, you ___ (pass) the exam.",answer:"will pass",exp:"Result clause → \"will\" + base verb."},{type:"error",q:"Find the error: \"If she will come, I will be happy.\"",opts:["If → When","will come → comes","will be → am","No error"],correct:1,exp:"After \"if\" → present simple, not \"will\"."},{type:"mc",q:"If they ___ early, we can have lunch together.",opts:["will arrive","arrived","arrive","arriving"],correct:2,exp:"If-clause → present simple \"arrive\"."},{type:"fill",q:"If you don't hurry, you ___ (miss) the bus.",answer:"will miss",exp:"Result of not hurrying → \"will miss\"."}]},{topic:"Reported Speech — Statements",explanation:"Change tense back: say \"I am tired\" → reported as \"He said he was tired\".",exercises:[{type:"mc",q:"Direct: \"I live in London.\" Reported: She said she ___ in London.",opts:["lives","lived","is living","will live"],correct:1,exp:"Present simple → past simple in reported speech."},{type:"fill",q:"He said: \"I am hungry.\" → He said he ___ hungry.",answer:"was",exp:"\"Am\" → \"was\" in reported speech."},{type:"mc",q:"\"I will help you.\" → She said she ___ help me.",opts:["will","would","should","could"],correct:1,exp:"\"Will\" → \"would\" in reported speech."},{type:"error",q:"Find the error: \"She said she will come tomorrow.\"",opts:["she → he","will → would","come → came","No error"],correct:1,exp:"\"Will\" becomes \"would\" in reported speech."},{type:"fill",q:"\"I can swim.\" → He said he ___ swim.",answer:"could",exp:"\"Can\" → \"could\" in reported speech."}]},{topic:"Relative Clauses — Who, Which, That",explanation:"\"Who\" for people, \"which\" for things, \"that\" for both. They add information about nouns.",exercises:[{type:"mc",q:"The man ___ lives next door is a doctor.",opts:["which","whose","who","that it"],correct:2,exp:"\"Man\" is a person → \"who\"."},{type:"fill",q:"This is the book ___ I told you about.",answer:"that",exp:"\"That\" can refer to things."},{type:"mc",q:"The car ___ she bought is very expensive.",opts:["who","whose","whom","which"],correct:3,exp:"\"Car\" is a thing → \"which\"."},{type:"error",q:"Find the error: \"The woman which won the race is my friend.\"",opts:["The → A","which → who","won → wins","No error"],correct:1,exp:"For people → \"who\", not \"which\"."},{type:"fill",q:"That is the restaurant ___ we went on our first date.",answer:"where",exp:"\"Where\" is used for places in relative clauses."}]},{topic:"Phrasal Verbs — Common Ones",explanation:"Phrasal verbs = verb + preposition/adverb. \"Give up\" (quit), \"find out\" (discover).",exercises:[{type:"mc",q:"Don't ___ (desistir)! Keep trying!",opts:["give out","give up","give in","give away"],correct:1,exp:"\"Give up\" = quit/desistir."},{type:"fill",q:"I need to ___ what time the bus leaves. (discover)",answer:"find out",exp:"\"Find out\" = discover."},{type:"mc",q:"\"Turn off\" means:",opts:["increase","activate","deactivate/turn off","turn around"],correct:2,exp:"\"Turn off\" = deactivate."},{type:"error",q:"Find the error: \"Please turn of the lights.\"",opts:["Please → Kindly","turn of → turn off","lights → light","No error"],correct:1,exp:"\"Turn off\" — double f."},{type:"fill",q:"Can you ___ the music? It's too loud. (reduce)",answer:"turn down",exp:"\"Turn down\" = reduce volume."}]},{topic:"Used To — Past Habits",explanation:"\"Used to + base verb\" describes past habits that no longer happen. \"I used to play football.\"",exercises:[{type:"mc",q:"She ___ smoke, but she quit.",opts:["was use to","used to","uses to","use to"],correct:1,exp:"\"Used to\" expresses a past habit."},{type:"fill",q:"I ___ (love) cartoons when I was a kid.",answer:"used to love",exp:"\"Used to\" + base verb."},{type:"error",q:"Find the error: \"He used to played guitar.\"",opts:["He → She","used to played → used to play","guitar → drums","No error"],correct:1,exp:"\"Used to\" + base verb (not past tense)."},{type:"mc",q:"Which sentence describes a past habit?",opts:["I play tennis now.","I used to play tennis.","I am playing tennis.","I will play tennis."],correct:1,exp:"\"Used to play\" = past habit."},{type:"fill",q:"Did you ___ live in this neighbourhood?",answer:"use to",exp:"Question form → \"Did you use to?\" (no -d)."}]}],
-  b2:[{topic:"Passive Voice — All Tenses",explanation:"Passive works in all tenses: is done, was done, has been done, will be done.",exercises:[{type:"mc",q:"The report ___ (write) by the team last week.",opts:["was writing","was written","has been written","were written"],correct:1,exp:"Past simple passive → \"was written\"."},{type:"fill",q:"The new bridge ___ (build) by 2025.",answer:"will be built",exp:"Future passive → \"will be built\"."},{type:"error",q:"Find the error: \"The windows have been broke.\"",opts:["The → These","have been broke → have been broken","windows → window","No error"],correct:1,exp:"Past participle of \"break\" → \"broken\"."},{type:"mc",q:"The meeting ___ (cancel) due to bad weather.",opts:["was cancelling","was cancelled","is cancelled","has cancelled"],correct:1,exp:"Past passive → \"was cancelled\"."},{type:"fill",q:"This novel ___ (translate) into 30 languages.",answer:"has been translated",exp:"Present perfect passive → \"has been translated\"."}]},{topic:"Second Conditional",explanation:"If + past simple, would + base verb. Imaginary/unlikely situations in the present.",exercises:[{type:"mc",q:"If I ___ a million dollars, I would travel the world.",opts:["have","will have","had","would have"],correct:2,exp:"2nd conditional → \"if\" + past simple."},{type:"fill",q:"If she ___ harder, she would get better grades. (study)",answer:"studied",exp:"Past simple in the \"if\" clause."},{type:"error",q:"Find the error: \"If I would be rich, I would buy a yacht.\"",opts:["would be → were/was","rich → wealthy","buy → bought","No error"],correct:0,exp:"2nd conditional: \"If I were rich\" (not \"would be\")."},{type:"mc",q:"I would call her if I ___ her number.",opts:["know","will know","knew","had known"],correct:2,exp:"2nd conditional if-clause → \"knew\"."},{type:"fill",q:"If you ___ (be) taller, you could be a basketball player.",answer:"were",exp:"2nd conditional: \"If you were\" (hypothetical)."}]},{topic:"Third Conditional",explanation:"If + past perfect, would have + past participle. Imaginary past situations.",exercises:[{type:"mc",q:"If she had studied, she ___ the exam.",opts:["passed","would pass","would have passed","had passed"],correct:2,exp:"3rd conditional → \"would have passed\"."},{type:"fill",q:"If I had known, I ___ (tell) you.",answer:"would have told",exp:"\"Would have\" + past participle."},{type:"mc",q:"Which sentence is a 3rd conditional?",opts:["If it rains, I'll stay.","If I were rich, I'd travel.","If she had come, we would have met.","If you want, we can go."],correct:2,exp:"Past perfect + would have = 3rd conditional."},{type:"error",q:"Find the error: \"If he had tried, he would has succeeded.\"",opts:["had tried → tried","would has → would have","succeeded → succeed","No error"],correct:1,exp:"\"Would have\" not \"would has\"."},{type:"fill",q:"They ___ (not lose) if they had practiced more.",answer:"wouldn't have lost",exp:"Negative 3rd conditional."}]},{topic:"Mixed Conditionals",explanation:"3rd cond. \"if\" + 2nd cond. result (or vice versa) — mixes time references.",exercises:[{type:"mc",q:"If she had taken the job, she ___ rich now.",opts:["would be","would have been","will be","had been"],correct:0,exp:"Past action → present result: \"would be\"."},{type:"fill",q:"If I ___ (be) braver, I would have spoken up yesterday.",answer:"were",exp:"Present state affecting past event → \"were\"."},{type:"mc",q:"Mixed conditional links:",opts:["two present events","past cause + present result","two future events","present cause + past result"],correct:1,exp:"Most common: past cause → present result."},{type:"error",q:"Find the error: \"If she was more careful, she would have avoided the accident.\"",opts:["was → had been","more → most","avoided → avoid","No error"],correct:0,exp:"For a past event → \"if she had been more careful\"."},{type:"fill",q:"If he had emigrated, he ___ (live) in Spain now.",answer:"would be living",exp:"Past cause → present result: \"would be living\"."}]},{topic:"Advanced Passive — Reporting Verbs",explanation:"\"It is said that...\" / \"He is believed to be...\" — formal passive with reporting verbs.",exercises:[{type:"mc",q:"People say he is a genius. → It ___ he is a genius.",opts:["is said that","said that","has said that","says that"],correct:0,exp:"Reporting passive → \"It is said that...\""},{type:"fill",q:"Experts believe the economy will improve. → The economy ___ (believe) to improve.",answer:"is believed",exp:"Passive with infinitive → \"is believed to\"."},{type:"mc",q:"\"It is thought that climate change is serious.\" This is:",opts:["Active voice","Passive reporting","Direct speech","A question"],correct:1,exp:"\"It is thought that\" = passive reporting structure."},{type:"error",q:"Find the error: \"It is knowing that she resigned.\"",opts:["It → This","knowing → known","resigned → resigns","No error"],correct:1,exp:"Passive requires past participle: \"It is known\"."},{type:"fill",q:"He is ___ (report) to have left the country.",answer:"reported",exp:"\"Is reported to have\" = passive reporting."}]},{topic:"Inversion for Emphasis",explanation:"For formal/emphatic style: \"Never have I seen...\", \"Rarely does she...\", \"Not only did he...\"",exercises:[{type:"mc",q:"\"Never I have seen such beauty.\" — What is wrong?",opts:["Never → Rarely","I have → have I","such → so much","Nothing"],correct:1,exp:"After \"Never\" → invert subject and auxiliary: \"Never have I\"."},{type:"fill",q:"___ has she been this angry. (hardly ever)",answer:"Rarely",exp:"\"Rarely\" can replace \"hardly ever\" in inversion."},{type:"mc",q:"\"Not only ___ he rude, but also aggressive.\"",opts:["is","was","were","did"],correct:0,exp:"\"Not only is he...\" — present inversion."},{type:"error",q:"Find the error: \"Hardly ever she complains.\"",opts:["Hardly → Almost","she complains → does she complain","ever → never","No error"],correct:1,exp:"After \"Hardly ever\" → invert: \"does she complain\"."},{type:"fill",q:"Under no circumstances ___ you reveal this secret.",answer:"should",exp:"After \"Under no circumstances\" → invert: \"should you\"."}]},{topic:"Subjunctive Mood",explanation:"Used in formal English after \"suggest, recommend, demand, insist\" + that + base verb.",exercises:[{type:"mc",q:"I suggest that he ___ the doctor. (formal)",opts:["sees","see","is seeing","will see"],correct:1,exp:"Subjunctive after \"suggest that\" → bare infinitive \"see\"."},{type:"fill",q:"The committee demanded that the report ___ (submit) immediately.",answer:"be submitted",exp:"Passive subjunctive → \"be submitted\"."},{type:"mc",q:"\"It is essential that every student ___ on time.\"",opts:["is","be","are","will be"],correct:1,exp:"After \"essential that\" → subjunctive \"be\"."},{type:"error",q:"Find the error: \"She insists that he apologizes.\"",opts:["She → He","apologizes → apologize","insists → insisted","No error"],correct:1,exp:"After \"insists that\" → subjunctive \"apologize\" (no -s)."},{type:"fill",q:"The doctor recommended that she ___ more rest. (take)",answer:"take",exp:"Subjunctive after \"recommended that\" → base verb \"take\"."}]},{topic:"Cleft Sentences for Emphasis",explanation:"\"It was X that/who...\" and \"What I need is...\" — structures to emphasize parts of a sentence.",exercises:[{type:"mc",q:"\"I need a break.\" → Emphatic: ___ I need is a break.",opts:["That","What","It","Which"],correct:1,exp:"\"What I need\" cleft emphasizes the object."},{type:"fill",q:"___ was John who broke the window. (emphasize subject)",answer:"It",exp:"\"It was John who...\" cleft emphasizes the subject."},{type:"mc",q:"Which is a correct cleft sentence?",opts:["What he did was leave early.","That he did was leave early.","Which he did was leave early.","How he did was leave early."],correct:0,exp:"\"What he did was...\" is a correct cleft."},{type:"error",q:"Find the error: \"It was yesterday that she called me.\"",opts:["It → This","was yesterday → yesterday was","No error — this is correct","No error"],correct:3,exp:"\"It was yesterday that she called me\" is a correct cleft."},{type:"fill",q:"___ I enjoy most is reading. (What/It)",answer:"What",exp:"\"What I enjoy most is...\" emphasizes the activity."}]},{topic:"Discourse Markers",explanation:"Words linking ideas: however, moreover, nevertheless, therefore, in contrast, on the other hand.",exercises:[{type:"mc",q:"The price is high. ___, the quality is excellent.",opts:["Therefore","However","Moreover","So"],correct:1,exp:"\"However\" introduces a contrast."},{type:"fill",q:"She was tired; ___, she kept working.",answer:"nevertheless",exp:"\"Nevertheless\" = despite this (formal \"but\")."},{type:"mc",q:"\"___, the results confirm our hypothesis.\" (adding evidence)",opts:["However","In contrast","Furthermore","Nevertheless"],correct:2,exp:"\"Furthermore\" adds supporting information."},{type:"error",q:"Find the error: \"He studied hard. Therefore, he failed.\"",opts:["Therefore → However","studied → studies","failed → passes","No error"],correct:0,exp:"\"Therefore\" shows result/consequence — contradictory here."},{type:"fill",q:"The plan seems good; ___, we should consider the risks.",answer:"however",exp:"\"However\" introduces a contrasting point."}]},{topic:"Wish / If Only",explanation:"\"Wish + past simple\" for present regrets. \"Wish + past perfect\" for past regrets.",exercises:[{type:"mc",q:"I wish I ___ taller. (I'm not tall)",opts:["am","was/were","have been","will be"],correct:1,exp:"Present wish → \"wish + past simple\": \"I wish I were taller\"."},{type:"fill",q:"If only I ___ (study) harder — then I would have passed.",answer:"had studied",exp:"Past regret → \"if only + past perfect\"."},{type:"mc",q:"\"I wish she would stop talking.\" This expresses:",opts:["a past regret","a present annoyance about behavior","a hypothetical past","a real condition"],correct:1,exp:"\"Wish + would\" = annoyance about present/future behavior."},{type:"error",q:"Find the error: \"I wish I was there yesterday.\"",opts:["I → She","was → had been","there → here","No error"],correct:1,exp:"Past regret → \"I wish I had been there yesterday\"."},{type:"fill",q:"She wishes she ___ (can) speak Japanese.",answer:"could",exp:"\"Can\" becomes \"could\" with \"wish\" → present wish."}]}],
+  starter:[{topic:"Verb To Be â Present",explanation:"Use am/is/are to describe people and things. \"I am\", \"He is\", \"They are\".",exercises:[{type:"mc",q:"She ___ a teacher.",opts:["am","is","are","be"],correct:1,exp:"\"She\" is 3rd person singular â use \"is\"."},{type:"fill",q:"Complete: I ___ happy today.",answer:"am",exp:"With \"I\", always use \"am\"."},{type:"error",q:"Find the error: \"They is my friends.\"",opts:["They â We","is â are","my â mine","No error"],correct:1,exp:"\"They\" takes \"are\", not \"is\"."},{type:"mc",q:"We ___ students.",opts:["am","is","are","be"],correct:2,exp:"\"We\" is plural â use \"are\"."},{type:"fill",q:"The dog ___ very big.",answer:"is",exp:"\"The dog\" is 3rd person singular â \"is\"."}]},{topic:"Subject Pronouns",explanation:"I, you, he, she, it, we, they replace nouns as the subject of a sentence.",exercises:[{type:"mc",q:"Maria is my sister. ___ is kind.",opts:["He","She","They","It"],correct:1,exp:"\"Maria\" is female â use \"She\"."},{type:"mc",q:"John and I are students. ___ study every day.",opts:["He","She","We","They"],correct:2,exp:"\"John and I\" = \"We\"."},{type:"fill",q:"My dog is big. ___ is also fast.",answer:"It",exp:"Non-human animals â \"It\"."},{type:"error",q:"Find the error: \"Him is my brother.\"",opts:["Him â He","is â are","my â mine","No error"],correct:0,exp:"Subject pronoun needed â \"He\"."},{type:"mc",q:"The books are on the table. ___ are new.",opts:["It","He","She","They"],correct:3,exp:"Plural things â \"They\"."}]},{topic:"Articles â A / An",explanation:"Use \"a\" before consonant sounds and \"an\" before vowel sounds (a, e, i, o, u).",exercises:[{type:"mc",q:"She has ___ umbrella.",opts:["a","an","the","â"],correct:1,exp:"\"Umbrella\" starts with a vowel sound â \"an\"."},{type:"mc",q:"He is ___ engineer.",opts:["a","an","the","â"],correct:1,exp:"\"Engineer\" starts with a vowel sound â \"an\"."},{type:"error",q:"Find the error: \"I have a apple.\"",opts:["I â We","a â an","have â has","No error"],correct:1,exp:"\"Apple\" starts with a vowel â \"an apple\"."},{type:"fill",q:"I want ___ orange juice.",answer:"an",exp:"\"Orange\" starts with a vowel sound â \"an\"."},{type:"mc",q:"She drives ___ old car.",opts:["a","an","the","â"],correct:1,exp:"\"Old\" starts with a vowel sound â \"an\"."}]},{topic:"Plural Nouns",explanation:"Most nouns add -s or -es to form the plural. Some are irregular (child/children).",exercises:[{type:"fill",q:"One cat, two ___",answer:"cats",exp:"Regular noun â add -s."},{type:"mc",q:"What is the plural of \"bus\"?",opts:["bus","buss","buses","busis"],correct:2,exp:"Words ending in -s, -sh, -ch, -x add -es."},{type:"mc",q:"What is the plural of \"child\"?",opts:["childs","childes","children","child"],correct:2,exp:"\"Child\" is an irregular plural â \"children\"."},{type:"error",q:"Find the error: \"She has two boxs.\"",opts:["She â He","boxs â boxes","has â have","No error"],correct:1,exp:"\"Box\" ends in -x â add -es: \"boxes\"."},{type:"fill",q:"One man, two ___",answer:"men",exp:"Irregular plural: man â men."}]},{topic:"Numbers & Basic Greetings",explanation:"Learn numbers 1â20 and everyday greetings: Hello, Good morning, Thank you.",exercises:[{type:"mc",q:"How do you say 15 in English?",opts:["fifty","fiveteen","fifteen","fiften"],correct:2,exp:"15 = fifteen."},{type:"mc",q:"Which is the correct greeting for morning?",opts:["Good night","Good evening","Good morning","Good afternoon"],correct:2,exp:"\"Good morning\" is used before noon."},{type:"fill",q:"10 + 5 = ___",answer:"fifteen",exp:"10 + 5 = 15 = fifteen."},{type:"mc",q:"How do you say 12 in English?",opts:["twelfth","twelve","twentee","twelf"],correct:1,exp:"12 = twelve."},{type:"error",q:"Find the error: \"Good Night! How are you?\" (morning context)",opts:["Good Night â Good Morning","How â What","you â u","No error"],correct:0,exp:"\"Good Night\" is for the evening, not morning."}]},{topic:"Verb To Have",explanation:"Use \"have\" with I/you/we/they and \"has\" with he/she/it.",exercises:[{type:"mc",q:"She ___ a red car.",opts:["have","has","is","are"],correct:1,exp:"3rd person singular â \"has\"."},{type:"error",q:"Find the error: \"They has two cats.\"",opts:["They â He","has â have","cats â cat","No error"],correct:1,exp:"\"They\" requires \"have\"."},{type:"fill",q:"I ___ a big family.",answer:"have",exp:"\"I\" always uses \"have\"."},{type:"mc",q:"My parents ___ a new house.",opts:["has","is","have","are"],correct:2,exp:"\"My parents\" = plural â \"have\"."},{type:"fill",q:"He ___ two brothers and one sister.",answer:"has",exp:"\"He\" is 3rd person singular â \"has\"."}]},{topic:"Common Adjectives",explanation:"Adjectives describe nouns. In English, they go BEFORE the noun: \"a big house\".",exercises:[{type:"mc",q:"Which sentence is correct?",opts:["A house big","A big house","Big a house","House big a"],correct:1,exp:"Adjective comes before the noun in English."},{type:"mc",q:"She is a ___ girl. (happy)",opts:["girl happy","happy girl","happily girl","girl happily"],correct:1,exp:"Adjective before noun: \"a happy girl\"."},{type:"fill",q:"The sky is ___. (blue)",answer:"blue",exp:"Adjectives also come after \"to be\"."},{type:"error",q:"Find the error: \"It is a day beautiful.\"",opts:["It â This","a day beautiful â a beautiful day","is â are","No error"],correct:1,exp:"Adjective goes BEFORE the noun."},{type:"mc",q:"Opposite of \"hot\" is:",opts:["warm","cool","cold","freezing"],correct:2,exp:"The direct opposite of \"hot\" is \"cold\"."}]},{topic:"Days of the Week",explanation:"Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday. Always capitalized in English.",exercises:[{type:"mc",q:"Which day comes after Wednesday?",opts:["Tuesday","Friday","Thursday","Monday"],correct:2,exp:"Mon â Tue â Wed â Thu â Fri â Sat â Sun."},{type:"error",q:"Find the error: \"I work on monday.\"",opts:["I â We","on â in","monday â Monday","work â works"],correct:2,exp:"Days of the week are always capitalized."},{type:"mc",q:"Saturday and Sunday are the ___",opts:["workdays","weekdays","weekend","holidays"],correct:2,exp:"Saturday + Sunday = the weekend."},{type:"fill",q:"The day after Sunday is ___",answer:"Monday",exp:"The week starts again with Monday."},{type:"mc",q:"Which day comes BEFORE Friday?",opts:["Saturday","Wednesday","Sunday","Thursday"],correct:3,exp:"Thu comes right before Fri."}]},{topic:"Basic Questions â WH Words",explanation:"Who (person), What (thing), Where (place), When (time), Why (reason), How (manner).",exercises:[{type:"mc",q:"___ is your name?",opts:["Where","When","What","Who"],correct:2,exp:"\"What\" is used for things/information like a name."},{type:"mc",q:"___ do you live?",opts:["What","Who","When","Where"],correct:3,exp:"\"Where\" asks about a place."},{type:"fill",q:"___ old are you?",answer:"How",exp:"\"How old\" asks about age."},{type:"mc",q:"___ is your birthday?",opts:["Where","What","When","Who"],correct:2,exp:"\"When\" asks about time/date."},{type:"error",q:"Find the error: \"Where is your name?\"",opts:["Where â What","is â are","your â you","No error"],correct:0,exp:"\"What is your name?\" â not \"Where\"."}]},{topic:"Colors in English",explanation:"Basic colors: red, blue, green, yellow, black, white, orange, purple, pink, brown.",exercises:[{type:"mc",q:"The sky is usually ___ during the day.",opts:["green","red","blue","purple"],correct:2,exp:"The daytime sky is blue."},{type:"fill",q:"Bananas are ___",answer:"yellow",exp:"Bananas are yellow."},{type:"mc",q:"Which color do you get mixing red and white?",opts:["purple","orange","pink","brown"],correct:2,exp:"Red + White = Pink."},{type:"error",q:"Find the error: \"Grass is usually red.\"",opts:["Grass â Trees","usually â always","red â green","No error"],correct:2,exp:"Grass is green, not red."},{type:"fill",q:"The opposite of black is ___",answer:"white",exp:"Black and white are opposites."}]}],
+  a1:[{topic:"Present Simple â Affirmative",explanation:"Use the base verb for I/you/we/they. Add -s/-es for he/she/it: \"She works\".",exercises:[{type:"mc",q:"He ___ to school every day.",opts:["go","goes","going","gone"],correct:1,exp:"3rd person singular â add -es to \"go\" â \"goes\"."},{type:"fill",q:"She ___ (like) coffee.",answer:"likes",exp:"3rd person singular â \"likes\"."},{type:"error",q:"Find the error: \"They goes to the gym.\"",opts:["They â He","goes â go","to â at","No error"],correct:1,exp:"\"They\" takes the base form â \"go\"."},{type:"mc",q:"My sister ___ in London.",opts:["live","lives","is living","lived"],correct:1,exp:"\"My sister\" = 3rd person singular â \"lives\"."},{type:"fill",q:"I ___ (study) English every morning.",answer:"study",exp:"\"I\" takes the base form â \"study\"."}]},{topic:"Present Simple â Negative",explanation:"Use \"don't\" (I/you/we/they) or \"doesn't\" (he/she/it) + base verb.",exercises:[{type:"mc",q:"She ___ like pizza.",opts:["don't","doesn't","isn't","aren't"],correct:1,exp:"She â \"doesn't\" + base verb."},{type:"fill",q:"They ___ (not watch) TV.",answer:"don't watch",exp:"\"They\" â \"don't\" + base verb."},{type:"error",q:"Find the error: \"He don't play football.\"",opts:["He â They","don't â doesn't","play â plays","No error"],correct:1,exp:"\"He\" requires \"doesn't\"."},{type:"mc",q:"We ___ live in Paris.",opts:["doesn't","don't","aren't","isn't"],correct:1,exp:"\"We\" â \"don't\"."},{type:"fill",q:"She ___ (not like) horror films.",answer:"doesn't like",exp:"\"She\" â \"doesn't\" + base verb."}]},{topic:"Present Simple â Questions",explanation:"Use Do/Does + subject + base verb. \"Do you play?\" / \"Does she work?\"",exercises:[{type:"mc",q:"___ she speak French?",opts:["Do","Does","Is","Are"],correct:1,exp:"3rd person singular question â \"Does\"."},{type:"fill",q:"___ you like music?",answer:"Do",exp:"\"You\" â use \"Do\"."},{type:"mc",q:"Which question is correct?",opts:["Does they work?","Do she work?","Does he work?","Do he works?"],correct:2,exp:"\"He\" â \"Does he work?\""},{type:"error",q:"Find the error: \"Do she live here?\"",opts:["Do â Does","she â he","live â lives","No error"],correct:0,exp:"\"She\" is 3rd singular â \"Does she live here?\""},{type:"fill",q:"___ your parents work on Saturdays?",answer:"Do",exp:"\"Your parents\" = plural â \"Do\"."}]},{topic:"Prepositions of Time â In, On, At",explanation:"\"At\" for exact times, \"on\" for days/dates, \"in\" for months/years/seasons.",exercises:[{type:"mc",q:"I wake up ___ 7 o'clock.",opts:["in","on","at","by"],correct:2,exp:"Exact time â \"at 7 o'clock\"."},{type:"mc",q:"She was born ___ July.",opts:["at","on","in","by"],correct:2,exp:"Month â \"in July\"."},{type:"fill",q:"We have class ___ Monday.",answer:"on",exp:"Days of the week â \"on Monday\"."},{type:"mc",q:"He started working here ___ 2019.",opts:["on","at","in","by"],correct:2,exp:"Years â \"in 2019\"."},{type:"error",q:"Find the error: \"The party is in Friday.\"",opts:["The â A","in â on","party â parties","No error"],correct:1,exp:"Days of the week â \"on Friday\"."}]},{topic:"Prepositions of Place â In, On, At",explanation:"\"At\" for specific locations, \"on\" for surfaces, \"in\" for enclosed spaces.",exercises:[{type:"mc",q:"The book is ___ the table.",opts:["in","at","on","by"],correct:2,exp:"Surface â \"on the table\"."},{type:"fill",q:"She is ___ home.",answer:"at",exp:"\"At home\" is a fixed expression."},{type:"error",q:"Find the error: \"He is in the bus stop.\"",opts:["He â She","in â at","bus â buss","No error"],correct:1,exp:"Specific location â \"at the bus stop\"."},{type:"mc",q:"The keys are ___ my bag.",opts:["at","on","in","by"],correct:2,exp:"Inside an enclosed space â \"in my bag\"."},{type:"fill",q:"There is a picture ___ the wall.",answer:"on",exp:"Surface â \"on the wall\"."}]},{topic:"There is / There are",explanation:"Use \"there is\" for singular and \"there are\" for plural to say something exists.",exercises:[{type:"mc",q:"___ a cat in the garden.",opts:["There are","There is","There was","It is"],correct:1,exp:"Singular \"a cat\" â \"There is\"."},{type:"fill",q:"___ three students in the room.",answer:"There are",exp:"Plural â \"There are\"."},{type:"error",q:"Find the error: \"There is two books on the desk.\"",opts:["There is â There are","two â second","books â book","No error"],correct:0,exp:"\"Two books\" is plural â \"There are\"."},{type:"mc",q:"___ a problem with the computer.",opts:["There are","There is","There were","They are"],correct:1,exp:"Singular \"a problem\" â \"There is\"."},{type:"fill",q:"___ many people at the party.",answer:"There are",exp:"\"Many people\" is plural â \"There are\"."}]},{topic:"Possessive Adjectives",explanation:"my, your, his, her, its, our, their â used before nouns to show ownership.",exercises:[{type:"mc",q:"That is ___ car. (belongs to him)",opts:["my","your","his","her"],correct:2,exp:"Male possession â \"his\"."},{type:"fill",q:"We love ___ school.",answer:"our",exp:"\"We\" â \"our\"."},{type:"error",q:"Find the error: \"She forgot hers bag.\"",opts:["She â He","hers â her","forgot â forgets","No error"],correct:1,exp:"\"Her\" is already possessive â no -s needed."},{type:"mc",q:"The dog wagged ___ tail.",opts:["his","her","their","its"],correct:3,exp:"For animals/things â \"its\"."},{type:"fill",q:"They sold ___ house last year.",answer:"their",exp:"\"They\" â \"their\"."}]},{topic:"Can / Can't for Ability",explanation:"Use \"can\" to say you are able to do something. \"Can't\" = cannot.",exercises:[{type:"mc",q:"She ___ swim very well.",opts:["can","cans","is can","does can"],correct:0,exp:"\"Can\" never adds -s. \"She can swim\"."},{type:"fill",q:"I ___ drive. I don't have a license.",answer:"can't",exp:"\"Can't\" = cannot."},{type:"mc",q:"Which is correct?",opts:["He can to run fast","He cans run fast","He can run fast","He can runs fast"],correct:2,exp:"Can + base verb (no \"to\", no -s)."},{type:"error",q:"Find the error: \"Can you to help me?\"",opts:["Can â Could","you â I","to help â help","No error"],correct:2,exp:"After \"can\" â base verb (no \"to\")."},{type:"fill",q:"Birds ___ fly, but penguins ___.",answer:"can, can't",exp:"Most birds can fly; penguins cannot."}]},{topic:"Object Pronouns",explanation:"me, you, him, her, it, us, them â used as the object of a verb or preposition.",exercises:[{type:"mc",q:"Can you help ___? (me/I)",opts:["I","me","my","mine"],correct:1,exp:"After a verb â object pronoun \"me\"."},{type:"mc",q:"I love ___. (him/he)",opts:["he","his","him","himself"],correct:2,exp:"After a verb â \"him\"."},{type:"fill",q:"Tell ___ the truth.",answer:"me",exp:"\"Tell me\" â object pronoun."},{type:"error",q:"Find the error: \"She called I yesterday.\"",opts:["She â He","called â called","I â me","No error"],correct:2,exp:"Object of verb â \"me\", not \"I\"."},{type:"mc",q:"They invited ___ to the party.",opts:["we","our","us","ours"],correct:2,exp:"Object pronoun for \"we\" â \"us\"."}]},{topic:"Imperatives",explanation:"Use the base verb to give commands or instructions. \"Open the door.\" / \"Don't talk!\"",exercises:[{type:"mc",q:"How do you say \"Nao fale!\" in English?",opts:["Not talk!","Don't talk!","No talk!","Doesn't talk!"],correct:1,exp:"Negative imperative = Don't + base verb."},{type:"fill",q:"___ your homework! (do)",answer:"Do",exp:"Imperative: base verb \"Do\"."},{type:"error",q:"Find the error: \"Please to close the window.\"",opts:["Please â Kindly","to close â close","window â windows","No error"],correct:1,exp:"Imperatives don't use \"to\": \"Please close\"."},{type:"mc",q:"Which is a correct imperative?",opts:["You sit down.","Please sits down.","Sit down, please.","Sitting down."],correct:2,exp:"Imperative: \"Sit down\" (base verb first)."},{type:"fill",q:"___ quiet, please! (be)",answer:"Be",exp:"\"Be quiet\" â imperative of \"to be\"."}]}],
+  a2:[{topic:"Past Simple â Regular Verbs",explanation:"Add -ed to regular verbs: walkâwalked, playâplayed. Use \"did not\" for negatives.",exercises:[{type:"mc",q:"She ___ (watch) TV last night.",opts:["watch","watches","watched","watching"],correct:2,exp:"Past simple regular â add -ed: \"watched\"."},{type:"fill",q:"They ___ (play) football yesterday.",answer:"played",exp:"Past simple â \"played\"."},{type:"error",q:"Find the error: \"He didn't went to school.\"",opts:["He â She","didn't went â didn't go","school â class","No error"],correct:1,exp:"After \"didn't\" always use the base form."},{type:"mc",q:"We ___ (visit) Rome last summer.",opts:["visit","visited","visits","visiting"],correct:1,exp:"Regular past simple â \"visited\"."},{type:"fill",q:"She ___ (clean) her room this morning.",answer:"cleaned",exp:"Regular verb â add -ed: \"cleaned\"."}]},{topic:"Past Simple â Irregular Verbs",explanation:"Common irregulars: goâwent, haveâhad, seeâsaw, comeâcame, takeâtook.",exercises:[{type:"mc",q:"She ___ to Paris last summer.",opts:["go","goes","went","gone"],correct:2,exp:"Past of \"go\" â \"went\"."},{type:"fill",q:"We ___ (see) a great movie.",answer:"saw",exp:"Past of \"see\" â \"saw\"."},{type:"mc",q:"Which is the past of \"have\"?",opts:["haved","had","has","having"],correct:1,exp:"Irregular: have â had."},{type:"error",q:"Find the error: \"I taked the bus yesterday.\"",opts:["I â She","taked â took","bus â train","No error"],correct:1,exp:"Irregular: take â took (not \"taked\")."},{type:"fill",q:"He ___ (come) to the party late.",answer:"came",exp:"Irregular: come â came."}]},{topic:"Past Simple â Questions",explanation:"Use \"Did + subject + base verb\" for past questions. \"Did you go?\" / \"Did she eat?\"",exercises:[{type:"mc",q:"___ you go to the party?",opts:["Do","Did","Was","Were"],correct:1,exp:"Past question â \"Did you go?\""},{type:"fill",q:"___ she call you?",answer:"Did",exp:"\"Did\" starts past questions."},{type:"error",q:"Find the error: \"Did she went to school?\"",opts:["Did â Does","went â go","school â work","No error"],correct:1,exp:"After \"Did\" â base verb \"go\"."},{type:"mc",q:"Where ___ you go last night?",opts:["do","does","did","was"],correct:2,exp:"Past question â \"did you go\"."},{type:"fill",q:"___ he study for the exam?",answer:"Did",exp:"\"Did\" + subject + base verb."}]},{topic:"Comparatives",explanation:"Short adjectives: add -er (bigger, taller). Long adjectives: use \"more\" (more expensive).",exercises:[{type:"mc",q:"This book is ___ than that one. (interesting)",opts:["interestinger","more interesting","most interesting","interestingmore"],correct:1,exp:"Long adjective â \"more interesting\"."},{type:"fill",q:"He is ___ than his brother. (tall)",answer:"taller",exp:"Short adjective â add -er: \"taller\"."},{type:"error",q:"Find the error: \"She is more tall than me.\"",opts:["She â He","more tall â taller","than â as","No error"],correct:1,exp:"Short adjective \"tall\" â \"taller\", not \"more tall\"."},{type:"mc",q:"This car is ___ than mine. (expensive)",opts:["expensiver","most expensive","more expensive","expensivest"],correct:2,exp:"Long adjective â \"more expensive\"."},{type:"fill",q:"Summer is ___ than winter. (hot)",answer:"hotter",exp:"Short adjective + double consonant â \"hotter\"."}]},{topic:"Superlatives",explanation:"Short adjectives: add -est (biggest). Long adjectives: use \"the most\" (the most expensive).",exercises:[{type:"mc",q:"She is ___ girl in the class. (smart)",opts:["smarter","the most smart","the smartest","most smartest"],correct:2,exp:"Short adjective + -est: \"the smartest\"."},{type:"fill",q:"It is ___ movie I have ever seen. (good)",answer:"the best",exp:"Irregular superlative: good â the best."},{type:"mc",q:"This is ___ building in the city. (tall)",opts:["the tallest","the most tall","taller","more taller"],correct:0,exp:"Short adjective â \"the tallest\"."},{type:"error",q:"Find the error: \"He is the most fast runner.\"",opts:["He â She","most fast â fastest","runner â runners","No error"],correct:1,exp:"Short adjective \"fast\" â \"the fastest\"."},{type:"fill",q:"Brazil is ___ country in South America. (big)",answer:"the biggest",exp:"Short adj + -est: big â biggest (double consonant)."}]},{topic:"Past Continuous",explanation:"Was/were + verb-ing. Describes an action in progress at a specific time in the past.",exercises:[{type:"mc",q:"At 8 PM, she ___ (study).",opts:["studied","was studying","is studying","studies"],correct:1,exp:"Action in progress in the past â \"was studying\"."},{type:"fill",q:"They ___ (play) when it started to rain.",answer:"were playing",exp:"\"They\" + past continuous â \"were playing\"."},{type:"error",q:"Find the error: \"He were watching TV.\"",opts:["He â They","were â was","watching â watched","No error"],correct:1,exp:"\"He\" (singular) â \"was watching\"."},{type:"mc",q:"I ___ (sleep) when you called.",opts:["slept","was sleeping","am sleeping","sleep"],correct:1,exp:"Past continuous for interrupted action â \"was sleeping\"."},{type:"fill",q:"We ___ (have) dinner at 7 o'clock.",answer:"were having",exp:"\"We\" + past continuous â \"were having\"."}]},{topic:"Adverbs of Frequency",explanation:"Always(100%), usually, often, sometimes, rarely, never(0%) go before the main verb.",exercises:[{type:"mc",q:"She ___ eats breakfast. (100% of the time)",opts:["never","sometimes","always","rarely"],correct:2,exp:"100% â \"always\"."},{type:"fill",q:"I ___ go to bed late. I prefer sleeping early.",answer:"rarely",exp:"Almost never â \"rarely\"."},{type:"error",q:"Find the error: \"He eats always lunch at noon.\"",opts:["He â She","always â never","eats always â always eats","No error"],correct:2,exp:"Adverb of frequency goes BEFORE the main verb."},{type:"mc",q:"Which adverb means \"about 50% of the time\"?",opts:["always","never","often","sometimes"],correct:3,exp:"\"Sometimes\" = approximately 50% frequency."},{type:"fill",q:"She ___ brushes her teeth before bed. (every time)",answer:"always",exp:"100% â \"always\"."}]},{topic:"Going To â Future Plans",explanation:"Use \"am/is/are going to + base verb\" to talk about plans or intentions.",exercises:[{type:"mc",q:"She ___ visit her parents next week.",opts:["going to","is going to","go to","will going"],correct:1,exp:"\"She\" â \"is going to visit\"."},{type:"fill",q:"We ___ (study) tonight.",answer:"are going to study",exp:"\"We\" â \"are going to\" + base verb."},{type:"error",q:"Find the error: \"He is go to travel tomorrow.\"",opts:["He â She","go â going","travel â traveling","No error"],correct:1,exp:"\"Is going to\" â needs \"going\", not \"go\"."},{type:"mc",q:"I ___ buy a new phone. (I have already decided)",opts:["am going to","is going to","are going to","go to"],correct:0,exp:"\"I\" â \"am going to\"."},{type:"fill",q:"___ they ___ (move) to a new city?",answer:"Are, going to move",exp:"\"They\" â \"Are they going to move?\""}]},{topic:"Countable vs Uncountable Nouns",explanation:"Countable: can be counted (an apple, two apples). Uncountable: can't be counted (water, money).",exercises:[{type:"mc",q:"Which is uncountable?",opts:["chair","book","water","car"],correct:2,exp:"\"Water\" cannot be counted individually."},{type:"mc",q:"She wants ___ information.",opts:["an","a","some","one"],correct:2,exp:"\"Information\" is uncountable â \"some information\"."},{type:"fill",q:"Could I have ___ water please?",answer:"some",exp:"Uncountable noun â \"some water\"."},{type:"error",q:"Find the error: \"I need an advice.\"",opts:["I â We","an â some","advice â advices","No error"],correct:1,exp:"\"Advice\" is uncountable â \"some advice\" (no \"an\")."},{type:"mc",q:"Which word is countable?",opts:["music","furniture","idea","equipment"],correct:2,exp:"\"Idea\" is countable (one idea, two ideas)."}]},{topic:"Questions with How",explanation:"\"How long?\" = duration, \"How often?\" = frequency, \"How far?\" = distance.",exercises:[{type:"mc",q:"___ does it take to get there? (1 hour)",opts:["How far","How often","How long","How much"],correct:2,exp:"\"1 hour\" is duration â \"How long?\""},{type:"fill",q:"___ do you exercise? â Three times a week.",answer:"How often",exp:"Frequency â \"How often?\""},{type:"mc",q:"___ is it from here? (5 km)",opts:["How long","How much","How often","How far"],correct:3,exp:"5 km is distance â \"How far?\""},{type:"error",q:"Find the error: \"How long do you go to the gym?\" (3 days/week)",opts:["How long â How often","do â does","go â went","No error"],correct:0,exp:"Frequency (3 days/week) â \"How often?\""},{type:"fill",q:"___ does the flight take? â About 10 hours.",answer:"How long",exp:"Duration (10 hours) â \"How long?\""}]}],
+  b1:[{topic:"Present Perfect â Introduction",explanation:"Have/has + past participle. Connects past actions to the present. \"I have eaten.\"",exercises:[{type:"mc",q:"She ___ (visit) Paris three times.",opts:["visited","has visited","have visited","visit"],correct:1,exp:"\"She\" (singular) â \"has visited\"."},{type:"fill",q:"I have never ___ (eat) sushi.",answer:"eaten",exp:"\"Eat\" irregular past participle â \"eaten\"."},{type:"error",q:"Find the error: \"He have finished the report.\"",opts:["He â They","have â has","finished â finish","No error"],correct:1,exp:"\"He\" â \"has finished\"."},{type:"mc",q:"They ___ just ___ the film. (watch)",opts:["have watched","has watched","watched","are watching"],correct:0,exp:"\"They\" â \"have watched\"."},{type:"fill",q:"We ___ (never / be) to Australia.",answer:"have never been",exp:"\"Have never been\" = never visited."}]},{topic:"Present Perfect â Since vs For",explanation:"\"Since\" = starting point (since 2020). \"For\" = duration (for 5 years).",exercises:[{type:"mc",q:"She has lived here ___ 2018.",opts:["for","since","during","from"],correct:1,exp:"2018 is a starting point â \"since\"."},{type:"fill",q:"He has worked there ___ ten years.",answer:"for",exp:"10 years is a duration â \"for\"."},{type:"mc",q:"I have known her ___ we were children.",opts:["for","during","since","in"],correct:2,exp:"\"We were children\" is a starting point â \"since\"."},{type:"error",q:"Find the error: \"They have lived here since five years.\"",opts:["They â We","since â for","lived â live","No error"],correct:1,exp:"\"Five years\" is a duration â \"for five years\"."},{type:"fill",q:"I have had this phone ___ March.",answer:"since",exp:"March is a starting point â \"since\"."}]},{topic:"Modal Verbs â Should / Shouldn't",explanation:"\"Should\" gives advice or recommendation. \"Shouldn't\" = it's not a good idea.",exercises:[{type:"mc",q:"You look tired. You ___ go to bed early.",opts:["must","should","can","would"],correct:1,exp:"Advice â \"should\"."},{type:"fill",q:"You ___ eat so much junk food. It's bad for you.",answer:"shouldn't",exp:"Negative advice â \"shouldn't\"."},{type:"error",q:"Find the error: \"She should to study more.\"",opts:["She â He","should to â should","study â studies","No error"],correct:1,exp:"Modal verbs don't use \"to\": \"should study\"."},{type:"mc",q:"Which sentence gives advice?",opts:["I can swim.","You should drink more water.","She is tired.","They played football."],correct:1,exp:"\"Should\" gives advice."},{type:"fill",q:"You ___ worry so much. Try to relax!",answer:"shouldn't",exp:"Negative advice â \"shouldn't worry\"."}]},{topic:"Modal Verbs â Must / Mustn't",explanation:"\"Must\" = strong obligation. \"Mustn't\" = it is prohibited. NOT the same as \"don't have to\".",exercises:[{type:"mc",q:"You ___ wear a seatbelt. It's the law.",opts:["should","must","can","might"],correct:1,exp:"Law = strong obligation â \"must\"."},{type:"fill",q:"You ___ smoke in here. It's forbidden.",answer:"mustn't",exp:"\"Mustn't\" = prohibited."},{type:"mc",q:"Which is correct? (exam tomorrow)",opts:["I mustn't study","I must to study","I must study","I musts study"],correct:2,exp:"Must + base verb (no \"to\")."},{type:"error",q:"Find the error: \"You musts leave now.\"",opts:["You â He","musts â must","leave â leaving","No error"],correct:1,exp:"\"Must\" never adds -s."},{type:"fill",q:"Children ___ touch electrical sockets. It's dangerous.",answer:"mustn't",exp:"\"Mustn't\" = prohibition for safety."}]},{topic:"First Conditional",explanation:"If + present simple, will + base verb. Real/possible future situations.",exercises:[{type:"mc",q:"If it rains, we ___ stay inside.",opts:["stayed","will stay","would stay","stay"],correct:1,exp:"1st conditional â \"will stay\"."},{type:"fill",q:"If you study hard, you ___ (pass) the exam.",answer:"will pass",exp:"Result clause â \"will\" + base verb."},{type:"error",q:"Find the error: \"If she will come, I will be happy.\"",opts:["If â When","will come â comes","will be â am","No error"],correct:1,exp:"After \"if\" â present simple, not \"will\"."},{type:"mc",q:"If they ___ early, we can have lunch together.",opts:["will arrive","arrived","arrive","arriving"],correct:2,exp:"If-clause â present simple \"arrive\"."},{type:"fill",q:"If you don't hurry, you ___ (miss) the bus.",answer:"will miss",exp:"Result of not hurrying â \"will miss\"."}]},{topic:"Reported Speech â Statements",explanation:"Change tense back: say \"I am tired\" â reported as \"He said he was tired\".",exercises:[{type:"mc",q:"Direct: \"I live in London.\" Reported: She said she ___ in London.",opts:["lives","lived","is living","will live"],correct:1,exp:"Present simple â past simple in reported speech."},{type:"fill",q:"He said: \"I am hungry.\" â He said he ___ hungry.",answer:"was",exp:"\"Am\" â \"was\" in reported speech."},{type:"mc",q:"\"I will help you.\" â She said she ___ help me.",opts:["will","would","should","could"],correct:1,exp:"\"Will\" â \"would\" in reported speech."},{type:"error",q:"Find the error: \"She said she will come tomorrow.\"",opts:["she â he","will â would","come â came","No error"],correct:1,exp:"\"Will\" becomes \"would\" in reported speech."},{type:"fill",q:"\"I can swim.\" â He said he ___ swim.",answer:"could",exp:"\"Can\" â \"could\" in reported speech."}]},{topic:"Relative Clauses â Who, Which, That",explanation:"\"Who\" for people, \"which\" for things, \"that\" for both. They add information about nouns.",exercises:[{type:"mc",q:"The man ___ lives next door is a doctor.",opts:["which","whose","who","that it"],correct:2,exp:"\"Man\" is a person â \"who\"."},{type:"fill",q:"This is the book ___ I told you about.",answer:"that",exp:"\"That\" can refer to things."},{type:"mc",q:"The car ___ she bought is very expensive.",opts:["who","whose","whom","which"],correct:3,exp:"\"Car\" is a thing â \"which\"."},{type:"error",q:"Find the error: \"The woman which won the race is my friend.\"",opts:["The â A","which â who","won â wins","No error"],correct:1,exp:"For people â \"who\", not \"which\"."},{type:"fill",q:"That is the restaurant ___ we went on our first date.",answer:"where",exp:"\"Where\" is used for places in relative clauses."}]},{topic:"Phrasal Verbs â Common Ones",explanation:"Phrasal verbs = verb + preposition/adverb. \"Give up\" (quit), \"find out\" (discover).",exercises:[{type:"mc",q:"Don't ___ (desistir)! Keep trying!",opts:["give out","give up","give in","give away"],correct:1,exp:"\"Give up\" = quit/desistir."},{type:"fill",q:"I need to ___ what time the bus leaves. (discover)",answer:"find out",exp:"\"Find out\" = discover."},{type:"mc",q:"\"Turn off\" means:",opts:["increase","activate","deactivate/turn off","turn around"],correct:2,exp:"\"Turn off\" = deactivate."},{type:"error",q:"Find the error: \"Please turn of the lights.\"",opts:["Please â Kindly","turn of â turn off","lights â light","No error"],correct:1,exp:"\"Turn off\" â double f."},{type:"fill",q:"Can you ___ the music? It's too loud. (reduce)",answer:"turn down",exp:"\"Turn down\" = reduce volume."}]},{topic:"Used To â Past Habits",explanation:"\"Used to + base verb\" describes past habits that no longer happen. \"I used to play football.\"",exercises:[{type:"mc",q:"She ___ smoke, but she quit.",opts:["was use to","used to","uses to","use to"],correct:1,exp:"\"Used to\" expresses a past habit."},{type:"fill",q:"I ___ (love) cartoons when I was a kid.",answer:"used to love",exp:"\"Used to\" + base verb."},{type:"error",q:"Find the error: \"He used to played guitar.\"",opts:["He â She","used to played â used to play","guitar â drums","No error"],correct:1,exp:"\"Used to\" + base verb (not past tense)."},{type:"mc",q:"Which sentence describes a past habit?",opts:["I play tennis now.","I used to play tennis.","I am playing tennis.","I will play tennis."],correct:1,exp:"\"Used to play\" = past habit."},{type:"fill",q:"Did you ___ live in this neighbourhood?",answer:"use to",exp:"Question form â \"Did you use to?\" (no -d)."}]}],
+  b2:[{topic:"Passive Voice â All Tenses",explanation:"Passive works in all tenses: is done, was done, has been done, will be done.",exercises:[{type:"mc",q:"The report ___ (write) by the team last week.",opts:["was writing","was written","has been written","were written"],correct:1,exp:"Past simple passive â \"was written\"."},{type:"fill",q:"The new bridge ___ (build) by 2025.",answer:"will be built",exp:"Future passive â \"will be built\"."},{type:"error",q:"Find the error: \"The windows have been broke.\"",opts:["The â These","have been broke â have been broken","windows â window","No error"],correct:1,exp:"Past participle of \"break\" â \"broken\"."},{type:"mc",q:"The meeting ___ (cancel) due to bad weather.",opts:["was cancelling","was cancelled","is cancelled","has cancelled"],correct:1,exp:"Past passive â \"was cancelled\"."},{type:"fill",q:"This novel ___ (translate) into 30 languages.",answer:"has been translated",exp:"Present perfect passive â \"has been translated\"."}]},{topic:"Second Conditional",explanation:"If + past simple, would + base verb. Imaginary/unlikely situations in the present.",exercises:[{type:"mc",q:"If I ___ a million dollars, I would travel the world.",opts:["have","will have","had","would have"],correct:2,exp:"2nd conditional â \"if\" + past simple."},{type:"fill",q:"If she ___ harder, she would get better grades. (study)",answer:"studied",exp:"Past simple in the \"if\" clause."},{type:"error",q:"Find the error: \"If I would be rich, I would buy a yacht.\"",opts:["would be â were/was","rich â wealthy","buy â bought","No error"],correct:0,exp:"2nd conditional: \"If I were rich\" (not \"would be\")."},{type:"mc",q:"I would call her if I ___ her number.",opts:["know","will know","knew","had known"],correct:2,exp:"2nd conditional if-clause â \"knew\"."},{type:"fill",q:"If you ___ (be) taller, you could be a basketball player.",answer:"were",exp:"2nd conditional: \"If you were\" (hypothetical)."}]},{topic:"Third Conditional",explanation:"If + past perfect, would have + past participle. Imaginary past situations.",exercises:[{type:"mc",q:"If she had studied, she ___ the exam.",opts:["passed","would pass","would have passed","had passed"],correct:2,exp:"3rd conditional â \"would have passed\"."},{type:"fill",q:"If I had known, I ___ (tell) you.",answer:"would have told",exp:"\"Would have\" + past participle."},{type:"mc",q:"Which sentence is a 3rd conditional?",opts:["If it rains, I'll stay.","If I were rich, I'd travel.","If she had come, we would have met.","If you want, we can go."],correct:2,exp:"Past perfect + would have = 3rd conditional."},{type:"error",q:"Find the error: \"If he had tried, he would has succeeded.\"",opts:["had tried â tried","would has â would have","succeeded â succeed","No error"],correct:1,exp:"\"Would have\" not \"would has\"."},{type:"fill",q:"They ___ (not lose) if they had practiced more.",answer:"wouldn't have lost",exp:"Negative 3rd conditional."}]},{topic:"Mixed Conditionals",explanation:"3rd cond. \"if\" + 2nd cond. result (or vice versa) â mixes time references.",exercises:[{type:"mc",q:"If she had taken the job, she ___ rich now.",opts:["would be","would have been","will be","had been"],correct:0,exp:"Past action â present result: \"would be\"."},{type:"fill",q:"If I ___ (be) braver, I would have spoken up yesterday.",answer:"were",exp:"Present state affecting past event â \"were\"."},{type:"mc",q:"Mixed conditional links:",opts:["two present events","past cause + present result","two future events","present cause + past result"],correct:1,exp:"Most common: past cause â present result."},{type:"error",q:"Find the error: \"If she was more careful, she would have avoided the accident.\"",opts:["was â had been","more â most","avoided â avoid","No error"],correct:0,exp:"For a past event â \"if she had been more careful\"."},{type:"fill",q:"If he had emigrated, he ___ (live) in Spain now.",answer:"would be living",exp:"Past cause â present result: \"would be living\"."}]},{topic:"Advanced Passive â Reporting Verbs",explanation:"\"It is said that...\" / \"He is believed to be...\" â formal passive with reporting verbs.",exercises:[{type:"mc",q:"People say he is a genius. â It ___ he is a genius.",opts:["is said that","said that","has said that","says that"],correct:0,exp:"Reporting passive â \"It is said that...\""},{type:"fill",q:"Experts believe the economy will improve. â The economy ___ (believe) to improve.",answer:"is believed",exp:"Passive with infinitive â \"is believed to\"."},{type:"mc",q:"\"It is thought that climate change is serious.\" This is:",opts:["Active voice","Passive reporting","Direct speech","A question"],correct:1,exp:"\"It is thought that\" = passive reporting structure."},{type:"error",q:"Find the error: \"It is knowing that she resigned.\"",opts:["It â This","knowing â known","resigned â resigns","No error"],correct:1,exp:"Passive requires past participle: \"It is known\"."},{type:"fill",q:"He is ___ (report) to have left the country.",answer:"reported",exp:"\"Is reported to have\" = passive reporting."}]},{topic:"Inversion for Emphasis",explanation:"For formal/emphatic style: \"Never have I seen...\", \"Rarely does she...\", \"Not only did he...\"",exercises:[{type:"mc",q:"\"Never I have seen such beauty.\" â What is wrong?",opts:["Never â Rarely","I have â have I","such â so much","Nothing"],correct:1,exp:"After \"Never\" â invert subject and auxiliary: \"Never have I\"."},{type:"fill",q:"___ has she been this angry. (hardly ever)",answer:"Rarely",exp:"\"Rarely\" can replace \"hardly ever\" in inversion."},{type:"mc",q:"\"Not only ___ he rude, but also aggressive.\"",opts:["is","was","were","did"],correct:0,exp:"\"Not only is he...\" â present inversion."},{type:"error",q:"Find the error: \"Hardly ever she complains.\"",opts:["Hardly â Almost","she complains â does she complain","ever â never","No error"],correct:1,exp:"After \"Hardly ever\" â invert: \"does she complain\"."},{type:"fill",q:"Under no circumstances ___ you reveal this secret.",answer:"should",exp:"After \"Under no circumstances\" â invert: \"should you\"."}]},{topic:"Subjunctive Mood",explanation:"Used in formal English after \"suggest, recommend, demand, insist\" + that + base verb.",exercises:[{type:"mc",q:"I suggest that he ___ the doctor. (formal)",opts:["sees","see","is seeing","will see"],correct:1,exp:"Subjunctive after \"suggest that\" â bare infinitive \"see\"."},{type:"fill",q:"The committee demanded that the report ___ (submit) immediately.",answer:"be submitted",exp:"Passive subjunctive â \"be submitted\"."},{type:"mc",q:"\"It is essential that every student ___ on time.\"",opts:["is","be","are","will be"],correct:1,exp:"After \"essential that\" â subjunctive \"be\"."},{type:"error",q:"Find the error: \"She insists that he apologizes.\"",opts:["She â He","apologizes â apologize","insists â insisted","No error"],correct:1,exp:"After \"insists that\" â subjunctive \"apologize\" (no -s)."},{type:"fill",q:"The doctor recommended that she ___ more rest. (take)",answer:"take",exp:"Subjunctive after \"recommended that\" â base verb \"take\"."}]},{topic:"Cleft Sentences for Emphasis",explanation:"\"It was X that/who...\" and \"What I need is...\" â structures to emphasize parts of a sentence.",exercises:[{type:"mc",q:"\"I need a break.\" â Emphatic: ___ I need is a break.",opts:["That","What","It","Which"],correct:1,exp:"\"What I need\" cleft emphasizes the object."},{type:"fill",q:"___ was John who broke the window. (emphasize subject)",answer:"It",exp:"\"It was John who...\" cleft emphasizes the subject."},{type:"mc",q:"Which is a correct cleft sentence?",opts:["What he did was leave early.","That he did was leave early.","Which he did was leave early.","How he did was leave early."],correct:0,exp:"\"What he did was...\" is a correct cleft."},{type:"error",q:"Find the error: \"It was yesterday that she called me.\"",opts:["It â This","was yesterday â yesterday was","No error â this is correct","No error"],correct:3,exp:"\"It was yesterday that she called me\" is a correct cleft."},{type:"fill",q:"___ I enjoy most is reading. (What/It)",answer:"What",exp:"\"What I enjoy most is...\" emphasizes the activity."}]},{topic:"Discourse Markers",explanation:"Words linking ideas: however, moreover, nevertheless, therefore, in contrast, on the other hand.",exercises:[{type:"mc",q:"The price is high. ___, the quality is excellent.",opts:["Therefore","However","Moreover","So"],correct:1,exp:"\"However\" introduces a contrast."},{type:"fill",q:"She was tired; ___, she kept working.",answer:"nevertheless",exp:"\"Nevertheless\" = despite this (formal \"but\")."},{type:"mc",q:"\"___, the results confirm our hypothesis.\" (adding evidence)",opts:["However","In contrast","Furthermore","Nevertheless"],correct:2,exp:"\"Furthermore\" adds supporting information."},{type:"error",q:"Find the error: \"He studied hard. Therefore, he failed.\"",opts:["Therefore â However","studied â studies","failed â passes","No error"],correct:0,exp:"\"Therefore\" shows result/consequence â contradictory here."},{type:"fill",q:"The plan seems good; ___, we should consider the risks.",answer:"however",exp:"\"However\" introduces a contrasting point."}]},{topic:"Wish / If Only",explanation:"\"Wish + past simple\" for present regrets. \"Wish + past perfect\" for past regrets.",exercises:[{type:"mc",q:"I wish I ___ taller. (I'm not tall)",opts:["am","was/were","have been","will be"],correct:1,exp:"Present wish â \"wish + past simple\": \"I wish I were taller\"."},{type:"fill",q:"If only I ___ (study) harder â then I would have passed.",answer:"had studied",exp:"Past regret â \"if only + past perfect\"."},{type:"mc",q:"\"I wish she would stop talking.\" This expresses:",opts:["a past regret","a present annoyance about behavior","a hypothetical past","a real condition"],correct:1,exp:"\"Wish + would\" = annoyance about present/future behavior."},{type:"error",q:"Find the error: \"I wish I was there yesterday.\"",opts:["I â She","was â had been","there â here","No error"],correct:1,exp:"Past regret â \"I wish I had been there yesterday\"."},{type:"fill",q:"She wishes she ___ (can) speak Japanese.",answer:"could",exp:"\"Can\" becomes \"could\" with \"wish\" â present wish."}]}],
 }
 
 function renderDaily() {
-  // ── Estado local ──
+  // ââ Estado local ââ
   if (!state.daily) state.daily = { answers: {}, submitted: {}, completed: false };
   const ds = state.daily;
 
-  // ── Selecionar prática do dia com base na data ──
+  // ââ Selecionar prÃ¡tica do dia com base na data ââ
   const now = new Date();
   const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
   const mod = state.user.module || 'starter';
@@ -1299,7 +1453,7 @@ function renderDaily() {
   const todayIndex = dayOfYear % practices.length;
   const practice = practices[todayIndex];
 
-  // ── Chave única do dia (para localStorage) ──
+  // ââ Chave Ãºnica do dia (para localStorage) ââ
   const todayKey = `nexus_daily_${state.user.id || "guest"}_${now.getFullYear()}_${now.getMonth()}_${now.getDate()}_${mod}`;
 
   function isDoneToday() {
@@ -1313,27 +1467,27 @@ function renderDaily() {
 
   const page = h('div', { className: 'daily-page' });
 
-  // ── Header ──
+  // ââ Header ââ
   const dayNum = todayIndex + 1;
   const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
   page.appendChild(h('div', { className: 'daily-header' },
     h('div', { className: 'daily-header-left' },
-      h('div', { className: 'daily-tag' }, '🔥 Day ' + dayNum),
+      h('div', { className: 'daily-tag' }, 'ð¥ Day ' + dayNum),
       h('h1', { className: 'daily-title' }, practice.topic),
       h('p', { className: 'daily-date' }, dateStr)
     ),
     alreadyDone
-      ? h('div', { className: 'daily-done-badge' }, '✓ Completed today!')
+      ? h('div', { className: 'daily-done-badge' }, 'â Completed today!')
       : h('div', { className: 'daily-level-badge' }, mod.toUpperCase())
   ));
 
-  // ── Explicação ──
+  // ââ ExplicaÃ§Ã£o ââ
   page.appendChild(h('div', { className: 'daily-explanation' },
     h('div', { className: 'daily-exp-icon' }, icon('info')),
     h('p', { className: 'daily-exp-text' }, practice.explanation)
   ));
 
-  // ── Exercícios ──
+  // ââ ExercÃ­cios ââ
   const exercisesWrap = h('div', { className: 'daily-exercises' });
 
   practice.exercises.forEach((ex, ei) => {
@@ -1389,7 +1543,7 @@ function renderDaily() {
         const inp = h('input', {
           className: 'daily-fill-input',
           type: 'text',
-          placeholder: 'Type your answer…',
+          placeholder: 'Type your answerâ¦',
           value: ds.answers[ansKey] || '',
           onInput: (e) => { ds.answers[ansKey] = e.target.value; const _btn = e.target.nextElementSibling; if (_btn) { const _has = !!e.target.value; _btn.disabled = !_has; _btn.className = 'daily-check-btn' + (_has ? '' : ' disabled'); } },
           onKeyDown: (e) => { if (e.key === 'Enter' && ds.answers[ansKey]) { ds.submitted[ansKey] = true; render(); } }
@@ -1408,7 +1562,7 @@ function renderDaily() {
         exCard.appendChild(h('div', { className: `daily-fill-result ${isCorrect ? 'correct' : 'wrong'}` },
           h('span', {}, 'Your answer: '),
           h('strong', {}, userAns || ex.answer),
-          !isCorrect ? h('span', { className: 'daily-correct-ans' }, ' ✓ ' + ex.answer) : null
+          !isCorrect ? h('span', { className: 'daily-correct-ans' }, ' â ' + ex.answer) : null
         ));
       }
     }
@@ -1422,7 +1576,7 @@ function renderDaily() {
         isRight = userAns === ex.correct;
       }
       exCard.appendChild(h('div', { className: `daily-feedback ${isRight ? 'right' : 'wrong'}` },
-        h('span', { className: 'daily-feedback-icon' }, isRight ? '✓' : '✗'),
+        h('span', { className: 'daily-feedback-icon' }, isRight ? 'â' : 'â'),
         h('span', {}, ex.exp)
       ));
     }
@@ -1432,7 +1586,7 @@ function renderDaily() {
 
   page.appendChild(exercisesWrap);
 
-  // ── Botão Complete ──
+  // ââ BotÃ£o Complete ââ
   const allSubmitted = practice.exercises.every((_, ei) => !!ds.submitted['ex_' + ei]);
 
   if (!alreadyDone) {
@@ -1459,12 +1613,12 @@ function renderDaily() {
             const p = JSON.parse(localStorage.getItem('nexus_aulas_progress') || '{}');
             render();
           }
-        }, '🔥 Complete Daily Practice')
+        }, 'ð¥ Complete Daily Practice')
       ));
     }
   } else {
     page.appendChild(h('div', { className: 'daily-done-msg' },
-      h('div', { className: 'daily-done-icon' }, '🎉'),
+      h('div', { className: 'daily-done-icon' }, 'ð'),
       h('h2', { className: 'daily-done-title' }, "You're done for today!"),
       h('p', { className: 'daily-done-sub' }, 'Come back tomorrow for a new practice.'),
       h('button', {
@@ -1478,26 +1632,26 @@ function renderDaily() {
 }
 
 
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 // ADMIN PANEL
-// ══════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function renderAdminPanel() {
   const d = h('div');
 
   const titles = {
-    students: { kicker: 'Cadastro', title: 'Gestão de <span>alunos</span>', sub: 'Cadastre, edite e organize os logins de cada aluno do portal.' },
-    sections: { kicker: 'Organização', title: 'Seções do <span>portal</span>', sub: 'Crie os blocos que aparecerão no portal dos alunos. Cada seção agrupa conteúdos relacionados.' },
-    contents: { kicker: 'Conteúdos', title: 'Itens das <span>seções</span>', sub: 'Adicione links, materiais e recursos dentro de cada seção criada.' },
-    announcements: { kicker: 'Comunicação', title: 'Avisos e <span>comunicados</span>', sub: 'Publique mensagens que aparecem para os alunos na página inicial.' },
-    admins: { kicker: 'Equipe', title: 'Administradores', sub: 'Gerencie quem tem acesso ao painel de administração do portal.' },
-    'tab-home': { kicker: 'Portal do Aluno', title: 'Aba <span>Home</span>', sub: 'Gerencie o conteúdo exibido na tela inicial do aluno.' },
-    'tab-daily': { kicker: 'Portal do Aluno', title: 'Aba <span>Daily Practice</span>', sub: 'Gerencie as atividades de prática diária dos alunos.' },
-    'tab-aulas': { kicker: 'Portal do Aluno', title: 'Aba <span>Aulas</span>', sub: 'Gerencie as aulas em vídeo, PDF ou link externo.' },
-    'tab-exercicios': { kicker: 'Portal do Aluno', title: 'Aba <span>Exercícios</span>', sub: 'Gerencie as listas de exercícios e quizzes.' },
-    'tab-materiais': { kicker: 'Portal do Aluno', title: 'Aba <span>Materiais</span>', sub: 'Gerencie livros, áudios, slides e recursos complementares.' },
-    'tab-gramatica': { kicker: 'Portal do Aluno', title: 'Aba <span>Ref. Gramatical</span>', sub: 'Gerencie o material de referência gramatical dos alunos.' },
-    'tab-prova': { kicker: 'Portal do Aluno', title: 'Aba <span>Prova</span>', sub: 'Gerencie as provas e avaliações do módulo.' },
-    'tab-chat': { kicker: 'Portal do Aluno', title: 'Aba <span>Chat com IA</span>', sub: 'Configure o assistente de IA disponível para os alunos.' },
+    students: { kicker: 'Cadastro', title: 'GestÃ£o de <span>alunos</span>', sub: 'Cadastre, edite e organize os logins de cada aluno do portal.' },
+    sections: { kicker: 'OrganizaÃ§Ã£o', title: 'SeÃ§Ãµes do <span>portal</span>', sub: 'Crie os blocos que aparecerÃ£o no portal dos alunos. Cada seÃ§Ã£o agrupa conteÃºdos relacionados.' },
+    contents: { kicker: 'ConteÃºdos', title: 'Itens das <span>seÃ§Ãµes</span>', sub: 'Adicione links, materiais e recursos dentro de cada seÃ§Ã£o criada.' },
+    announcements: { kicker: 'ComunicaÃ§Ã£o', title: 'Avisos e <span>comunicados</span>', sub: 'Publique mensagens que aparecem para os alunos na pÃ¡gina inicial.' },
+    admins: { kicker: 'Equipe', title: 'Administradores', sub: 'Gerencie quem tem acesso ao painel de administraÃ§Ã£o do portal.' },
+    'tab-home': { kicker: 'Portal do Aluno', title: 'Aba <span>Home</span>', sub: 'Gerencie o conteÃºdo exibido na tela inicial do aluno.' },
+    'tab-daily': { kicker: 'Portal do Aluno', title: 'Aba <span>Daily Practice</span>', sub: 'Gerencie as atividades de prÃ¡tica diÃ¡ria dos alunos.' },
+    'tab-aulas': { kicker: 'Portal do Aluno', title: 'Aba <span>Aulas</span>', sub: 'Gerencie as aulas em vÃ­deo, PDF ou link externo.' },
+    'tab-exercicios': { kicker: 'Portal do Aluno', title: 'Aba <span>ExercÃ­cios</span>', sub: 'Gerencie as listas de exercÃ­cios e quizzes.' },
+    'tab-materiais': { kicker: 'Portal do Aluno', title: 'Aba <span>Materiais</span>', sub: 'Gerencie livros, Ã¡udios, slides e recursos complementares.' },
+    'tab-gramatica': { kicker: 'Portal do Aluno', title: 'Aba <span>Ref. Gramatical</span>', sub: 'Gerencie o material de referÃªncia gramatical dos alunos.' },
+    'tab-prova': { kicker: 'Portal do Aluno', title: 'Aba <span>Prova</span>', sub: 'Gerencie as provas e avaliaÃ§Ãµes do mÃ³dulo.' },
+    'tab-chat': { kicker: 'Portal do Aluno', title: 'Aba <span>Chat com IA</span>', sub: 'Configure o assistente de IA disponÃ­vel para os alunos.' },
     'tab-comunidades': { kicker: 'Portal do Aluno', title: 'Aba <span>Comunidades</span>', sub: 'Gerencie os grupos e comunidades de estudo.' },
   };
   const t = titles[state.adminSubTab] || titles.students;
@@ -1528,7 +1682,7 @@ function renderAdminPanel() {
   return d;
 }
 
-// ── Admin: Students ──
+// ââ Admin: Students ââ
 function renderAdminStudents() {
   const d = h('div');
 
@@ -1797,10 +1951,10 @@ function renderAdminTabGeneric(tabId, label, iconName) {
   const items = state.data.contents.filter(c => c.content_type === tabKey);
 
   d.appendChild(h('button', { className: 'btn-add', onClick: async () => {
-    const title = prompt('Título:'); if (!title) return;
-    const description = prompt('Descrição (opcional):') || '';
+    const title = prompt('TÃ­tulo:'); if (!title) return;
+    const description = prompt('DescriÃ§Ã£o (opcional):') || '';
     const link = prompt('Link (URL, opcional):') || '';
-    const modStr = prompt('Para quais módulos? (starter,a1,a2,b1,b2 \u2014 vazio = todos):', '') || '';
+    const modStr = prompt('Para quais mÃ³dulos? (starter,a1,a2,b1,b2 \u2014 vazio = todos):', '') || '';
     const target_modules = modStr ? modStr.toLowerCase().split(',').map(s => s.trim()).filter(Boolean) : ['starter','a1','a2','b1','b2'];
     await dbInsert('contents', { title, description, link, content_type: tabKey, target_modules, sort_order: items.length });
     await loadAll();
@@ -1810,7 +1964,7 @@ function renderAdminTabGeneric(tabId, label, iconName) {
     d.appendChild(h('div', { className: 'empty-state' },
       h('div', { className: 'empty-state-icon' }, icon(iconName)),
       h('div', { className: 'empty-state-title', innerHTML: 'Nenhum item em <span>' + label + '</span>' }),
-      h('div', { className: 'empty-state-text' }, 'Use o botão acima para adicionar o primeiro item.')
+      h('div', { className: 'empty-state-text' }, 'Use o botÃ£o acima para adicionar o primeiro item.')
     ));
   } else {
     const list = h('div', { className: 'admin-list' });
@@ -1825,10 +1979,10 @@ function renderAdminTabGeneric(tabId, label, iconName) {
         h('div', { className: 'edit-actions' },
           item.link && h('a', { className: 'icon-btn', href: item.link, target: '_blank', title: 'Abrir' }, icon('external')),
           h('button', { className: 'icon-btn', title: 'Editar', onClick: async () => {
-            const title = prompt('Título:', item.title); if (!title) return;
-            const description = prompt('Descrição:', item.description || '') || '';
+            const title = prompt('TÃ­tulo:', item.title); if (!title) return;
+            const description = prompt('DescriÃ§Ã£o:', item.description || '') || '';
             const link = prompt('Link:', item.link || '') || '';
-            const modStr = prompt('Módulos (vazio=todos):', (item.target_modules || []).join(',')) || '';
+            const modStr = prompt('MÃ³dulos (vazio=todos):', (item.target_modules || []).join(',')) || '';
             const target_modules = modStr ? modStr.toLowerCase().split(',').map(s => s.trim()).filter(Boolean) : ['starter','a1','a2','b1','b2'];
             await dbUpdate('contents', item.id, { title, description, link, target_modules }); await loadAll();
           }}, icon('edit')),
@@ -1846,38 +2000,38 @@ function renderAdminTabGeneric(tabId, label, iconName) {
 function renderAdminTabHome(){ return renderAdminTabGeneric('tab-home', 'Home', 'home'); }
 function renderAdminTabDaily(){ return renderAdminTabGeneric('tab-daily', 'Daily Practice', 'spark'); }
 function renderAdminTabAulas(){ return renderAdminTabGeneric('tab-aulas', 'Aulas', 'book'); }
-function renderAdminTabExercicios(){ return renderAdminTabGeneric('tab-exercicios', 'Exercícios', 'stack'); }
+function renderAdminTabExercicios(){ return renderAdminTabGeneric('tab-exercicios', 'ExercÃ­cios', 'stack'); }
 function renderAdminTabMateriais(){ return renderAdminTabGeneric('tab-materiais', 'Materiais', 'compass'); }
 function renderAdminTabGramatica(){ return renderAdminTabGeneric('tab-gramatica', 'Ref. Gramatical', 'info'); }
 function renderAdminTabProva(){ return renderAdminTabGeneric('tab-prova', 'Prova', 'sparkle'); }
 function renderAdminTabChat(){ return renderAdminTabGeneric('tab-chat', 'Chat com IA', 'waveform'); }
 function renderAdminTabComunidades(){ return renderAdminTabGeneric('tab-comunidades', 'Comunidades', 'users'); }
 
-// ── Admin: Sections ──
+// ââ Admin: Sections ââ
 function renderAdminSections() {
   const d = h('div');
 
   d.appendChild(h('div', { className: 'info-panel' },
     h('span', { className: 'info-panel-icon' }, icon('info')),
     h('div', {},
-      h('div', { className: 'info-panel-title' }, 'Seções do portal'),
-      h('div', { className: 'info-panel-text', innerHTML: 'Cada seção é um <strong>bloco do portal</strong> (ex: Materiais, Biblioteca, Podcasts). Depois, em "Conteúdos", você adiciona itens dentro delas.' })
+      h('div', { className: 'info-panel-title' }, 'SeÃ§Ãµes do portal'),
+      h('div', { className: 'info-panel-text', innerHTML: 'Cada seÃ§Ã£o Ã© um <strong>bloco do portal</strong> (ex: Materiais, Biblioteca, Podcasts). Depois, em "ConteÃºdos", vocÃª adiciona itens dentro delas.' })
     )
   ));
 
   d.appendChild(h('button', { className: 'btn-add', onClick: async () => {
-    const name = prompt('Nome da seção:'); if (!name) return;
-    const description = prompt('Descrição curta:') || '';
-    const modStr = prompt('Mostrar para quais módulos? (starter,a1,a2,b1,b2 — vazio = todos):', '') || '';
+    const name = prompt('Nome da seÃ§Ã£o:'); if (!name) return;
+    const description = prompt('DescriÃ§Ã£o curta:') || '';
+    const modStr = prompt('Mostrar para quais mÃ³dulos? (starter,a1,a2,b1,b2 â vazio = todos):', '') || '';
     const target_modules = modStr ? modStr.toLowerCase().split(',').map(s => s.trim()).filter(Boolean) : ['starter','a1','a2','b1','b2'];
     await dbInsert('sections', { name, description, sort_order: state.data.sections.length + 1, target_modules });
     await loadAll();
-  }}, icon('plus'), 'Criar seção'));
+  }}, icon('plus'), 'Criar seÃ§Ã£o'));
 
   if (state.data.sections.length === 0) {
     d.appendChild(h('div', { className: 'empty-state' },
       h('div', { className: 'empty-state-icon' }, icon('shape')),
-      h('div', { className: 'empty-state-title', innerHTML: 'Nenhuma <span>seção</span>' })
+      h('div', { className: 'empty-state-title', innerHTML: 'Nenhuma <span>seÃ§Ã£o</span>' })
     ));
   } else {
     const list = h('div', { className: 'admin-list' });
@@ -1886,9 +2040,9 @@ function renderAdminSections() {
       list.appendChild(h('div', { className: 'admin-list-item' },
         h('div', { className: 'admin-list-number' }, String(i + 1).padStart(2, '0')),
         h('div', { className: 'admin-list-main' },
-          h('div', { className: 'content-tag' }, count + ' ' + (count === 1 ? 'item' : 'itens') + ' · ' + (sec.visible ? 'VISÍVEL' : 'OCULTA')),
+          h('div', { className: 'content-tag' }, count + ' ' + (count === 1 ? 'item' : 'itens') + ' Â· ' + (sec.visible ? 'VISÃVEL' : 'OCULTA')),
           h('h3', { className: 'content-title' }, sec.name),
-          h('p', { className: 'content-desc' }, sec.description || '—')
+          h('p', { className: 'content-desc' }, sec.description || 'â')
         ),
         h('div', { className: 'edit-actions' },
           h('button', { className: 'icon-btn', title: sec.visible ? 'Ocultar' : 'Mostrar', onClick: async () => {
@@ -1914,13 +2068,13 @@ function renderAdminSections() {
           }}, icon('arrowDown')),
           h('button', { className: 'icon-btn', title: 'Editar', onClick: async () => {
             const name = prompt('Nome:', sec.name); if (!name) return;
-            const description = prompt('Descrição:', sec.description || '') || '';
-            const modStr = prompt('Módulos (vazio=todos):', (sec.target_modules || []).join(',')) || '';
+            const description = prompt('DescriÃ§Ã£o:', sec.description || '') || '';
+            const modStr = prompt('MÃ³dulos (vazio=todos):', (sec.target_modules || []).join(',')) || '';
             const target_modules = modStr ? modStr.toLowerCase().split(',').map(s => s.trim()).filter(Boolean) : ['starter','a1','a2','b1','b2'];
             await dbUpdate('sections', sec.id, { name, description, target_modules }); await loadAll();
           }}, icon('edit')),
           h('button', { className: 'icon-btn danger', title: 'Excluir', onClick: async () => {
-            if (!confirm('Excluir seção "' + sec.name + '" e todos os conteúdos dentro?')) return;
+            if (!confirm('Excluir seÃ§Ã£o "' + sec.name + '" e todos os conteÃºdos dentro?')) return;
             await dbDelete('sections', sec.id); await loadAll();
           }}, icon('trash'))
         )
@@ -1931,73 +2085,73 @@ function renderAdminSections() {
   return d;
 }
 
-// ── Admin: Contents ──
+// ââ Admin: Contents ââ
 function renderAdminContents() {
   const d = h('div');
 
   d.appendChild(h('div', { className: 'info-panel' },
     h('span', { className: 'info-panel-icon' }, icon('info')),
     h('div', {},
-      h('div', { className: 'info-panel-title' }, 'Conteúdos'),
-      h('div', { className: 'info-panel-text', innerHTML: 'Adicione itens dentro das seções. Cada item é um <strong>link</strong> (Google Drive, YouTube, PDF, etc).' })
+      h('div', { className: 'info-panel-title' }, 'ConteÃºdos'),
+      h('div', { className: 'info-panel-text', innerHTML: 'Adicione itens dentro das seÃ§Ãµes. Cada item Ã© um <strong>link</strong> (Google Drive, YouTube, PDF, etc).' })
     )
   ));
 
   if (state.data.sections.length === 0) {
     d.appendChild(h('div', { className: 'empty-state' },
       h('div', { className: 'empty-state-icon' }, icon('shape')),
-      h('div', { className: 'empty-state-title', innerHTML: 'Crie <span>seções</span> primeiro' }),
-      h('div', { className: 'empty-state-text' }, 'Antes de adicionar conteúdos, você precisa criar ao menos uma seção.')
+      h('div', { className: 'empty-state-title', innerHTML: 'Crie <span>seÃ§Ãµes</span> primeiro' }),
+      h('div', { className: 'empty-state-text' }, 'Antes de adicionar conteÃºdos, vocÃª precisa criar ao menos uma seÃ§Ã£o.')
     ));
     return d;
   }
 
   d.appendChild(h('button', { className: 'btn-add', onClick: async () => {
     const sectionOpts = state.data.sections.map((s, i) => (i + 1) + ' - ' + s.name).join('\n');
-    const secIdx = prompt('Em qual seção? Digite o número:\n\n' + sectionOpts);
+    const secIdx = prompt('Em qual seÃ§Ã£o? Digite o nÃºmero:\n\n' + sectionOpts);
     if (!secIdx) return;
     const sec = state.data.sections[parseInt(secIdx) - 1];
-    if (!sec) { alert('Seção inválida'); return; }
+    if (!sec) { alert('SeÃ§Ã£o invÃ¡lida'); return; }
 
-    const title = prompt('Título:'); if (!title) return;
-    const description = prompt('Descrição (opcional):') || '';
+    const title = prompt('TÃ­tulo:'); if (!title) return;
+    const description = prompt('DescriÃ§Ã£o (opcional):') || '';
     const link = prompt('Link (URL):') || '';
-    const content_type = prompt('Tipo (LINK, VÍDEO, PDF, ÁUDIO, DRIVE):', 'LINK') || 'LINK';
-    const modStr = prompt('Para quais módulos? (vazio = todos):', '') || '';
+    const content_type = prompt('Tipo (LINK, VÃDEO, PDF, ÃUDIO, DRIVE):', 'LINK') || 'LINK';
+    const modStr = prompt('Para quais mÃ³dulos? (vazio = todos):', '') || '';
     const target_modules = modStr ? modStr.toLowerCase().split(',').map(s => s.trim()).filter(Boolean) : ['starter','a1','a2','b1','b2'];
 
     await dbInsert('contents', { section_id: sec.id, title, description, link, content_type, target_modules, sort_order: 0 });
     await loadAll();
-  }}, icon('plus'), 'Adicionar conteúdo'));
+  }}, icon('plus'), 'Adicionar conteÃºdo'));
 
   state.data.sections.forEach(sec => {
     const items = state.data.contents.filter(c => c.section_id === sec.id);
 
     d.appendChild(h('div', { className: 'section-kicker' },
-      h('span', { className: 'section-kicker-label' }, sec.name + ' · ' + items.length + (items.length === 1 ? ' item' : ' itens')),
+      h('span', { className: 'section-kicker-label' }, sec.name + ' Â· ' + items.length + (items.length === 1 ? ' item' : ' itens')),
       h('div', { className: 'section-kicker-line' })
     ));
 
     if (items.length === 0) {
-      d.appendChild(h('p', { style: { fontFamily: 'Geist, sans-serif', color: '#8a7b71', fontSize: '13px', padding: '12px 0', fontStyle: 'italic' } }, 'Vazio. Use o botão acima para adicionar.'));
+      d.appendChild(h('p', { style: { fontFamily: 'Geist, sans-serif', color: '#8a7b71', fontSize: '13px', padding: '12px 0', fontStyle: 'italic' } }, 'Vazio. Use o botÃ£o acima para adicionar.'));
     } else {
       const list = h('div', { className: 'admin-list' });
       items.forEach((item, i) => {
         list.appendChild(h('div', { className: 'admin-list-item' },
           h('div', { className: 'admin-list-number' }, String(i + 1).padStart(2, '0')),
           h('div', { className: 'admin-list-main' },
-            h('div', { className: 'content-tag' }, (item.content_type || 'LINK') + (item.target_modules && item.target_modules.length < 5 ? ' · ' + item.target_modules.map(m => m.toUpperCase()).join(', ') : '')),
+            h('div', { className: 'content-tag' }, (item.content_type || 'LINK') + (item.target_modules && item.target_modules.length < 5 ? ' Â· ' + item.target_modules.map(m => m.toUpperCase()).join(', ') : '')),
             h('h3', { className: 'content-title' }, item.title),
             item.description && h('p', { className: 'content-desc' }, item.description)
           ),
           h('div', { className: 'edit-actions' },
             item.link && h('a', { className: 'icon-btn', href: item.link, target: '_blank', title: 'Abrir' }, icon('external')),
             h('button', { className: 'icon-btn', title: 'Editar', onClick: async () => {
-              const title = prompt('Título:', item.title); if (!title) return;
-              const description = prompt('Descrição:', item.description || '') || '';
+              const title = prompt('TÃ­tulo:', item.title); if (!title) return;
+              const description = prompt('DescriÃ§Ã£o:', item.description || '') || '';
               const link = prompt('Link:', item.link || '') || '';
               const content_type = prompt('Tipo:', item.content_type || 'LINK') || 'LINK';
-              const modStr = prompt('Módulos (vazio=todos):', (item.target_modules || []).join(',')) || '';
+              const modStr = prompt('MÃ³dulos (vazio=todos):', (item.target_modules || []).join(',')) || '';
               const target_modules = modStr ? modStr.toLowerCase().split(',').map(s => s.trim()).filter(Boolean) : ['starter','a1','a2','b1','b2'];
               await dbUpdate('contents', item.id, { title, description, link, content_type, target_modules }); await loadAll();
             }}, icon('edit')),
@@ -2015,7 +2169,7 @@ function renderAdminContents() {
   return d;
 }
 
-// ── Admin: Announcements ──
+// ââ Admin: Announcements ââ
 function renderAdminAnnouncements() {
   const d = h('div');
 
@@ -2028,10 +2182,10 @@ function renderAdminAnnouncements() {
   ));
 
   d.appendChild(h('button', { className: 'btn-add', onClick: async () => {
-    const title = prompt('Título do aviso:'); if (!title) return;
-    const content = prompt('Conteúdo:') || '';
+    const title = prompt('TÃ­tulo do aviso:'); if (!title) return;
+    const content = prompt('ConteÃºdo:') || '';
     const pinned = confirm('Fixar no topo?');
-    const modStr = prompt('Para quais módulos? (vazio = todos):', '') || '';
+    const modStr = prompt('Para quais mÃ³dulos? (vazio = todos):', '') || '';
     const target_modules = modStr ? modStr.toLowerCase().split(',').map(s => s.trim()).filter(Boolean) : ['starter','a1','a2','b1','b2'];
 
     await dbInsert('student_announcements', { title, content, pinned, target_modules, author: state.user.name });
@@ -2058,8 +2212,8 @@ function renderAdminAnnouncements() {
           await dbUpdate('student_announcements', a.id, { pinned: !a.pinned }); await loadAll();
         }}, icon('pin')),
         h('button', { className: 'icon-btn', title: 'Editar', onClick: async () => {
-          const title = prompt('Título:', a.title); if (!title) return;
-          const content = prompt('Conteúdo:', a.content || '') || '';
+          const title = prompt('TÃ­tulo:', a.title); if (!title) return;
+          const content = prompt('ConteÃºdo:', a.content || '') || '';
           await dbUpdate('student_announcements', a.id, { title, content }); await loadAll();
         }}, icon('edit')),
         h('button', { className: 'icon-btn danger', title: 'Excluir', onClick: async () => {
@@ -2075,7 +2229,7 @@ function renderAdminAnnouncements() {
   return d;
 }
 
-// ── Admin: Admins ──
+// ââ Admin: Admins ââ
 function renderAdminAdmins() {
   const d = h('div');
 
@@ -2083,17 +2237,17 @@ function renderAdminAdmins() {
     h('span', { className: 'info-panel-icon' }, icon('info')),
     h('div', {},
       h('div', { className: 'info-panel-title' }, 'Administradores'),
-      h('div', { className: 'info-panel-text', innerHTML: 'Quem tem acesso ao painel pode <strong>criar, editar e excluir</strong> todo o conteúdo do portal.' })
+      h('div', { className: 'info-panel-text', innerHTML: 'Quem tem acesso ao painel pode <strong>criar, editar e excluir</strong> todo o conteÃºdo do portal.' })
     )
   ));
 
   d.appendChild(h('button', { className: 'btn-add', onClick: async () => {
     const name = prompt('Nome completo:'); if (!name) return;
-    const username = prompt('Usuário (sem espaços, minúsculo):'); if (!username) return;
+    const username = prompt('UsuÃ¡rio (sem espaÃ§os, minÃºsculo):'); if (!username) return;
     const password = prompt('Senha:'); if (!password) return;
 
     const exists = state.data.admins.find(a => a.username === username.toLowerCase().trim());
-    if (exists) { alert('Usuário já existe!'); return; }
+    if (exists) { alert('UsuÃ¡rio jÃ¡ existe!'); return; }
 
     await dbInsert('student_portal_admins', {
       username: username.toLowerCase().trim(), password, name
@@ -2131,7 +2285,7 @@ function renderAdminAdmins() {
   return d;
 }
 
-// ── Session restore on page load ──
+// ââ Session restore on page load ââ
 (function() {
   try {
     const saved = sessionStorage.getItem('nexus_session');

@@ -1303,7 +1303,7 @@ function renderAulas() {
     if (all.length < 2) return 0;
     all.sort((a, b) => (b.xp || 0) - (a.xp || 0));
     const idx = all.findIndex(s => s.id === state.user.id);
-    return idx === -1 ? 0 : Math.round((idx / (all.length - 1 || 1)) * 100);
+    return idx === -1 ? 0 : Math.round(((all.length - 1 - idx) / (all.length - 1 || 1)) * 100);
   })();
 
   function buildRankingCard() {

@@ -1106,8 +1106,9 @@ function renderAulas() {
   const aheadPct = (() => {
     const all = (state.data && state.data.students) ? state.data.students : [];
     if (all.length < 2) return 0;
-    const below = all.filter(s => (s.xp || 0) < totalXPReal).length;
-    return Math.round((below / (all.length - 1)) * 100);
+    const below = all.filter(s => s.id !== state.user.id && (s.xp || 0) < totalXPReal).length;
+    const others = all.length - 1;
+    return others <= 0 ? 0 : Math.round((below / others) * 100);
   })();
   const statsBar = h('div', { className: 'ranking-stats-bar' },
     h('div', { className: 'ranking-stat-card' },

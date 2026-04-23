@@ -1,4 +1,4 @@
-// ══════════════════════════════════════════════════════════════
+h// ══════════════════════════════════════════════════════════════
 // NEXUS ENGLISH CENTER - PORTAL DO ALUNO
 // ══════════════════════════════════════════════════════════════
 //
@@ -811,9 +811,10 @@ function renderHome() {
   const streak   = state.user.streak || 0;
   const _modId = state.user.module || state.user.level || 'starter';
   const _modTotal = COURSE_TOTALS[_modId] || 8;
+  const _allTotal = Object.values(COURSE_TOTALS).reduce(function(a, b) { return a + b; }, 0);
   const _rawProg = JSON.parse(localStorage.getItem('nexus_aulas_progress') || '{}');
-  const _modDone = Object.values(_rawProg).filter(v => v === 'completed').length;
-  const progress = _modTotal > 0 ? Math.round(Math.min(_modDone, _modTotal) / _modTotal * 100) : 0;
+  const _modDone = Object.values(_rawProg).filter(function(v) { return v === 'completed'; }).length;
+  const progress = _allTotal > 0 ? Math.round(_modDone / _allTotal * 100) : 0;
 
   // \u2500\u2500 1. TOPO \u2500\u2500
   const topBar = h('div', { className: 'home-topbar' },

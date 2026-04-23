@@ -3723,3 +3723,398 @@ body {
   .gami-title { font-size: 1.2rem; }
   .gami-emoji { font-size: 2.8rem; }
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   RANKING SYSTEM
+   Sistema de Ranking / Leaderboard — Nexus Portal do Aluno
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Grid layout when ranking is active ── */
+.aulas-page-with-ranking {
+  display: grid !important;
+  grid-template-columns: 1fr 300px !important;
+  gap: 0 24px !important;
+  max-width: 1200px !important;
+  padding: 32px 40px !important;
+  align-items: start !important;
+}
+
+.aulas-page-with-ranking .aulas-tabs {
+  grid-column: 1 / -1;
+}
+
+.ranking-stats-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.aulas-page-with-ranking .gami-xp-bar {
+  display: none !important;
+}
+
+.aulas-page-with-ranking .path-nextstep-card { grid-column: 1; }
+.aulas-page-with-ranking .path-header { grid-column: 1; }
+.aulas-page-with-ranking .path-timeline { grid-column: 1; }
+.aulas-page-with-ranking .gami-module-complete-banner { grid-column: 1; }
+
+/* ── Stat cards (top bar) ── */
+.ranking-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--dark-card, #1e1e1e);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  flex: 1;
+  min-width: 160px;
+  transition: border-color 0.2s;
+}
+
+.ranking-stat-card:hover { border-color: rgba(231,97,28,0.4); }
+
+.ranking-stat-icon { font-size: 1.4rem; flex-shrink: 0; }
+
+.ranking-stat-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--dark-orange, #e7611c);
+  line-height: 1;
+}
+
+.ranking-stat-green { color: #22c55e !important; }
+
+.ranking-stat-label {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.45);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+/* ── Ranking card (right sidebar) ── */
+.ranking-card {
+  grid-column: 2;
+  grid-row: 2 / 10;
+  background: var(--dark-card, #1e1e1e);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 24px;
+  position: sticky;
+  top: 24px;
+}
+
+.ranking-card-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ranking-card-trophy {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, #e7611c, #b84d1f);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin: 0 auto 12px;
+  box-shadow: 0 4px 16px rgba(231,97,28,0.35);
+}
+
+.ranking-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--dark-orange, #e7611c);
+}
+
+.ranking-card-hero {
+  text-align: center;
+  padding: 18px 12px;
+  background: rgba(231,97,28,0.06);
+  border: 1px solid rgba(231,97,28,0.15);
+  border-radius: 14px;
+  margin-bottom: 12px;
+}
+
+.ranking-card-ahead-label {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 4px;
+}
+
+.ranking-card-percent {
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: var(--dark-orange, #e7611c);
+  line-height: 1;
+  display: block;
+}
+
+.ranking-card-students-label {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  margin-top: 4px;
+}
+
+.ranking-card-week-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 18px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #22c55e;
+}
+
+/* ── Mini leaderboard ── */
+.ranking-mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.ranking-mini-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  transition: background 0.15s;
+}
+
+.ranking-mini-item:hover { background: rgba(255,255,255,0.04); }
+
+.ranking-mini-item.you {
+  background: rgba(231,97,28,0.12);
+  border: 1px solid rgba(231,97,28,0.3);
+}
+
+.ranking-mini-pos {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.ranking-mini-item.you .ranking-mini-pos { color: var(--dark-orange, #e7611c); }
+
+.ranking-mini-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.ranking-mini-name {
+  flex: 1;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ranking-mini-item.you .ranking-mini-name {
+  color: var(--dark-orange, #e7611c);
+  font-weight: 700;
+}
+
+.ranking-mini-xp {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.35);
+  flex-shrink: 0;
+}
+
+.ranking-mini-item.you .ranking-mini-xp { color: var(--dark-orange, #e7611c); }
+
+/* ── View Full Ranking button ── */
+.ranking-view-btn {
+  width: 100%;
+  padding: 11px 16px;
+  background: transparent;
+  border: 1px solid rgba(231,97,28,0.4);
+  border-radius: 10px;
+  color: var(--dark-orange, #e7611c);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.18s;
+  margin-bottom: 0;
+}
+
+.ranking-view-btn:hover {
+  background: rgba(231,97,28,0.12);
+  border-color: var(--dark-orange, #e7611c);
+}
+
+/* ── Motivation card ── */
+.ranking-motivation-card {
+  grid-column: 2;
+  background: var(--dark-card, #1e1e1e);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.ranking-motivation-icon { font-size: 1.6rem; flex-shrink: 0; }
+
+.ranking-motivation-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.ranking-motivation-sub {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.4;
+}
+
+/* ── Full Ranking Modal ── */
+.ranking-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.ranking-modal {
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 32px;
+  width: 480px;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.ranking-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.ranking-modal-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--dark-orange, #e7611c);
+}
+
+.ranking-modal-close {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+}
+
+.ranking-modal-close:hover {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+.ranking-modal-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  background: rgba(255,255,255,0.03);
+}
+
+.ranking-modal-item.you {
+  background: rgba(231,97,28,0.12);
+  border: 1px solid rgba(231,97,28,0.3);
+}
+
+.ranking-modal-rank {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.4);
+  width: 32px;
+}
+
+.ranking-modal-item.you .ranking-modal-rank { color: var(--dark-orange, #e7611c); }
+
+.ranking-modal-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ranking-modal-name {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.8);
+}
+
+.ranking-modal-item.you .ranking-modal-name {
+  color: var(--dark-orange, #e7611c);
+  font-weight: 700;
+}
+
+.ranking-modal-xp {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+}
+
+.ranking-modal-item.you .ranking-modal-xp { color: var(--dark-orange, #e7611c); }
+
+/* ── Responsive: hide ranking on small screens ── */
+@media (max-width: 1024px) {
+  .aulas-page-with-ranking {
+    grid-template-columns: 1fr !important;
+  }
+  .ranking-card,
+  .ranking-motivation-card {
+    display: none !important;
+  }
+  .ranking-stats-bar {
+    grid-column: 1 !important;
+  }
+}

@@ -1059,7 +1059,7 @@ function renderAulas() {
     return allBefore ? 'current' : 'available';
   }
 
-  const page = h('div', { className: 'aulas-page' });
+  const page = h('div', { className: 'aulas-page aulas-page-with-ranking' });
 
   // ── Tabs ──
   const tabs = h('div', { className: 'aulas-tabs' });
@@ -1091,7 +1091,33 @@ function renderAulas() {
     ),
     h('div', { className: 'gami-xp-bar-right' }, prog.done + ' / ' + prog.total + ' lessons')
   );
-  page.appendChild(xpBar);
+  page.appendChild(xpBar)
+  // ── Ranking Stats Bar ──
+  const aheadPct = 73;
+  const statsBar = h('div', { className: 'ranking-stats-bar' },
+    h('div', { className: 'ranking-stat-card' },
+      h('span', { className: 'ranking-stat-icon' }, '⭐'),
+      h('div', {},
+        h('div', { className: 'ranking-stat-value' }, totalXP + ' XP'),
+        h('div', { className: 'ranking-stat-label' }, 'Total de XP')
+      )
+    ),
+    h('div', { className: 'ranking-stat-card' },
+      h('span', { className: 'ranking-stat-icon' }, '🎯'),
+      h('div', {},
+        h('div', { className: 'ranking-stat-value' }, prog.done + ' / ' + prog.total),
+        h('div', { className: 'ranking-stat-label' }, 'Aulas concluídas')
+      )
+    ),
+    h('div', { className: 'ranking-stat-card' },
+      h('span', { className: 'ranking-stat-icon' }, '📊'),
+      h('div', {},
+        h('div', { className: 'ranking-stat-value ranking-stat-green' }, 'Top ' + (100 - aheadPct) + '%'),
+        h('div', { className: 'ranking-stat-label' }, 'Você está à frente de ' + aheadPct + '% dos alunos')
+      )
+    )
+  );
+  page.appendChild(statsBar);;
 
   // ── Your Next Step Card ──
   const nextLesson = activeCourse.lessons.find((l, i) => getLessonStatus(activeCourse, i) !== 'completed');
@@ -1255,6 +1281,109 @@ function renderAulas() {
     timeline.appendChild(item);
   });
   timeline.appendChild(h('div', { className: 'path-toast' }, ''));
+
+  // ── Ranking Card (sidebar) ──
+  const LEADERBOARD = [
+    { pos: 21, name: 'Ana',   xp: 180, color: '#6366f1', ini: 'A' },
+    { pos: 22, name: 'Pedro', xp: 170, color: '#0ea5e9', ini: 'P' },
+    { pos: 23, name: 'You',   xp: totalXP || 165, color: '#e7611c', ini: (state.user && state.user.name ? state.user.name[0].toUpperCase() : 'V'), isYou: true },
+    { pos: 24, name: 'Lucas', xp: 160, color: '#8b5cf6', ini: 'L' },
+    { pos: 25, name: 'Maria', xp: 150, color: '#ec4899', ini: 'M' },
+  ];
+  const aheadPct2 = 73;
+
+  function buildRankingCard() {
+    const card = h('div', { className: 'ranking-card', id: 'ranking-sidebar-card' },
+      h('div', { className: 'ranking-card-header' },
+        h('div', { className: 'ranking-card-trophy' }, '🏆'),
+        h('div', { className: 'ranking-card-title' }, 'Your Ranking')
+      ),
+      h('div', { className: 'ranking-card-hero' },
+        h('div', { className: 'ranking-card-ahead-label' }, 'You\'re ahead of'),
+        h('span', { className: 'ranking-card-percent' }, aheadPct2 + '%'),
+        h('div', { className: 'ranking-card-students-label' }, 'of students 🚀')
+      ),
+      h('div', { className: 'ranking-card-week-progress' },
+        h('span', { className: 'arrow' }, '▲'),
+        h('span', {}, '+3 positions this week')
+      ),
+      h('div', { className: 'ranking-mini-list' },
+        ...LEADERBOARD.map(item =>
+          h('div', { className: 'ranking-mini-item' + (item.isYou ? ' you' : '') },
+            h('span', { className: 'ranking-mini-pos' }, '#' + item.pos),
+            h('div', { className: 'ranking-mini-avatar', style: 'background:' + item.color }, item.ini),
+            h('span', { className: 'ranking-mini-name' }, item.name),
+            h('span', { className: 'ranking-mini-xp' }, item.xp + ' XP')
+          )
+        )
+      ),
+      h('button', {
+        className: 'ranking-view-btn',
+        onClick: () => {
+          const overlay = h('div', { className: 'ranking-modal-overlay' });
+          const FULL_LB = [
+            { pos: 1, name: 'Felipe', xp: 520, color: '#f59e0b', ini: 'F' },
+            { pos: 2, name: 'Carla', xp: 490, color: '#6366f1', ini: 'C' },
+            { pos: 3, name: 'Diego', xp: 450, color: '#0ea5e9', ini: 'D' },
+            { pos: 4, name: 'Sofia', xp: 410, color: '#ec4899', ini: 'S' },
+            { pos: 5, name: 'Rafael', xp: 385, color: '#10b981', ini: 'R' },
+            { pos: 6, name: 'Julia', xp: 360, color: '#8b5cf6', ini: 'J' },
+            { pos: 7, name: 'Bruno', xp: 340, color: '#f97316', ini: 'B' },
+            { pos: 8, name: 'Larissa', xp: 315, color: '#14b8a6', ini: 'L' },
+            { pos: 9, name: 'Gustavo', xp: 295, color: '#6366f1', ini: 'G' },
+            { pos: 10, name: 'Isabela', xp: 275, color: '#ec4899', ini: 'I' },
+            { pos: 11, name: 'Thiago', xp: 260, color: '#0ea5e9', ini: 'T' },
+            { pos: 12, name: 'Amanda', xp: 245, color: '#8b5cf6', ini: 'A' },
+            { pos: 13, name: 'Carlos', xp: 235, color: '#f59e0b', ini: 'C' },
+            { pos: 14, name: 'Fernanda', xp: 225, color: '#10b981', ini: 'F' },
+            { pos: 15, name: 'Mateus', xp: 215, color: '#6366f1', ini: 'M' },
+            { pos: 16, name: 'Camila', xp: 205, color: '#ec4899', ini: 'C' },
+            { pos: 17, name: 'Eduardo', xp: 198, color: '#0ea5e9', ini: 'E' },
+            { pos: 18, name: 'Bianca', xp: 194, color: '#8b5cf6', ini: 'B' },
+            { pos: 19, name: 'Leonardo', xp: 190, color: '#f97316', ini: 'L' },
+            { pos: 20, name: 'Priscila', xp: 185, color: '#14b8a6', ini: 'P' },
+            { pos: 21, name: 'Ana', xp: 180, color: '#6366f1', ini: 'A' },
+            { pos: 22, name: 'Pedro', xp: 170, color: '#0ea5e9', ini: 'P' },
+            { pos: 23, name: 'You', xp: totalXP || 165, color: '#e7611c', ini: (state.user && state.user.name ? state.user.name[0].toUpperCase() : 'V'), isYou: true },
+            { pos: 24, name: 'Lucas', xp: 160, color: '#8b5cf6', ini: 'L' },
+            { pos: 25, name: 'Maria', xp: 150, color: '#ec4899', ini: 'M' },
+          ];
+          const modal = h('div', { className: 'ranking-modal' },
+            h('div', { className: 'ranking-modal-header' },
+              h('div', { className: 'ranking-modal-title' }, '🏆 Ranking Completo'),
+              h('button', { className: 'ranking-modal-close', onClick: () => overlay.remove() }, '✕ Fechar')
+            ),
+            ...FULL_LB.map(item => {
+              const medal = item.pos === 1 ? '🥇 ' : item.pos === 2 ? '🥈 ' : item.pos === 3 ? '🥉 ' : '';
+              return h('div', { className: 'ranking-modal-item' + (item.isYou ? ' you' : '') },
+                h('span', { className: 'ranking-modal-rank' }, '#' + item.pos),
+                h('div', { className: 'ranking-modal-avatar', style: 'background:' + item.color }, item.ini),
+                h('span', { className: 'ranking-modal-name' }, medal + item.name + (item.isYou ? ' 👈' : '')),
+                h('span', { className: 'ranking-modal-xp' }, item.xp + ' XP')
+              );
+            })
+          );
+          overlay.appendChild(modal);
+          overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+          document.body.appendChild(overlay);
+          setTimeout(() => { const u = modal.querySelector('.you'); if (u) u.scrollIntoView({ block: 'center' }); }, 100);
+        }
+      }, 'Ver ranking completo →')
+    );
+    return card;
+  }
+  page.appendChild(buildRankingCard());
+
+  // ── Motivation card ──
+  const motivCard = h('div', { className: 'ranking-motivation-card' },
+    h('div', { className: 'ranking-motivation-icon' }, '⭐'),
+    h('div', {},
+      h('div', { className: 'ranking-motivation-title' }, 'Continue assim!'),
+      h('div', { className: 'ranking-motivation-sub' }, 'Estude mais para subir ainda mais no ranking.')
+    )
+  );
+  page.appendChild(motivCard);
+
   page.appendChild(timeline);
   return page;
 }

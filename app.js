@@ -1427,7 +1427,7 @@ function announcementNode(a) {
       h('strong', {}, day),
       h('span', {}, month)
     ),
-    h('div', { className: 'announcement-body' },h
+    h('div', { className: 'announcement-body' },
       h('h3', {}, a.title),
       a.content && h('p', {}, a.content),
       h('div', { className: 'announcement-author' }, '— ' + (a.author || 'Coordenação'))

@@ -11,7 +11,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 if (!window.supabase) { document.getElementById('app').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#c23616;font-size:1rem;">Erro ao carregar Supabase. Verifique sua conexão e recarregue a página.</div>'; throw new Error('Supabase SDK não carregou'); }
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+h
 const MODULES = [
   { id: 'starter', label: 'Starter' },
   { id: 'a1', label: 'A1' },
@@ -1060,29 +1060,6 @@ function renderAulas() {
   if (!state.aulas) state.aulas = { level: 'starter', openLesson: null, quizAnswers: {}, quizSubmitted: {} };
   const as = state.aulas;
 
-  // Daily practice gate
-  if (localStorage.getItem('nexus_daily_done') !== new Date().toDateString()) {
-    const gate = document.createElement('div');
-    gate.style.cssText = 'background:linear-gradient(135deg,#e8491e,#d9622d);border-radius:16px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 8px 32px rgba(232,73,30,0.3);';
-    const gL = document.createElement('div');
-    gL.style.cssText = 'flex:1;min-width:200px;';
-    const gKicker = document.createElement('div');
-    gKicker.style.cssText = 'font-size:11px;font-weight:700;letter-spacing:.1em;color:rgba(255,255,255,.75);text-transform:uppercase;margin-bottom:8px;';
-    gKicker.textContent = '\u26a1 Complete before starting';
-    const gTitle = document.createElement('div');
-    gTitle.style.cssText = 'font-size:20px;font-weight:700;color:#fff;margin-bottom:6px;';
-    gTitle.textContent = 'Daily Practice primeiro!';
-    const gSub = document.createElement('div');
-    gSub.style.cssText = 'font-size:13px;color:rgba(255,255,255,.85);';
-    gSub.textContent = 'Complete o desafio di\u00e1rio e ganhe +5 XP para manter seu streak.';
-    gL.append(gKicker, gTitle, gSub);
-    const gB = document.createElement('button');
-    gB.style.cssText = 'background:#fff;color:#e8491e;border:none;border-radius:10px;padding:13px 24px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;';
-    gB.textContent = '\uD83D\uDD25 Ir para Daily Practice';
-    gB.onclick = () => { state.tab = 'daily'; render(); };
-    gate.append(gL, gB);
-    return gate;
-  }
 
 
   function getProgress() {

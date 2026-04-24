@@ -1098,6 +1098,7 @@ function renderAulas() {
 
   const page = h('div', { className: 'aulas-v2-page' });
 
+  // Level Tabs
   const tabs = h('div', { className: 'av2-tabs' });
   COURSES.forEach(course => {
     const cp = getProgress();
@@ -1109,18 +1110,29 @@ function renderAulas() {
       className: `av2-tab${isActive ? ' active' : ''}`,
       onclick: () => { state.aulas.level = course.id; renderPortal(); }
     });
-    tab.appendChild(h('span', { className: 'av2-tab-label', textContent: course.label }));
-    if (pct > 0) tab.appendChild(h('span', { className: `av2-tab-pct${pct === 100 ? ' done' : ''}`, textContent: pct + '%' }));
+    const tabLabel = h('span', { className: 'av2-tab-label' });
+    tabLabel.textContent = course.label;
+    tab.appendChild(tabLabel);
+    if (pct > 0) {
+      const tabPct = h('span', { className: `av2-tab-pct${pct === 100 ? ' done' : ''}` });
+      tabPct.textContent = pct + '%';
+      tab.appendChild(tabPct);
+    }
     tabs.appendChild(tab);
   });
 
   const grid = h('div', { className: 'av2-grid' });
   const leftCol = h('div', { className: 'av2-left' });
 
+  // Header
   const header = h('div', { className: 'av2-header' });
   const headerLeft = h('div', { className: 'av2-header-left' });
-  headerLeft.appendChild(h('h1', { className: 'av2-title', textContent: 'Aulas' }));
-  headerLeft.appendChild(h('p', { className: 'av2-subtitle', textContent: 'Continue sua jornada e evolua seu inglês.' }));
+  const titleEl = h('h1', { className: 'av2-title' });
+  titleEl.textContent = 'Aulas';
+  const subtitleEl = h('p', { className: 'av2-subtitle' });
+  subtitleEl.textContent = 'Continue sua jornada e evolua seu inglês.';
+  headerLeft.appendChild(titleEl);
+  headerLeft.appendChild(subtitleEl);
   header.appendChild(headerLeft);
 
   const headerStats = h('div', { className: 'av2-header-stats' });
@@ -1136,6 +1148,7 @@ function renderAulas() {
   header.appendChild(headerStats);
   leftCol.appendChild(header);
 
+  // Learning Path
   const pathSection = h('div', { className: 'av2-path' });
 
   lessons.forEach((lesson, idx) => {
@@ -1148,10 +1161,10 @@ function renderAulas() {
     const row = h('div', { className: 'av2-path-row' });
 
     const node = h('div', { className: `av2-path-node ${statusClass}` });
-    if (isDone) node.textContent = '✓';
-    else if (isCurrent) node.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>';
-    else if (isLocked) node.textContent = '🔒';
-    else node.textContent = lesson.num;
+    if (isDone) { node.textContent = '✓'; }
+    else if (isCurrent) { node.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'; }
+    else if (isLocked) { node.textContent = '🔒'; }
+    else { node.textContent = String(lesson.num); }
     row.appendChild(node);
 
     const card = h('div', { className: `av2-lesson-card ${statusClass}` });
@@ -1161,19 +1174,31 @@ function renderAulas() {
     cardInner.appendChild(iconBox);
 
     const cardText = h('div', { className: 'av2-card-text' });
-    cardText.appendChild(h('div', { className: 'av2-card-num', textContent: `Lesson ${lesson.num}` }));
-    cardText.appendChild(h('div', { className: 'av2-card-title', textContent: lesson.label }));
-    if (lesson.desc) cardText.appendChild(h('div', { className: 'av2-card-desc', textContent: lesson.desc }));
+    const cardNum = h('div', { className: 'av2-card-num' });
+    cardNum.textContent = 'Lesson ' + lesson.num;
+    const cardTitle = h('div', { className: 'av2-card-title' });
+    cardTitle.textContent = lesson.label;
+    cardText.appendChild(cardNum);
+    cardText.appendChild(cardTitle);
+    if (lesson.desc) {
+      const cardDesc = h('div', { className: 'av2-card-desc' });
+      cardDesc.textContent = lesson.desc;
+      cardText.appendChild(cardDesc);
+    }
     cardInner.appendChild(cardText);
     card.appendChild(cardInner);
 
     const cardRight = h('div', { className: 'av2-card-right' });
     if (isDone) {
-      cardRight.appendChild(h('span', { className: 'av2-badge done', textContent: '✓ Concluída' }));
+      const badge = h('span', { className: 'av2-badge done' });
+      badge.textContent = '✓ Concluída';
+      cardRight.appendChild(badge);
     } else if (isCurrent) {
-      const btn = h('button', { className: 'av2-continue-btn', textContent: 'Continuar',
+      const btn = h('button', {
+        className: 'av2-continue-btn',
         onclick: (e) => { e.stopPropagation(); state.aulas.openLesson = lesson.id; renderPortal(); }
       });
+      btn.textContent = 'Continuar';
       cardRight.appendChild(btn);
     } else if (isLocked) {
       const badge = h('span', { className: 'av2-badge locked' });
@@ -1192,49 +1217,82 @@ function renderAulas() {
 
     row.appendChild(card);
     item.appendChild(row);
-
     if (idx < lessons.length - 1) {
       item.appendChild(h('div', { className: `av2-path-line${isDone ? ' done' : ''}` }));
     }
-
     pathSection.appendChild(item);
   });
 
   leftCol.appendChild(pathSection);
   grid.appendChild(leftCol);
 
+  // Right Column
   const rightCol = h('div', { className: 'av2-right' });
 
   const rankCard = h('div', { className: 'av2-rank-card' });
-  const rankHeader = h('div', { className: 'av2-rank-header' });
-  rankHeader.innerHTML = '<span class="av2-rank-icon">🏆</span><span class="av2-rank-title">Seu ranking</span>';
-  rankCard.appendChild(rankHeader);
+  const rankHdr = h('div', { className: 'av2-rank-header' });
+  const ri = h('span', { className: 'av2-rank-icon' });
+  ri.textContent = '🏆';
+  const rt = h('span', { className: 'av2-rank-title' });
+  rt.textContent = 'Seu ranking';
+  rankHdr.appendChild(ri);
+  rankHdr.appendChild(rt);
+  rankCard.appendChild(rankHdr);
 
-  const rankPct = h('div', { className: 'av2-rank-pct-section' });
-  rankPct.innerHTML = `<div class="av2-rank-sub">Você está no</div><div class="av2-rank-big">Top ${100 - aheadPct}%</div><div class="av2-rank-sub2">dos alunos 🚀</div>`;
-  rankCard.appendChild(rankPct);
+  const rankPctSec = h('div', { className: 'av2-rank-pct-section' });
+  const rs1 = h('div', { className: 'av2-rank-sub' });
+  rs1.textContent = 'Você está no';
+  const rb = h('div', { className: 'av2-rank-big' });
+  rb.textContent = 'Top ' + (100 - aheadPct) + '%';
+  const rs2 = h('div', { className: 'av2-rank-sub2' });
+  rs2.textContent = 'dos alunos 🚀';
+  rankPctSec.appendChild(rs1);
+  rankPctSec.appendChild(rb);
+  rankPctSec.appendChild(rs2);
+  rankCard.appendChild(rankPctSec);
 
   if (rankList.length > 0) {
     const rankTable = h('div', { className: 'av2-rank-table' });
     rankList.forEach(student => {
-      const initials = (student.name || 'A').split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
-      const row = h('div', { className: `av2-rank-row${student.isMe ? ' me' : ''}` });
-      row.innerHTML = `<span class="av2-rank-pos">#${student.rankNum}</span><span class="av2-rank-avatar">${initials}</span><span class="av2-rank-name">${student.isMe ? '<strong>Você</strong>' : (student.name || 'Aluno')}</span><span class="av2-rank-xp">${student.xp || 0} XP</span>`;
-      rankTable.appendChild(row);
+      const initials = (student.name || 'A').split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+      const rankRow = h('div', { className: `av2-rank-row${student.isMe ? ' me' : ''}` });
+      const pos = h('span', { className: 'av2-rank-pos' });
+      pos.textContent = '#' + student.rankNum;
+      const av = h('span', { className: 'av2-rank-avatar' });
+      av.textContent = initials;
+      const nm = h('span', { className: 'av2-rank-name' });
+      nm.textContent = student.isMe ? 'Você' : (student.name || 'Aluno');
+      if (student.isMe) nm.style.fontWeight = '700';
+      const xpEl = h('span', { className: 'av2-rank-xp' });
+      xpEl.textContent = (student.xp || 0) + ' XP';
+      rankRow.appendChild(pos); rankRow.appendChild(av); rankRow.appendChild(nm); rankRow.appendChild(xpEl);
+      rankTable.appendChild(rankRow);
     });
     rankCard.appendChild(rankTable);
   }
 
-  rankCard.appendChild(h('button', { className: 'av2-rank-cta', textContent: 'Ver ranking completo →', onclick: () => {} }));
+  const rCta = h('button', { className: 'av2-rank-cta', onclick: () => {} });
+  rCta.textContent = 'Ver ranking completo →';
+  rankCard.appendChild(rCta);
   rightCol.appendChild(rankCard);
 
   if (currentLesson) {
     const nextCard = h('div', { className: 'av2-next-card' });
-    nextCard.innerHTML = `<div class="av2-next-header"><span class="av2-next-icon">${currentLesson.icon || '📅'}</span><span class="av2-next-label">Próxima aula</span></div><div class="av2-next-title">${currentLesson.label}</div><div class="av2-next-sub">Lesson ${currentLesson.num}</div>`;
-    const nextBtn = h('button', { className: 'av2-next-btn', textContent: 'Continuar aula →',
-      onclick: () => { state.aulas.openLesson = currentLesson.id; renderPortal(); }
-    });
-    nextCard.appendChild(nextBtn);
+    const nHdr = h('div', { className: 'av2-next-header' });
+    const ni = h('span', { className: 'av2-next-icon' });
+    ni.textContent = currentLesson.icon || '📅';
+    const nl = h('span', { className: 'av2-next-label' });
+    nl.textContent = 'Próxima aula';
+    nHdr.appendChild(ni); nHdr.appendChild(nl);
+    nextCard.appendChild(nHdr);
+    const nt = h('div', { className: 'av2-next-title' });
+    nt.textContent = currentLesson.label;
+    const ns = h('div', { className: 'av2-next-sub' });
+    ns.textContent = 'Lesson ' + currentLesson.num;
+    nextCard.appendChild(nt); nextCard.appendChild(ns);
+    const nb = h('button', { className: 'av2-next-btn', onclick: () => { state.aulas.openLesson = currentLesson.id; renderPortal(); } });
+    nb.textContent = 'Continuar aula →';
+    nextCard.appendChild(nb);
     rightCol.appendChild(nextCard);
   }
 

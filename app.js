@@ -1095,7 +1095,7 @@ function renderAulas() {
   currentLessonIdx = Math.min(currentLessonIdx, lessons.length - 1);
   const currentLesson = lessons[currentLessonIdx];
 
-  const page = h('div', { className: 'aulas-v2-page' });
+  
 
   const as = state.aulas;
     function markComplete(lessonId, lessonLabel, course) {
@@ -1176,193 +1176,247 @@ function renderAulas() {
     tabs.appendChild(tab);
   });
 
-  const grid = h('div', { className: 'av2-grid' });
-  const leftCol = h('div', { className: 'av2-left' });
+  // === MAIN GRID LAYOUT ===
+    const page = h('div', { className: 'av2-page' });
+    page.appendChild(tabs);
 
-  // Header
-  const header = h('div', { className: 'av2-header' });
-  const headerLeft = h('div', { className: 'av2-header-left' });
-  const titleEl = h('h1', { className: 'av2-title' });
-  titleEl.textContent = 'Aulas';
-  const subtitleEl = h('p', { className: 'av2-subtitle' });
-  subtitleEl.textContent = 'Continue sua jornada e evolua seu inglês.';
-  headerLeft.appendChild(titleEl);
-  headerLeft.appendChild(subtitleEl);
-  header.appendChild(headerLeft);
+    const grid = h('div', { className: 'av2-grid' });
 
-  const headerStats = h('div', { className: 'av2-header-stats' });
-  const xpStat = h('div', { className: 'av2-stat' });
-  xpStat.innerHTML = `<span class="av2-stat-icon">⭐</span><div><div class="av2-stat-value">${totalXPReal} XP</div><div class="av2-stat-label">Total de XP</div></div>`;
-  const lessonsStat = h('div', { className: 'av2-stat' });
-  lessonsStat.innerHTML = `<span class="av2-stat-icon">🎯</span><div><div class="av2-stat-value">${allCompleted} / ${totalLessons}</div><div class="av2-stat-label">Aulas concluídas</div></div>`;
-  const rankStat = h('div', { className: 'av2-stat' });
-  rankStat.innerHTML = `<span class="av2-stat-icon">📊</span><div><div class="av2-stat-value">Top ${100 - aheadPct}%</div><div class="av2-stat-label">Entre os alunos</div></div>`;
-  headerStats.appendChild(xpStat);
-  headerStats.appendChild(lessonsStat);
-  headerStats.appendChild(rankStat);
-  header.appendChild(headerStats);
-  leftCol.appendChild(header);
+    // ======= LEFT COLUMN =======
+    const leftCol = h('div', { className: 'av2-left' });
 
-  // Learning Path
-  const pathSection = h('div', { className: 'av2-path' });
+    // Header area: Title + Subtitle on left, Stats on right
+    const header = h('div', { className: 'av2-header' });
 
-  lessons.forEach((lesson, idx) => {
-    const isDone = progress[lesson.id] === 'completed';
-    const isCurrent = idx === currentLessonIdx && !isDone;
-    const isLocked = idx > currentLessonIdx && !isDone;
-    const statusClass = isDone ? 'done' : isCurrent ? 'current' : isLocked ? 'locked' : 'available';
+    // Title block
+    const titleBlock = h('div', { className: 'av2-header-left' });
+    const titleEl = h('h1', { className: 'av2-title' });
+    titleEl.textContent = 'Aulas';
+    const subtitleEl = h('p', { className: 'av2-subtitle' });
+    subtitleEl.textContent = 'Continue sua jornada e evolua seu inglês.';
+    titleBlock.appendChild(titleEl);
+    titleBlock.appendChild(subtitleEl);
+    header.appendChild(titleBlock);
 
-    const item = h('div', { className: 'av2-path-item' });
-    const row = h('div', { className: 'av2-path-row' });
+    // Stats cards inline (right side of header)
+    const statsRow = h('div', { className: 'av2-stats-row' });
 
-    const node = h('div', { className: `av2-path-node ${statusClass}` });
-    if (isDone) { node.textContent = '✓'; }
-    else if (isCurrent) { node.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'; }
-    else if (isLocked) { node.textContent = '🔒'; }
-    else { node.textContent = String(lesson.num); }
-    row.appendChild(node);
+    // XP Stat
+    const xpCard = h('div', { className: 'av2-stat-card' });
+    xpCard.innerHTML = `<span class="av2-stat-card-icon">⭐</span><div><div class="av2-stat-card-value">${totalXPReal} XP</div><div class="av2-stat-card-label">Total de XP</div></div>`;
+    statsRow.appendChild(xpCard);
 
-    const card = h('div', { className: `av2-lesson-card ${statusClass}` });
-    const cardInner = h('div', { className: 'av2-card-inner' });
-    const iconBox = h('div', { className: `av2-lesson-icon ${statusClass}` });
-    iconBox.textContent = lesson.icon || '📖';
-    cardInner.appendChild(iconBox);
+    // Lessons Stat
+    const lessonsCard = h('div', { className: 'av2-stat-card' });
+    lessonsCard.innerHTML = `<span class="av2-stat-card-icon">🎯</span><div><div class="av2-stat-card-value">${allCompleted} / ${totalLessons}</div><div class="av2-stat-card-label">Aulas concluídas</div></div>`;
+    statsRow.appendChild(lessonsCard);
 
-    const cardText = h('div', { className: 'av2-card-text' });
-    const cardNum = h('div', { className: 'av2-card-num' });
-    cardNum.textContent = 'Lesson ' + lesson.num;
-    const cardTitle = h('div', { className: 'av2-card-title' });
-    cardTitle.textContent = lesson.label;
-    cardText.appendChild(cardNum);
-    cardText.appendChild(cardTitle);
-    if (lesson.desc) {
-      const cardDesc = h('div', { className: 'av2-card-desc' });
-      cardDesc.textContent = lesson.desc;
-      cardText.appendChild(cardDesc);
-    }
-    cardInner.appendChild(cardText);
-    card.appendChild(cardInner);
+    // Ranking Stat
+    const rankCard2 = h('div', { className: 'av2-stat-card' });
+    rankCard2.innerHTML = `<span class="av2-stat-card-icon">📊</span><div><div class="av2-stat-card-value">Top ${100 - aheadPct}%</div><div class="av2-stat-card-label">Entre os alunos</div></div>`;
+    statsRow.appendChild(rankCard2);
 
-    const cardRight = h('div', { className: 'av2-card-right' });
-    if (isDone) {
-      const badge = h('span', { className: 'av2-badge done' });
-      badge.textContent = '✓ Concluída';
-      cardRight.appendChild(badge);
-    } else if (isCurrent) {
-      const btn = h('button', {
-        className: 'av2-continue-btn',
-        onclick: (e) => { e.stopPropagation(); state.aulas.openLesson = lesson.id; render(); }
-      });
-      btn.textContent = 'Continuar';
-      cardRight.appendChild(btn);
-    } else if (isLocked) {
-      const badge = h('span', { className: 'av2-badge locked' });
-      badge.textContent = '🔒 Disponível em breve';
-      cardRight.appendChild(badge);
-    }
-    const chevron = h('span', { className: 'av2-chevron' });
-    chevron.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>';
-    cardRight.appendChild(chevron);
-    card.appendChild(cardRight);
+    header.appendChild(statsRow);
+    leftCol.appendChild(header);
 
-    if (!isLocked) {
-      card.style.cursor = 'pointer';
-      card.onclick = () => { state.aulas.openLesson = (state.aulas.openLesson === lesson.id) ? null : lesson.id; render(); };
-    }
+    // ======= LEARNING PATH =======
+    const pathSection = h('div', { className: 'av2-learning-path' });
 
-    row.appendChild(card);
-    item.appendChild(row);
-        if (lesson.id === state.aulas.openLesson) {
-                item.appendChild(buildLessonPanel(lesson, idx));
-        }
-    if (idx < lessons.length - 1) {
-      item.appendChild(h('div', { className: `av2-path-line${isDone ? ' done' : ''}` }));
-    }
-    pathSection.appendChild(item);
-  });
+    lessons.forEach((lesson, idx) => {
+          const isDone = progress[lesson.id] === 'completed';
+          const isCurrent = idx === currentLessonIdx && !isDone;
+          const isLocked = idx > currentLessonIdx && !isDone;
+          const statusClass = isDone ? 'done' : isCurrent ? 'current' : isLocked ? 'locked' : 'available';
 
-  leftCol.appendChild(pathSection);
-  grid.appendChild(leftCol);
+          // Path item wrapper (node + card + connector line)
+          const pathItem = h('div', { className: 'av2-path-item' });
 
-  // Right Column
-  const rightCol = h('div', { className: 'av2-right' });
+          // Left side: node circle + vertical line
+          const pathLeft = h('div', { className: 'av2-path-left' });
 
-  const rankCard = h('div', { className: 'av2-rank-card' });
-  const rankHdr = h('div', { className: 'av2-rank-header' });
-  const ri = h('span', { className: 'av2-rank-icon' });
-  ri.textContent = '🏆';
-  const rt = h('span', { className: 'av2-rank-title' });
-  rt.textContent = 'Seu ranking';
-  rankHdr.appendChild(ri);
-  rankHdr.appendChild(rt);
-  rankCard.appendChild(rankHdr);
+          // Node circle
+          const node = h('div', { className: `av2-path-node ${statusClass}` });
+          if (isDone) {
+                  node.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg>`;
+          } else if (isCurrent) {
+                  node.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>`;
+          } else if (isLocked) {
+                  node.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+          } else {
+                  node.textContent = String(lesson.num);
+          }
+          pathLeft.appendChild(node);
 
-  const rankPctSec = h('div', { className: 'av2-rank-pct-section' });
-  const rs1 = h('div', { className: 'av2-rank-sub' });
-  rs1.textContent = 'Você está no';
-  const rb = h('div', { className: 'av2-rank-big' });
-  rb.textContent = 'Top ' + (100 - aheadPct) + '%';
-  const rs2 = h('div', { className: 'av2-rank-sub2' });
-  rs2.textContent = 'dos alunos 🚀';
-  rankPctSec.appendChild(rs1);
-  rankPctSec.appendChild(rb);
-  rankPctSec.appendChild(rs2);
-  rankCard.appendChild(rankPctSec);
+          // Vertical connector line (not for last item)
+          if (idx < lessons.length - 1) {
+                  const line = h('div', { className: `av2-path-connector${isDone ? ' done' : ''}` });
+                  pathLeft.appendChild(line);
+          }
 
-  if (rankList.length > 0) {
-    const rankTable = h('div', { className: 'av2-rank-table' });
-    rankList.forEach(student => {
-      const initials = (student.name || 'A').split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
-      const rankRow = h('div', { className: `av2-rank-row${student.isMe ? ' me' : ''}` });
-      const pos = h('span', { className: 'av2-rank-pos' });
-      pos.textContent = '#' + student.rankNum;
-      const av = h('span', { className: 'av2-rank-avatar' });
-      av.textContent = initials;
-      const nm = h('span', { className: 'av2-rank-name' });
-      nm.textContent = student.isMe ? 'Você' : (student.name || 'Aluno');
-      if (student.isMe) nm.style.fontWeight = '700';
-      const xpEl = h('span', { className: 'av2-rank-xp' });
-      xpEl.textContent = (student.xp || 0) + ' XP';
-      rankRow.appendChild(pos); rankRow.appendChild(av); rankRow.appendChild(nm); rankRow.appendChild(xpEl);
-      rankTable.appendChild(rankRow);
+          pathItem.appendChild(pathLeft);
+
+          // Right side: lesson card
+          const card = h('div', { className: `av2-lesson-card ${statusClass}` });
+          if (isCurrent) {
+                  card.style.borderColor = '#E8491E';
+                  card.style.background = 'rgba(232, 73, 30, 0.06)';
+                  card.style.boxShadow = '0 0 0 1px #E8491E, 0 4px 20px rgba(232,73,30,0.15)';
+          }
+
+          const cardInner = h('div', { className: 'av2-card-inner' });
+
+          // Icon box
+          const iconBox = h('div', { className: `av2-lesson-icon ${statusClass}` });
+          iconBox.textContent = lesson.icon || '📚';
+          cardInner.appendChild(iconBox);
+
+          // Card text
+          const cardText = h('div', { className: 'av2-card-text' });
+          const cardNum = h('div', { className: 'av2-card-num' });
+          cardNum.textContent = 'Lesson ' + lesson.num;
+          const cardTitle = h('div', { className: 'av2-card-title' });
+          cardTitle.textContent = lesson.label;
+          cardText.appendChild(cardNum);
+          cardText.appendChild(cardTitle);
+          if (lesson.desc) {
+                  const cardDesc = h('div', { className: 'av2-card-desc' });
+                  cardDesc.textContent = lesson.desc;
+                  cardText.appendChild(cardDesc);
+          }
+          cardInner.appendChild(cardText);
+
+          // Right side of card
+          const cardRight = h('div', { className: 'av2-card-right' });
+
+          if (isDone) {
+                          const badge = h('span', { className: 'av2-badge done', style: 'cursor:pointer', title: 'Clique para desmarcar', onclick: (e) => { e.stopPropagation(); markUncomplete(lesson.id); } });
+                  badge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> Concluída`;
+                  cardRight.appendChild(badge);
+          } else if (isCurrent) {
+                  const btn = h('button', { className: 'av2-continue-btn', onclick: () => { state.aulas.openLesson = (state.aulas.openLesson === lesson.id) ? null : lesson.id; render(); } });
+                  btn.textContent = 'Continuar';
+                  cardRight.appendChild(btn);
+          } else if (isLocked) {
+                  const lockBadge = h('span', { className: 'av2-badge locked' });
+                  lockBadge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Disponível em breve`;
+                  cardRight.appendChild(lockBadge);
+          } else {
+                  const btn = h('button', { className: 'av2-continue-btn', onclick: () => { state.aulas.openLesson = (state.aulas.openLesson === lesson.id) ? null : lesson.id; render(); } });
+                  btn.textContent = 'Continuar';
+                  cardRight.appendChild(btn);
+          }
+
+          // Chevron toggle
+          const chevron = h('span', { className: `av2-chevron${state.aulas.openLesson === lesson.id ? ' open' : ''}` });
+          chevron.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>`;
+          cardRight.appendChild(chevron);
+
+          cardInner.appendChild(cardRight);
+          card.appendChild(cardInner);
+
+          if (!isLocked) {
+                  card.style.cursor = 'pointer';
+                  card.onclick = () => { state.aulas.openLesson = (state.aulas.openLesson === lesson.id) ? null : lesson.id; render(); };
+          }
+
+          // Expanded lesson panel
+          if (lesson.id === state.aulas.openLesson) {
+                  card.appendChild(buildLessonPanel(lesson, idx));
+          }
+
+          pathItem.appendChild(card);
+          pathSection.appendChild(pathItem);
     });
-    rankCard.appendChild(rankTable);
-  }
 
-  const rCta = h('button', { className: 'av2-rank-cta', onclick: () => { state.tab = 'aulas'; render(); } });
-  rCta.textContent = 'Ver ranking completo →';
-  rankCard.appendChild(rCta);
-  rightCol.appendChild(rankCard);
+    leftCol.appendChild(pathSection);
+    grid.appendChild(leftCol);
 
-  if (currentLesson) {
-    const nextCard = h('div', { className: 'av2-next-card' });
-    const nHdr = h('div', { className: 'av2-next-header' });
-    const ni = h('span', { className: 'av2-next-icon' });
-    ni.textContent = currentLesson.icon || '📅';
-    const nl = h('span', { className: 'av2-next-label' });
-    nl.textContent = 'Próxima aula';
-    nHdr.appendChild(ni); nHdr.appendChild(nl);
-    nextCard.appendChild(nHdr);
-    const nt = h('div', { className: 'av2-next-title' });
-    nt.textContent = currentLesson.label;
-    const ns = h('div', { className: 'av2-next-sub' });
-    ns.textContent = 'Lesson ' + currentLesson.num;
-    nextCard.appendChild(nt); nextCard.appendChild(ns);
-    const nb = h('button', { className: 'av2-next-btn', onclick: () => { state.aulas.openLesson = currentLesson.id; render(); } });
-    nb.textContent = 'Continuar aula →';
-    nextCard.appendChild(nb);
-    rightCol.appendChild(nextCard);
-  }
+    // ======= RIGHT COLUMN =======
+    const rightCol = h('div', { className: 'av2-right' });
 
-  grid.appendChild(rightCol);
-  page.appendChild(tabs);
-  page.appendChild(grid);
+    // Ranking Card
+    const rankCard = h('div', { className: 'av2-rank-card' });
 
-  
-  return page;
+    const rankHdr = h('div', { className: 'av2-rank-header' });
+    const ri = h('span', { className: 'av2-rank-icon' });
+    ri.textContent = '🏆';
+    const rt = h('span', { className: 'av2-rank-title' });
+    rt.textContent = 'Seu ranking';
+    rankHdr.appendChild(ri); rankHdr.appendChild(rt);
+    rankCard.appendChild(rankHdr);
 
+    // Big percentage display
+    const rankBig = h('div', { className: 'av2-rank-big' });
+    const rbLabel = h('div', { className: 'av2-rank-big-label' });
+    rbLabel.textContent = 'Você está no';
+    const rbPct = h('div', { className: 'av2-rank-big-pct' });
+    rbPct.textContent = `Top ${100 - aheadPct}%`;
+    const rbSub = h('div', { className: 'av2-rank-big-sub' });
+    rbSub.textContent = 'dos alunos 🚀';
+    rankBig.appendChild(rbLabel);
+    rankBig.appendChild(rbPct);
+    rankBig.appendChild(rbSub);
+
+    // Weekly progress indicator
+    if (aheadPct > 0) {
+          const weeklyBadge = h('div', { className: 'av2-rank-weekly' });
+          weeklyBadge.innerHTML = `<span style="color:#4ade80">▲</span> <span style="color:#4ade80">${Math.min(3, Math.ceil(aheadPct/10))}</span> posições esta semana`;
+          rankBig.appendChild(weeklyBadge);
+    }
+
+    rankCard.appendChild(rankBig);
+
+    if (rankList.length > 0) {
+          const rankTable = h('div', { className: 'av2-rank-table' });
+          rankList.forEach(student => {
+                  const initials = (student.name || 'A').split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+                  const rankRow = h('div', { className: `av2-rank-row${student.isMe ? ' me' : ''}` });
+                  const pos = h('span', { className: 'av2-rank-pos' });
+                  pos.textContent = '#' + student.rankNum;
+                  const av = h('span', { className: 'av2-rank-avatar' });
+                  av.textContent = initials;
+                  const nm = h('span', { className: 'av2-rank-name' });
+                  nm.textContent = student.isMe ? 'Você' : (student.name || 'Aluno');
+                  if (student.isMe) nm.style.fontWeight = '700';
+                  const xpEl = h('span', { className: 'av2-rank-xp' });
+                  xpEl.textContent = (student.xp || 0) + ' XP';
+                  rankRow.appendChild(pos); rankRow.appendChild(av); rankRow.appendChild(nm); rankRow.appendChild(xpEl);
+                  rankTable.appendChild(rankRow);
+          });
+          rankCard.appendChild(rankTable);
+    }
+
+    const rCta = h('button', { className: 'av2-rank-cta', onclick: () => { state.tab = 'aulas'; render(); } });
+    rCta.textContent = 'Ver ranking completo →';
+    rankCard.appendChild(rCta);
+    rightCol.appendChild(rankCard);
+
+    // Next Lesson Card
+    if (currentLesson) {
+          const nextCard = h('div', { className: 'av2-next-card' });
+          const nHdr = h('div', { className: 'av2-next-header' });
+          const ni = h('span', { className: 'av2-next-icon' });
+          ni.textContent = currentLesson.icon || '📅';
+          const nl = h('span', { className: 'av2-next-label' });
+          nl.textContent = 'Próxima aula';
+          nHdr.appendChild(ni); nHdr.appendChild(nl);
+          nextCard.appendChild(nHdr);
+          const nt = h('div', { className: 'av2-next-title' });
+          nt.textContent = currentLesson.label;
+          const ns = h('div', { className: 'av2-next-sub' });
+          ns.textContent = 'Lesson ' + currentLesson.num;
+          nextCard.appendChild(nt); nextCard.appendChild(ns);
+          const nb = h('button', { className: 'av2-next-btn', onclick: () => { state.aulas.openLesson = currentLesson.id; render(); } });
+          nb.textContent = 'Continuar aula →';
+          nextCard.appendChild(nb);
+          rightCol.appendChild(nextCard);
+    }
+
+    grid.appendChild(rightCol);
+    page.appendChild(grid);
+
+    return page;
 }
-
 function announcementNode(a) {
   const dt = new Date(a.created_at);
   const day = dt.getDate();
@@ -1373,7 +1427,7 @@ function announcementNode(a) {
       h('strong', {}, day),
       h('span', {}, month)
     ),
-    h('div', { className: 'announcement-body' },
+    h('div', { className: 'announcement-body' },h
       h('h3', {}, a.title),
       a.content && h('p', {}, a.content),
       h('div', { className: 'announcement-author' }, '— ' + (a.author || 'Coordenação'))

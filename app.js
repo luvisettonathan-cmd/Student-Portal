@@ -528,7 +528,7 @@ function renderSidebar(isAdmin) {
   } else {
     // Aluno sidebar
     const mainLinks = [
-      { id: 'home', label: 'Home', iconName: 'home' },      { id: 'daily', label: 'Daily practice', iconName: 'spark' },
+      { id: 'home', label: 'Início', iconName: 'home' },      { id: 'daily', label: 'Prática do dia', iconName: 'spark' },
       { id: 'aulas', label: 'Aulas', iconName: 'book' },
       { id: 'exercicios', label: 'Exercícios', iconName: 'stack' },
       { id: 'materiais', label: 'Materiais', iconName: 'compass' },

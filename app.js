@@ -1108,7 +1108,7 @@ function renderAulas() {
     const isActive = course.id === state.aulas.level;
     const tab = h('button', {
       className: `av2-tab${isActive ? ' active' : ''}`,
-      onclick: () => { state.aulas.level = course.id; renderPortal(); }
+      onclick: () => { state.aulas.level = course.id; render(); }
     });
     const tabLabel = h('span', { className: 'av2-tab-label' });
     tabLabel.textContent = course.label;
@@ -1196,7 +1196,7 @@ function renderAulas() {
     } else if (isCurrent) {
       const btn = h('button', {
         className: 'av2-continue-btn',
-        onclick: (e) => { e.stopPropagation(); state.aulas.openLesson = lesson.id; renderPortal(); }
+        onclick: (e) => { e.stopPropagation(); state.aulas.openLesson = lesson.id; render(); }
       });
       btn.textContent = 'Continuar';
       cardRight.appendChild(btn);
@@ -1212,7 +1212,7 @@ function renderAulas() {
 
     if (!isLocked) {
       card.style.cursor = 'pointer';
-      card.onclick = () => { state.aulas.openLesson = lesson.id; renderPortal(); };
+      card.onclick = () => { state.aulas.openLesson = lesson.id; render(); };
     }
 
     row.appendChild(card);
@@ -1290,7 +1290,7 @@ function renderAulas() {
     const ns = h('div', { className: 'av2-next-sub' });
     ns.textContent = 'Lesson ' + currentLesson.num;
     nextCard.appendChild(nt); nextCard.appendChild(ns);
-    const nb = h('button', { className: 'av2-next-btn', onclick: () => { state.aulas.openLesson = currentLesson.id; renderPortal(); } });
+    const nb = h('button', { className: 'av2-next-btn', onclick: () => { state.aulas.openLesson = currentLesson.id; render(); } });
     nb.textContent = 'Continuar aula →';
     nextCard.appendChild(nb);
     rightCol.appendChild(nextCard);

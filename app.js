@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════
-// NEXUS ENGLISH CENTER - PORTAL DO ALUNO
+// NEXUS ENGLISH CENTER - PORTAL DO ALUNO 
 // ══════════════════════════════════════════════════════════════
 //
 // ⚠️ SUBSTITUA AS 2 LINHAS ABAIXO COM OS DADOS DO SEU SUPABASE

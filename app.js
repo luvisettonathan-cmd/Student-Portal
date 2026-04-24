@@ -11,7 +11,6 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 if (!window.supabase) { document.getElementById('app').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#c23616;font-size:1rem;">Erro ao carregar Supabase. Verifique sua conexão e recarregue a página.</div>'; throw new Error('Supabase SDK não carregou'); }
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-h
 const MODULES = [
   { id: 'starter', label: 'Starter' },
   { id: 'a1', label: 'A1' },
@@ -959,7 +958,7 @@ function renderSectionDetail() {
   const backBtn = h('button', { className: 'back-link', onClick: () => { state.currentSection = null; state.tab = 'home'; render(); } });
   backBtn.appendChild(icon('arrowUp'));
   backBtn.firstElementChild.style.transform = 'rotate(-90deg)';
-  backBtn.appendChild(h('span', {}, 'Voltar ao início'));h
+  backBtn.appendChild(h('span', {}, 'Voltar ao início'));
   d.appendChild(backBtn);
 
   d.appendChild(h('div', { className: 'page-header' },
@@ -1268,7 +1267,7 @@ function renderAulas() {
 
     if (!isLocked) {
       card.style.cursor = 'pointer';
-      card.onclick = () => { state.aulas.openLesson = lesson.id; render(); };
+      card.onclick = () => { state.aulas.openLesson = (state.aulas.openLesson === lesson.id) ? null : lesson.id; render(); };
     }
 
     row.appendChild(card);

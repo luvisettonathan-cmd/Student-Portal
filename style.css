@@ -50,8 +50,8 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--font-body);
-  background: var(--cream);
-  color: var(--ink);
+  background: #0f0f0f;
+  color: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
@@ -4344,9 +4344,9 @@ body {
 }
 
 .av2-lesson-card.done {
-  border-color: rgba(34,197,94,0.15);
-  background: rgba(34,197,94,0.03);
-  opacity: 0.85;
+  border-color: rgba(34,197,94,0.2);
+  background: rgba(34,197,94,0.04);
+  opacity: 1;
 }
 
 .av2-lesson-card.locked {

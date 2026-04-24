@@ -11,7 +11,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 if (!window.supabase) { document.getElementById('app').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#c23616;font-size:1rem;">Erro ao carregar Supabase. Verifique sua conexão e recarregue a página.</div>'; throw new Error('Supabase SDK não carregou'); }
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-h
+hh
 const MODULES = [
   { id: 'starter', label: 'Starter' },
   { id: 'a1', label: 'A1' },
@@ -26,7 +26,7 @@ const UNITS = [
   { id: 'online', label: 'Online' },
 ];
 
-// ── ICONES SVG CUSTOMIZADOS (traço fino, não padrão AI) ──
+// ── ICONES SVG CUSTOMIZADOS h(traço fino, não padrão AI) ──
 const ICONS = {
   home: '<svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1v-9z" stroke-linejoin="round"/></svg>',
   announce: '<svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 8L3 11v3l15 3V8z" stroke-linejoin="round"/><path d="M18 6v14"/><circle cx="20" cy="13" r="1.5"/><path d="M7 14l1 5h3l-1-5"/></svg>',
@@ -1098,7 +1098,63 @@ function renderAulas() {
 
   const page = h('div', { className: 'aulas-v2-page' });
 
-  // Level Tabs
+  const as = state.aulas;
+    function markComplete(lessonId, lessonLabel, course) {
+          const p = getProgress();
+          if (p[lessonId] === 'completed') return;
+          p[lessonId] = 'completed'; saveProgress(p); addXP(XP_PER_LESSON, lessonId);
+          const allDone = course.lessons.every(l => p[l.id] === 'completed');
+          if (allDone) awardBadge(course.id);
+          const idx = course.lessons.findIndex(l => l.id === lessonId);
+          const nextLesson = course.lessons[idx + 1]; as.openLesson = null;
+          showCompletionModal(lessonLabel, nextLesson ? nextLesson.label : null, allDone, course.label);
+    }
+    function markUncomplete(lessonId) { const p = getProgress(); p[lessonId] = 'not-started'; saveProgress(p); render(); }
+    function getLessonStatus(course, index) {
+          const p = getProgress(); const lesson = course.lessons[index];
+          if (p[lesson.id] === 'completed') return 'completed';
+          if (index === 0) return 'current';
+          const prevLesson = course.lessons[index - 1]; if (p[prevLesson.id] !== 'completed') return 'locked';
+          const allBefore = course.lessons.slice(0, index).every(l => p[l.id] === 'completed'); return allBefore ? 'current' : 'available';
+    }
+    function buildLessonPanel(lesson, lessonIndex) {
+          const status = getLessonStatus(activeCourse, lessonIndex);
+          const panel = h('div', { className: 'path-inline-panel' });
+          const vw = h('div', { className: 'aulas-video-wrapper' }); const vp = h('div', { className: 'aulas-video-placeholder' });
+          const vi = h('div', { className: 'aulas-video-icon' }); vi.appendChild(icon('book')); vp.appendChild(vi);
+          const vt = h('p', { className: 'aulas-video-text' }); vt.textContent = 'Video: ' + lesson.label; vp.appendChild(vt);
+          const vh = h('p', { className: 'aulas-video-hint' }); vh.textContent = 'The video will be embedded here'; vp.appendChild(vh); vw.appendChild(vp); panel.appendChild(vw);
+          const quizKey = lesson.id; const submitted = !!as.quizSubmitted[quizKey];
+          const quizSection = h('div', { className: 'aulas-quiz' });
+          const qt = h('h3', { className: 'aulas-quiz-title' }); qt.textContent = 'Quiz'; quizSection.appendChild(qt);
+          const questions = [{ id: 'q1', text: 'Question 1: ' + lesson.label, options: ['Option A', 'Option B', 'Option C', 'Option D'], correct: 0 }, { id: 'q2', text: 'Question 2: ' + lesson.label, options: ['Option A', 'Option B', 'Option C', 'Option D'], correct: 1 }, { id: 'q3', text: 'Question 3: ' + lesson.label, options: ['Option A', 'Option B', 'Option C', 'Option D'], correct: 2 }];
+          questions.forEach((q, qi) => {
+                  const qBlock = h('div', { className: 'aulas-quiz-question' }); const qTxt = h('p', { className: 'aulas-quiz-q-text' }); qTxt.textContent = (qi+1) + '. ' + q.text; qBlock.appendChild(qTxt);
+                  const opts = h('div', { className: 'aulas-quiz-options' });
+                  q.options.forEach((opt, oi) => {
+                            const sel = as.quizAnswers[quizKey+'_'+q.id] === oi; let oc = 'aulas-quiz-opt';
+                            if (submitted) { if (oi === q.correct) oc += ' correct'; else if (sel) oc += ' wrong'; } else if (sel) oc += ' selected';
+                            const ob = h('button', { className: oc, disabled: submitted }); ob.textContent = opt;
+                            ob.onclick = () => { if (!submitted) { as.quizAnswers[quizKey+'_'+q.id] = oi; render(); } };
+                            opts.appendChild(ob);
+                  }); qBlock.appendChild(opts); quizSection.appendChild(qBlock);
+          });
+          if (!submitted) {
+                  const allAnswered = questions.every(q => as.quizAnswers[quizKey+'_'+q.id] !== undefined);
+                  const sb = h('button', { className: 'aulas-quiz-submit' + (allAnswered ? '' : ' disabled'), disabled: !allAnswered });
+                  sb.textContent = 'Submit answers';
+                  sb.onclick = () => { if (allAnswered) { as.quizSubmitted[quizKey] = true; markComplete(lesson.id, lesson.label, activeCourse); render(); } };
+                  quizSection.appendChild(sb);
+          } else {
+                  const score = questions.filter(q => as.quizAnswers[quizKey+'_'+q.id] === q.correct).length;
+                  const pct = Math.round((score/questions.length)*100); const rc = pct >= 70 ? 'great' : pct >= 40 ? 'ok' : 'retry';
+                  const res = h('div', { className: 'aulas-quiz-result ' + rc }); const rs = h('span', { className: 'aulas-quiz-score' }); rs.textContent = score+'/'+questions.length+' correct'; res.appendChild(rs);
+                  const rp = h('span', { className: 'aulas-quiz-pct' }); rp.textContent = pct+'%'; res.appendChild(rp);
+                  if (pct < 70) { const rb = h('button', { className: 'aulas-quiz-retry' }); rb.textContent = 'Try again'; rb.onclick = () => { as.quizSubmitted[quizKey] = false; render(); }; res.appendChild(rb); } else { const cg = h('span', { className: 'aulas-quiz-congrats' }); cg.textContent = 'Congrats!'; res.appendChild(cg); }
+                  quizSection.appendChild(res);
+          }
+          panel.appendChild(quizSection); return panel;
+    }
   const tabs = h('div', { className: 'av2-tabs' });
   COURSES.forEach(course => {
     const cp = getProgress();
@@ -1217,6 +1273,9 @@ function renderAulas() {
 
     row.appendChild(card);
     item.appendChild(row);
+        if (lesson.id === state.aulas.openLesson) {
+                item.appendChild(buildLessonPanel(lesson, idx));
+        }
     if (idx < lessons.length - 1) {
       item.appendChild(h('div', { className: `av2-path-line${isDone ? ' done' : ''}` }));
     }
@@ -1271,7 +1330,7 @@ function renderAulas() {
     rankCard.appendChild(rankTable);
   }
 
-  const rCta = h('button', { className: 'av2-rank-cta', onclick: () => {} });
+  const rCta = h('button', { className: 'av2-rank-cta', onclick: () => { state.tab = 'aulas'; render(); } });
   rCta.textContent = 'Ver ranking completo →';
   rankCard.appendChild(rCta);
   rightCol.appendChild(rankCard);

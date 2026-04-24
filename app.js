@@ -1041,416 +1041,216 @@ function renderAulas() {
     {
       id: 'starter', label: 'Starter',
       lessons: [
-        { id: 'starter-1', label: 'Hello & Introductions', num: 1 },
-        { id: 'starter-2', label: 'Simple Present', num: 2 },
-        { id: 'starter-3', label: 'Daily Routine', num: 3 },
-        { id: 'starter-4', label: 'Questions', num: 4 },
-        { id: 'starter-5', label: 'Likes & Dislikes', num: 5 },
-        { id: 'starter-6', label: 'Food & Drinks', num: 6 },
-        { id: 'starter-7', label: 'Family & People', num: 7 },
-        { id: 'starter-8', label: 'Places & Directions', num: 8 },
+        { id: 'starter-1', label: 'Hello & Introductions', num: 1, desc: 'Aprenda a se apresentar e cumprimentar pessoas.', icon: '💬' },
+        { id: 'starter-2', label: 'Simple Present', num: 2, desc: 'Entenda e use o presente simples no dia a dia.', icon: '👤' },
+        { id: 'starter-3', label: 'Daily Routine', num: 3, desc: 'Fale sobre sua rotina diária em inglês.', icon: '📅' },
+        { id: 'starter-4', label: 'Questions', num: 4, desc: 'Aprenda a fazer perguntas em inglês.', icon: '❓' },
+        { id: 'starter-5', label: 'Likes & Dislikes', num: 5, desc: 'Fale sobre gostos e preferências.', icon: '💜' },
+        { id: 'starter-6', label: 'Food & Drinks', num: 6, desc: 'Aprenda vocabulário sobre comidas e bebidas.', icon: '🍽️' },
+        { id: 'starter-7', label: 'Family & People', num: 7, desc: 'Fale sobre família e pessoas importantes.', icon: '👨‍👩‍👧' },
+        { id: 'starter-8', label: 'Places & Directions', num: 8, desc: 'Navegue e descreva lugares em inglês.', icon: '📍' },
       ]
     },
-    { id: 'a1', label: 'A1', lessons: Array.from({ length: 10 }, (_, i) => ({ id: `a1-${i+1}`, label: `Lesson ${i+1}`, num: i+1 })) },
-    { id: 'a2', label: 'A2', lessons: Array.from({ length: 10 }, (_, i) => ({ id: `a2-${i+11}`, label: `Lesson ${i+11}`, num: i+11 })) },
-    { id: 'b1', label: 'B1', lessons: Array.from({ length: 10 }, (_, i) => ({ id: `b1-${i+21}`, label: `Lesson ${i+21}`, num: i+21 })) },
-    { id: 'b2', label: 'B2', lessons: Array.from({ length: 19 }, (_, i) => i+1).filter(n => ![5,10,15,20].includes(n)).map(n => ({ id: `b2-${n}`, label: `Unit ${n}`, num: n })) },
+    { id: 'a1', label: 'A1', lessons: Array.from({ length: 10 }, (_, i) => ({ id: `a1-${i+1}`, label: `Lesson ${i+1}`, num: i+1, desc: 'Continue sua jornada de aprendizado.', icon: '📖' })) },
+    { id: 'a2', label: 'A2', lessons: Array.from({ length: 10 }, (_, i) => ({ id: `a2-${i+11}`, label: `Lesson ${i+11}`, num: i+11, desc: 'Expanda seu vocabulário e gramática.', icon: '📚' })) },
+    { id: 'b1', label: 'B1', lessons: Array.from({ length: 10 }, (_, i) => ({ id: `b1-${i+21}`, label: `Lesson ${i+21}`, num: i+21, desc: 'Desenvolva fluência intermediária.', icon: '🎯' })) },
+    { id: 'b2', label: 'B2', lessons: Array.from({ length: 19 }, (_, i) => i+1).filter(n => ![5,10,15,20].includes(n)).map(n => ({ id: `b2-${n}`, label: `Unit ${n}`, num: n, desc: 'Domine o inglês avançado.', icon: '🏆' })) },
   ];
 
   if (!state.aulas) state.aulas = { level: 'starter', openLesson: null, quizAnswers: {}, quizSubmitted: {} };
-  const as = state.aulas;
-
-
 
   function getProgress() {
     try { return JSON.parse(localStorage.getItem('nexus_aulas_progress') || '{}'); } catch { return {}; }
   }
   function saveProgress(p) { localStorage.setItem('nexus_aulas_progress', JSON.stringify(p)); }
 
-  function markComplete(lessonId, lessonLabel, course) {
-    const p = getProgress();
-    if (p[lessonId] === 'completed') return; // already done, no XP
-    p[lessonId] = 'completed';
-    saveProgress(p);
-    addXP(XP_PER_LESSON, lessonId);
+  const progress = getProgress();
+  const activeCourse = COURSES.find(c => c.id === state.aulas.level) || COURSES[0];
+  const lessons = activeCourse.lessons;
 
-    // Check module completion
-    const allDone = course.lessons.every(l => p[l.id] === 'completed');
-    if (allDone) awardBadge(course.id);
-
-    // Find next lesson
-    const idx = course.lessons.findIndex(l => l.id === lessonId);
-    const nextLesson = course.lessons[idx + 1];
-    as.openLesson = null;
-
-    showCompletionModal(lessonLabel, nextLesson ? nextLesson.label : null, allDone, course.label);
-  }
-
-  function markUncomplete(lessonId) {
-    const p = getProgress(); p[lessonId] = 'not-started'; saveProgress(p);
-  }
-  function getLevelProgress(course) {
-    const p = getProgress();
-    const total = course.lessons.length;
-    const done = course.lessons.filter(l => p[l.id] === 'completed').length;
-    return { done, total, pct: total > 0 ? Math.round((done / total) * 100) : 0 };
-  }
-  function getLessonStatus(course, index) {
-    const p = getProgress();
-    const lesson = course.lessons[index];
-    if (p[lesson.id] === 'completed') return 'completed';
-    if (index === 0) return 'current';
-    const prevLesson = course.lessons[index - 1];
-    if (p[prevLesson.id] !== 'completed') return 'locked';
-    const allBefore = course.lessons.slice(0, index).every(l => p[l.id] === 'completed');
-    return allBefore ? 'current' : 'available';
-  }
-
-  const page = h('div', { className: 'aulas-page aulas-page-with-ranking' });
-
-  // ── Tabs ──
-  const tabs = h('div', { className: 'aulas-tabs' });
-  COURSES.forEach(course => {
-    const active = as.level === course.id;
-    const prog = getLevelProgress(course);
-    const hasBadge = getBadges().includes(course.id);
-    tabs.appendChild(h('button', {
-      className: `aulas-tab ${active ? 'active' : ''}`,
-      onClick: () => { as.level = course.id; as.openLesson = null; render(); }
-    },
-      h('span', { className: 'aulas-tab-label' }, course.label + (hasBadge ? ' 🏅' : '')),
-      h('span', { className: `aulas-tab-badge ${prog.pct === 100 ? 'done' : ''}` }, prog.pct + '%')
-    ));
-  });
-  page.appendChild(tabs);
-
-  const activeCourse = COURSES.find(c => c.id === as.level);
-  const prog = getLevelProgress(activeCourse);
-  const hasBadge = getBadges().includes(activeCourse.id);
-
-  // ── XP Bar ──
-  const totalXP = getXP();
-  const xpBar = h('div', { className: 'gami-xp-bar' },
-    h('div', { className: 'gami-xp-bar-left' },
-      h('span', { className: 'gami-xp-bar-icon' }, '⚡'),
-      h('span', { className: 'gami-xp-bar-value' }, totalXP + ' XP'),
-      hasBadge ? h('span', { className: 'gami-module-badge-inline' }, '🏅 ' + activeCourse.label) : null
-    ),
-    h('div', { className: 'gami-xp-bar-right' }, prog.done + ' / ' + prog.total + ' lessons')
-  );
-  page.appendChild(xpBar)
-  // ── Ranking Stats Bar ──
-  const totalXPReal = getXP();
-  const aheadPct = (() => {
-    const all = (state.data && state.data.students) ? state.data.students : [];
-    if (all.length < 2) return 0;
-    const below = all.filter(s => s.id !== state.user.id && (s.xp || 0) < totalXPReal).length;
-    const others = all.length - 1;
-    return others <= 0 ? 0 : Math.round((below / others) * 100);
+  const totalXPReal = (() => {
+    try { return parseInt(localStorage.getItem('nexus_total_xp') || '0', 10); } catch { return 0; }
   })();
-  const statsBar = h('div', { className: 'ranking-stats-bar' },
-    h('div', { className: 'ranking-stat-card' },
-      h('span', { className: 'ranking-stat-icon' }, '⭐'),
-      h('div', {},
-        h('div', { className: 'ranking-stat-value' }, totalXPReal + ' XP'),
-        h('div', { className: 'ranking-stat-label' }, 'Total de XP')
-      )
-    ),
-    h('div', { className: 'ranking-stat-card' },
-      h('span', { className: 'ranking-stat-icon' }, '🎯'),
-      h('div', {},
-        h('div', { className: 'ranking-stat-value' }, prog.done + ' / ' + prog.total),
-        h('div', { className: 'ranking-stat-label' }, 'Aulas concluídas')
-      )
-    ),
-    h('div', { className: 'ranking-stat-card' },
-      h('span', { className: 'ranking-stat-icon' }, '📊'),
-      h('div', {},
-        h('div', { className: 'ranking-stat-value ranking-stat-green' }, 'Top ' + (100 - aheadPct) + '%'),
-        h('div', { className: 'ranking-stat-label' }, 'Você está à frente de ' + aheadPct + '% dos alunos')
-      )
-    )
-  );
-  page.appendChild(statsBar);;
 
-  // ── Your Next Step Card ──
-  const nextLesson = activeCourse.lessons.find((l, i) => getLessonStatus(activeCourse, i) !== 'completed');
-  const isFirstLesson = prog.done === 0;
-  if (nextLesson) {
-    const nextStepCard = h('div', { className: 'path-nextstep-card',
-      onClick: () => { as.openLesson = as.openLesson === nextLesson.id ? null : nextLesson.id; as.quizAnswers = {}; as.quizSubmitted = {}; render(); }
-    },
-      h('div', { className: 'path-nextstep-icon' }, h('div', { className: 'path-nextstep-icon-circle' }, '🎯')),
-      h('div', { className: 'path-nextstep-content' },
-        h('span', { className: 'path-nextstep-label' }, 'YOUR NEXT STEP'),
-        h('h2', { className: 'path-nextstep-title' }, 'Lesson ' + nextLesson.num + ' – ' + nextLesson.label),
-        h('p', { className: 'path-nextstep-sub' }, isFirstLesson ? 'Start your journey!' : 'Keep going! You\'re doing great.')
-      ),
-      h('button', { className: 'path-nextstep-btn',
-        onClick: (e) => { e.stopPropagation(); as.openLesson = as.openLesson === nextLesson.id ? null : nextLesson.id; as.quizAnswers = {}; as.quizSubmitted = {}; render(); }
-      }, isFirstLesson ? 'Start lesson →' : 'Continue lesson →')
-    );
-    page.appendChild(nextStepCard);
+  const allCompleted = lessons.filter(l => progress[l.id] === 'completed').length;
+  const totalLessons = lessons.length;
+
+  const all = (state.data && state.data.students) ? state.data.students : [];
+  let aheadPct = 50;
+  let rankList = [];
+  if (all.length > 1 && state.user) {
+    const sorted = [...all].sort((a, b) => (b.xp || 0) - (a.xp || 0));
+    const myIdx = sorted.findIndex(s => s.id === state.user.id && s.id !== undefined);
+    if (myIdx !== -1) {
+      aheadPct = Math.round(((sorted.length - 1 - myIdx) / Math.max(sorted.length - 1, 1)) * 100);
+    }
+    const start = Math.max(0, (myIdx !== -1 ? myIdx : 0) - 2);
+    rankList = sorted.slice(start, start + 5).map((s, i) => ({ ...s, rankNum: start + i + 1, isMe: s.id === state.user?.id }));
   }
 
-  // ── Module complete badge ──
-  if (hasBadge) {
-    page.appendChild(h('div', { className: 'gami-module-complete-banner' },
-      h('span', {}, '🏆'),
-      h('div', {},
-        h('strong', {}, activeCourse.label + ' Completed!'),
-        h('p', {}, 'You earned the ' + activeCourse.label + ' badge. Well done!')
-      ),
-      h('span', { className: 'gami-banner-badge' }, '🏅')
-    ));
+  let currentLessonIdx = 0;
+  for (let i = 0; i < lessons.length; i++) {
+    if (progress[lessons[i].id] === 'completed') currentLessonIdx = i + 1;
+    else break;
   }
+  currentLessonIdx = Math.min(currentLessonIdx, lessons.length - 1);
+  const currentLesson = lessons[currentLessonIdx];
 
-  // ── Path Header ──
-  page.appendChild(h('div', { className: 'path-header' },
-    h('div', { className: 'path-header-top' },
-      h('h2', { className: 'path-header-title' }, activeCourse.label + ' Path'),
-      h('span', { className: 'path-header-count' }, prog.done + ' / ' + prog.total + ' lessons completed')
-    ),
-    h('p', { className: 'path-header-sub' }, 'Complete the lessons in order to unlock new content and level up your English.'),
-    h('div', { className: 'path-progress-bar' },
-      h('div', { className: 'path-progress-fill', style: `width:${prog.pct}%` })
-    )
-  ));
+  const page = h('div', { className: 'aulas-v2-page' });
 
-  // ── Inline panel builder ──
-  function buildLessonPanel(lesson, lessonIndex) {
-    const status = getLessonStatus(activeCourse, lessonIndex);
-    const panel = h('div', { className: 'path-inline-panel' });
-    panel.appendChild(h('div', { className: 'path-inline-header' },
-      h('h3', { className: 'path-inline-title' }, lesson.label),
-      h('div', { className: 'path-inline-actions' },
-        status !== 'completed'
-          ? h('button', { className: 'aulas-complete-btn', onClick: () => { markComplete(lesson.id, lesson.label, activeCourse); render(); } }, '✓ Mark as completed')
-          : h('button', { className: 'aulas-uncomplete-btn', onClick: () => { markUncomplete(lesson.id); render(); } }, '↺ Mark as not completed')
-      )
-    ));
-    panel.appendChild(h('div', { className: 'aulas-video-wrapper' },
-      h('div', { className: 'aulas-video-placeholder' },
-        h('div', { className: 'aulas-video-icon' }, icon('book')),
-        h('p', { className: 'aulas-video-text' }, 'Video: ' + lesson.label),
-        h('p', { className: 'aulas-video-hint' }, 'The video will be embedded here')
-      )
-    ));
-    const quizKey = lesson.id;
-    const submitted = !!as.quizSubmitted[quizKey];
-    const quizSection = h('div', { className: 'aulas-quiz' });
-    quizSection.appendChild(h('h3', { className: 'aulas-quiz-title' }, '📝 Quiz'));
-    const questions = [
-      { id: 'q1', text: `Quiz: ${lesson.label} — Question 1`, options: ['Option A', 'Option B', 'Option C', 'Option D'], correct: 0 },
-      { id: 'q2', text: `Quiz: ${lesson.label} — Question 2`, options: ['Option A', 'Option B', 'Option C', 'Option D'], correct: 1 },
-      { id: 'q3', text: `Quiz: ${lesson.label} — Question 3`, options: ['Option A', 'Option B', 'Option C', 'Option D'], correct: 2 },
-    ];
-    questions.forEach((q, qi) => {
-      const qBlock = h('div', { className: 'aulas-quiz-question' });
-      qBlock.appendChild(h('p', { className: 'aulas-quiz-q-text' }, (qi+1) + '. ' + q.text));
-      const opts = h('div', { className: 'aulas-quiz-options' });
-      q.options.forEach((opt, oi) => {
-        const selected = as.quizAnswers[quizKey+'_'+q.id] === oi;
-        let optClass = 'aulas-quiz-opt';
-        if (submitted) { if (oi === q.correct) optClass += ' correct'; else if (selected) optClass += ' wrong'; }
-        else if (selected) optClass += ' selected';
-        opts.appendChild(h('button', { className: optClass, disabled: submitted,
-          onClick: () => { if (!submitted) { as.quizAnswers[quizKey+'_'+q.id] = oi; render(); } }
-        }, opt));
+  const tabs = h('div', { className: 'av2-tabs' });
+  COURSES.forEach(course => {
+    const cp = getProgress();
+    const cl = course.lessons;
+    const dc = cl.filter(l => cp[l.id] === 'completed').length;
+    const pct = Math.round((dc / cl.length) * 100);
+    const isActive = course.id === state.aulas.level;
+    const tab = h('button', {
+      className: `av2-tab${isActive ? ' active' : ''}`,
+      onclick: () => { state.aulas.level = course.id; renderPortal(); }
+    });
+    tab.appendChild(h('span', { className: 'av2-tab-label', textContent: course.label }));
+    if (pct > 0) tab.appendChild(h('span', { className: `av2-tab-pct${pct === 100 ? ' done' : ''}`, textContent: pct + '%' }));
+    tabs.appendChild(tab);
+  });
+
+  const grid = h('div', { className: 'av2-grid' });
+  const leftCol = h('div', { className: 'av2-left' });
+
+  const header = h('div', { className: 'av2-header' });
+  const headerLeft = h('div', { className: 'av2-header-left' });
+  headerLeft.appendChild(h('h1', { className: 'av2-title', textContent: 'Aulas' }));
+  headerLeft.appendChild(h('p', { className: 'av2-subtitle', textContent: 'Continue sua jornada e evolua seu inglês.' }));
+  header.appendChild(headerLeft);
+
+  const headerStats = h('div', { className: 'av2-header-stats' });
+  const xpStat = h('div', { className: 'av2-stat' });
+  xpStat.innerHTML = `<span class="av2-stat-icon">⭐</span><div><div class="av2-stat-value">${totalXPReal} XP</div><div class="av2-stat-label">Total de XP</div></div>`;
+  const lessonsStat = h('div', { className: 'av2-stat' });
+  lessonsStat.innerHTML = `<span class="av2-stat-icon">🎯</span><div><div class="av2-stat-value">${allCompleted} / ${totalLessons}</div><div class="av2-stat-label">Aulas concluídas</div></div>`;
+  const rankStat = h('div', { className: 'av2-stat' });
+  rankStat.innerHTML = `<span class="av2-stat-icon">📊</span><div><div class="av2-stat-value">Top ${100 - aheadPct}%</div><div class="av2-stat-label">Entre os alunos</div></div>`;
+  headerStats.appendChild(xpStat);
+  headerStats.appendChild(lessonsStat);
+  headerStats.appendChild(rankStat);
+  header.appendChild(headerStats);
+  leftCol.appendChild(header);
+
+  const pathSection = h('div', { className: 'av2-path' });
+
+  lessons.forEach((lesson, idx) => {
+    const isDone = progress[lesson.id] === 'completed';
+    const isCurrent = idx === currentLessonIdx && !isDone;
+    const isLocked = idx > currentLessonIdx && !isDone;
+    const statusClass = isDone ? 'done' : isCurrent ? 'current' : isLocked ? 'locked' : 'available';
+
+    const item = h('div', { className: 'av2-path-item' });
+    const row = h('div', { className: 'av2-path-row' });
+
+    const node = h('div', { className: `av2-path-node ${statusClass}` });
+    if (isDone) node.textContent = '✓';
+    else if (isCurrent) node.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>';
+    else if (isLocked) node.textContent = '🔒';
+    else node.textContent = lesson.num;
+    row.appendChild(node);
+
+    const card = h('div', { className: `av2-lesson-card ${statusClass}` });
+    const cardInner = h('div', { className: 'av2-card-inner' });
+    const iconBox = h('div', { className: `av2-lesson-icon ${statusClass}` });
+    iconBox.textContent = lesson.icon || '📖';
+    cardInner.appendChild(iconBox);
+
+    const cardText = h('div', { className: 'av2-card-text' });
+    cardText.appendChild(h('div', { className: 'av2-card-num', textContent: `Lesson ${lesson.num}` }));
+    cardText.appendChild(h('div', { className: 'av2-card-title', textContent: lesson.label }));
+    if (lesson.desc) cardText.appendChild(h('div', { className: 'av2-card-desc', textContent: lesson.desc }));
+    cardInner.appendChild(cardText);
+    card.appendChild(cardInner);
+
+    const cardRight = h('div', { className: 'av2-card-right' });
+    if (isDone) {
+      cardRight.appendChild(h('span', { className: 'av2-badge done', textContent: '✓ Concluída' }));
+    } else if (isCurrent) {
+      const btn = h('button', { className: 'av2-continue-btn', textContent: 'Continuar',
+        onclick: (e) => { e.stopPropagation(); state.aulas.openLesson = lesson.id; renderPortal(); }
       });
-      qBlock.appendChild(opts);
-      quizSection.appendChild(qBlock);
-    });
-    if (!submitted) {
-      const allAnswered = questions.every(q => as.quizAnswers[quizKey+'_'+q.id] !== undefined);
-      quizSection.appendChild(h('button', {
-        className: `aulas-quiz-submit ${allAnswered ? '' : 'disabled'}`, disabled: !allAnswered,
-        onClick: () => { if (allAnswered) { as.quizSubmitted[quizKey] = true; markComplete(lesson.id, lesson.label, activeCourse); render(); } }
-      }, 'Submit answers'));
-    } else {
-      const score = questions.filter(q => as.quizAnswers[quizKey+'_'+q.id] === q.correct).length;
-      const pct = Math.round((score/questions.length)*100);
-      const resultClass = pct >= 70 ? 'great' : pct >= 40 ? 'ok' : 'retry';
-      quizSection.appendChild(h('div', { className: `aulas-quiz-result ${resultClass}` },
-        h('span', { className: 'aulas-quiz-score' }, score+'/'+questions.length+' correct'),
-        h('span', { className: 'aulas-quiz-pct' }, pct+'%'),
-        pct < 70
-          ? h('button', { className: 'aulas-quiz-retry', onClick: () => { as.quizAnswers = Object.fromEntries(Object.entries(as.quizAnswers).filter(([k]) => !k.startsWith(quizKey+'_'))); as.quizSubmitted[quizKey] = false; render(); } }, '↺ Try again')
-          : h('span', { className: 'aulas-quiz-congrats' }, '🎉 Congrats!')
-      ));
+      cardRight.appendChild(btn);
+    } else if (isLocked) {
+      const badge = h('span', { className: 'av2-badge locked' });
+      badge.textContent = '🔒 Disponível em breve';
+      cardRight.appendChild(badge);
     }
-    panel.appendChild(quizSection);
-    return panel;
-  }
+    const chevron = h('span', { className: 'av2-chevron' });
+    chevron.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>';
+    cardRight.appendChild(chevron);
+    card.appendChild(cardRight);
 
-  // ── Timeline ──
-  const timeline = h('div', { className: 'path-timeline' });
-  activeCourse.lessons.forEach((lesson, index) => {
-    const status = getLessonStatus(activeCourse, index);
-    const isOpen = as.openLesson === lesson.id;
-    const item = h('div', { className: `path-item ${status}` });
-    if (index > 0) {
-      const prevStatus = getLessonStatus(activeCourse, index-1);
-      item.appendChild(h('div', { className: `path-line ${prevStatus === 'completed' ? 'completed' : ''}` }));
+    if (!isLocked) {
+      card.style.cursor = 'pointer';
+      card.onclick = () => { state.aulas.openLesson = lesson.id; renderPortal(); };
     }
-    const row = h('div', { className: 'path-row' });
-    let nodeContent = '';
-    if (status === 'completed') nodeContent = '✓';
-    else if (status === 'current') nodeContent = '▶';
-    else nodeContent = '🔒';
-    row.appendChild(h('div', { className: `path-node ${status}` }, nodeContent));
-    const card = h('div', {
-      className: `path-card ${status} ${isOpen ? 'open' : ''}`,
-      onClick: () => {
-        if (status === 'locked') {
-          const toast = document.querySelector('.path-toast');
-          if (toast) { toast.textContent = 'Complete the previous lessons to unlock this one.'; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
-          return;
-        }
-        as.openLesson = isOpen ? null : lesson.id;
-        if (!isOpen) { as.quizAnswers = {}; as.quizSubmitted = {}; }
-        render();
-      }
-    });
-    card.appendChild(h('div', { className: 'path-card-left' },
-      h('span', { className: 'path-card-num' }, 'Lesson ' + lesson.num),
-      h('span', { className: 'path-card-title' }, lesson.label)
-    ));
-    let badge;
-    if (status === 'completed') badge = h('span', { className: 'path-badge completed' }, '✓ Completed');
-    else if (status === 'current') badge = h('span', { className: 'path-badge current' }, isOpen ? 'Close ▲' : 'Continue →');
-    else if (status === 'available') badge = h('span', { className: 'path-badge available' }, '🔓 Available');
-    else badge = h('span', { className: 'path-badge locked' }, '🔒 Locked');
-    card.appendChild(h('div', { className: 'path-card-right' }, badge, status !== 'locked' ? h('span', { className: `path-chevron ${isOpen ? 'open' : ''}` }, isOpen ? '▲' : '▼') : null));
+
     row.appendChild(card);
     item.appendChild(row);
-    if (isOpen && status !== 'locked') {
-      const panelWrap = h('div', { className: 'path-panel-wrap' });
-      panelWrap.appendChild(h('div', { className: 'path-panel-spacer' }));
-      const panelContent = h('div', { className: 'path-panel-content' });
-      panelContent.appendChild(buildLessonPanel(lesson, index));
-      panelWrap.appendChild(panelContent);
-      item.appendChild(panelWrap);
+
+    if (idx < lessons.length - 1) {
+      item.appendChild(h('div', { className: `av2-path-line${isDone ? ' done' : ''}` }));
     }
-    timeline.appendChild(item);
+
+    pathSection.appendChild(item);
   });
-  timeline.appendChild(h('div', { className: 'path-toast' }, ''));
 
-  // ── Ranking Card (sidebar) ──
-  const aheadPct2 = (() => {
-    const all = (state.data && state.data.students) ? [...state.data.students] : [];
-    if (all.length < 2) return 0;
-    all.sort((a, b) => (b.xp || 0) - (a.xp || 0));
-    const idx = all.findIndex(s => s.id === state.user.id);
-    return idx === -1 ? 0 : Math.round(((all.length - 1 - idx) / (all.length - 1 || 1)) * 100);
-  })();
+  leftCol.appendChild(pathSection);
+  grid.appendChild(leftCol);
 
-  function buildRankingCard() {
-    const allStudents = (state.data && state.data.students) ? [...state.data.students] : [];
-    const myId = state.user && state.user.id;
-    const myXP = getXP();
-    const myStudent = allStudents.find(s => s.id === myId);
-    if (myStudent) myStudent.xp = myXP;
-    allStudents.sort((a, b) => (b.xp || 0) - (a.xp || 0));
-    const myIdx = allStudents.findIndex(s => s.id === myId);
-    const myPos = myIdx === -1 ? allStudents.length + 1 : myIdx + 1;
-    const total = allStudents.length || 1;
-    const startIdx = Math.max(0, myIdx === -1 ? 0 : myIdx - 2);
-    const endIdx = Math.min(allStudents.length - 1, myIdx === -1 ? 4 : myIdx + 2);
-    const neighbors = allStudents.slice(startIdx, endIdx + 1);
-    const COLORS = ['#6366f1','#0ea5e9','#8b5cf6','#ec4899','#10b981','#f97316','#14b8a6','#f59e0b'];
-    const colorFor = (id) => COLORS[Math.abs((id||'').toString().split('').reduce((a,c)=>a+c.charCodeAt(0),0))%COLORS.length];
-    const card = h('div', { className: 'ranking-card', id: 'ranking-sidebar-card' },
-      h('div', { className: 'ranking-card-header' },
-        h('div', { className: 'ranking-card-trophy' }, '🏆'),
-        h('div', { className: 'ranking-card-title' }, 'Your Ranking')
-      ),
-      allStudents.length < 2
-        ? h('div', { className: 'ranking-card-hero' },
-            h('div', { className: 'ranking-card-ahead-label' }, 'Seja o primeiro!'),
-            h('span', { className: 'ranking-card-percent' }, '-'),
-            h('div', { className: 'ranking-card-students-label' }, 'Complete aulas para entrar 🚀')
-          )
-        : h('div', { className: 'ranking-card-hero' },
-            h('div', { className: 'ranking-card-ahead-label' }, "You're ahead of"),
-            h('span', { className: 'ranking-card-percent' }, aheadPct2 + '%'),
-            h('div', { className: 'ranking-card-students-label' }, 'of students 🚀')
-          ),
-      h('div', { className: 'ranking-card-week-progress' },
-        h('span', { className: 'arrow' }, '▲'),
-        h('span', {}, '#' + myPos + ' de ' + total + ' alunos')
-      ),
-      h('div', { className: 'ranking-mini-list' },
-        ...neighbors.map((s, i) => {
-          const pos = startIdx + i + 1;
-          const isMe = s.id === myId;
-          const sXP = isMe ? myXP : (s.xp || 0);
-          return h('div', { className: 'ranking-mini-item' + (isMe ? ' you' : '') },
-            h('span', { className: 'ranking-mini-pos' }, '#' + pos),
-            h('div', { className: 'ranking-mini-avatar', style: 'background:' + colorFor(s.id) },
-              (s.name||s.username||'?')[0].toUpperCase()
-            ),
-            h('span', { className: 'ranking-mini-name' }, isMe ? 'Você' : (s.name||s.username||'?')),
-            h('span', { className: 'ranking-mini-xp' }, sXP + ' XP')
-          );
-        })
-      ),
-      h('button', {
-        className: 'ranking-view-btn',
-        onClick: () => {
-          const overlay = h('div', { className: 'ranking-modal-overlay' });
-          const all2 = (state.data && state.data.students) ? [...state.data.students] : [];
-          all2.sort((a, b) => (b.xp || 0) - (a.xp || 0));
-          const COLS = ['#6366f1','#0ea5e9','#8b5cf6','#ec4899','#10b981','#f97316','#14b8a6','#f59e0b'];
-          const cFor2 = (id) => COLS[Math.abs((id||'').toString().split('').reduce((a,c)=>a+c.charCodeAt(0),0))%COLS.length];
-          const modal = h('div', { className: 'ranking-modal' },
-            h('div', { className: 'ranking-modal-header' },
-              h('div', { className: 'ranking-modal-title' }, '🏆 Ranking Completo'),
-              h('button', { className: 'ranking-modal-close', onClick: () => overlay.remove() }, '✕ Fechar')
-            ),
-            all2.length === 0
-              ? h('p', { style: 'color:rgba(255,255,255,0.4);text-align:center;padding:24px' }, 'Nenhum aluno cadastrado ainda.')
-              : h('div', {},
-                  ...all2.map((s, i) => {
-                    const pos = i + 1;
-                    const isMe = s.id === myId;
-                    const sXP = isMe ? myXP : (s.xp || 0);
-                    const medal = pos===1?'🥇 ':pos===2?'🥈 ':pos===3?'🥉 ':'';
-                    return h('div', { className: 'ranking-modal-item' + (isMe ? ' you' : '') },
-                      h('span', { className: 'ranking-modal-rank' }, '#' + pos),
-                      h('div', { className: 'ranking-modal-avatar', style: 'background:' + cFor2(s.id) },
-                        (s.name||s.username||'?')[0].toUpperCase()
-                      ),
-                      h('span', { className: 'ranking-modal-name' }, medal + (isMe ? 'Você 👈' : (s.name||s.username||'?'))),
-                      h('span', { className: 'ranking-modal-xp' }, sXP + ' XP')
-                    );
-                  })
-                )
-          );
-          overlay.appendChild(modal);
-          overlay.addEventListener('click', e => { if(e.target===overlay) overlay.remove(); });
-          document.body.appendChild(overlay);
-          setTimeout(() => { const u = modal.querySelector('.ranking-modal-item.you'); if(u) u.scrollIntoView({block:'center',behavior:'smooth'}); }, 100);
-        }
-      }, 'Ver ranking completo →')
-    );
-    return card;
+  const rightCol = h('div', { className: 'av2-right' });
+
+  const rankCard = h('div', { className: 'av2-rank-card' });
+  const rankHeader = h('div', { className: 'av2-rank-header' });
+  rankHeader.innerHTML = '<span class="av2-rank-icon">🏆</span><span class="av2-rank-title">Seu ranking</span>';
+  rankCard.appendChild(rankHeader);
+
+  const rankPct = h('div', { className: 'av2-rank-pct-section' });
+  rankPct.innerHTML = `<div class="av2-rank-sub">Você está no</div><div class="av2-rank-big">Top ${100 - aheadPct}%</div><div class="av2-rank-sub2">dos alunos 🚀</div>`;
+  rankCard.appendChild(rankPct);
+
+  if (rankList.length > 0) {
+    const rankTable = h('div', { className: 'av2-rank-table' });
+    rankList.forEach(student => {
+      const initials = (student.name || 'A').split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+      const row = h('div', { className: `av2-rank-row${student.isMe ? ' me' : ''}` });
+      row.innerHTML = `<span class="av2-rank-pos">#${student.rankNum}</span><span class="av2-rank-avatar">${initials}</span><span class="av2-rank-name">${student.isMe ? '<strong>Você</strong>' : (student.name || 'Aluno')}</span><span class="av2-rank-xp">${student.xp || 0} XP</span>`;
+      rankTable.appendChild(row);
+    });
+    rankCard.appendChild(rankTable);
   }
-  page.appendChild(buildRankingCard());
 
-  const motivCard = h('div', { className: 'ranking-motivation-card' },
-    h('div', { className: 'ranking-motivation-icon' }, '⭐'),
-    h('div', {},
-      h('div', { className: 'ranking-motivation-title' }, 'Continue assim!'),
-      h('div', { className: 'ranking-motivation-sub' }, 'Estude mais para subir ainda mais no ranking.')
-    )
-  );
-  page.appendChild(motivCard);
+  rankCard.appendChild(h('button', { className: 'av2-rank-cta', textContent: 'Ver ranking completo →', onclick: () => {} }));
+  rightCol.appendChild(rankCard);
 
+  if (currentLesson) {
+    const nextCard = h('div', { className: 'av2-next-card' });
+    nextCard.innerHTML = `<div class="av2-next-header"><span class="av2-next-icon">${currentLesson.icon || '📅'}</span><span class="av2-next-label">Próxima aula</span></div><div class="av2-next-title">${currentLesson.label}</div><div class="av2-next-sub">Lesson ${currentLesson.num}</div>`;
+    const nextBtn = h('button', { className: 'av2-next-btn', textContent: 'Continuar aula →',
+      onclick: () => { state.aulas.openLesson = currentLesson.id; renderPortal(); }
+    });
+    nextCard.appendChild(nextBtn);
+    rightCol.appendChild(nextCard);
+  }
 
-  page.appendChild(timeline);
-  return page;
+  grid.appendChild(rightCol);
+  page.appendChild(tabs);
+  page.appendChild(grid);
+
+  const container = document.querySelector('.content') || document.querySelector('main');
+  if (container) { container.innerHTML = ''; container.appendChild(page); }
+
+  if (state.aulas.openLesson) {
+    const lesson = lessons.find(l => l.id === state.aulas.openLesson);
+    if (lesson) renderSectionDetail(lesson);
+  }
 }
+
 function announcementNode(a) {
   const dt = new Date(a.created_at);
   const day = dt.getDate();

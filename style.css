@@ -4943,3 +4943,26 @@ body {
      color: rgba(255,255,255,0.45);
      margin-top: 4px;
 }
+
+/* Fix header layout - ensure title/subtitle doesn't wrap badly */
+.av2-header {
+     align-items: flex-start !important;
+     flex-wrap: nowrap !important;
+}
+
+.av2-header-left {
+     min-width: 180px;
+     max-width: 280px;
+}
+
+.av2-title {
+     white-space: nowrap;
+}
+
+.av2-subtitle {
+     white-space: nowrap;
+}
+
+.av2-stats-row {
+     flex-wrap: nowrap !important;
+}

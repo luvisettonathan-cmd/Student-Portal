@@ -1,8 +1,8 @@
-/* ══════════════════════════════════════════════════════════════
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    NEXUS PORTAL DO ALUNO
-   Layout: Sidebar laranja + área principal creme
+   Layout: Sidebar laranja + Ã¡rea principal creme
    Tipografia: Bricolage Grotesque (display) + Geist (texto)
-   ══════════════════════════════════════════════════════════════ */
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -65,9 +65,9 @@ input, textarea, select, button { font-family: inherit; }
 input:focus, textarea:focus, select:focus { outline: none; }
 ::selection { background: var(--orange); color: var(--white); }
 
-/* ══════════════════════════════════════════════════════════════
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    LOADING
-   ══════════════════════════════════════════════════════════════ */
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .loading {
   min-height: 100vh;
   display: flex;
@@ -104,9 +104,9 @@ input:focus, textarea:focus, select:focus { outline: none; }
 .fade-up { animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 
-/* ══════════════════════════════════════════════════════════════
-   LOGIN — dark theme
-   ══════════════════════════════════════════════════════════════ */
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   LOGIN â dark theme
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 .login-wrap {
   min-height: 100vh;
@@ -115,7 +115,7 @@ input:focus, textarea:focus, select:focus { outline: none; }
   background: #111110;
 }
 
-/* ── Coluna esquerda ── */
+/* ââ Coluna esquerda ââ */
 .login-left {
   position: relative;
   display: flex;
@@ -185,7 +185,7 @@ input:focus, textarea:focus, select:focus { outline: none; }
   max-width: 340px;
 }
 
-/* ── Coluna direita (formulário) ── */
+/* ââ Coluna direita (formulÃ¡rio) ââ */
 .login-right {
   display: flex;
   align-items: center;
@@ -324,18 +324,18 @@ input:focus, textarea:focus, select:focus { outline: none; }
 }
 
 
-/* ══════════════════════════════════════════════════════════════
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    MAIN LAYOUT (sidebar + content)
-   ══════════════════════════════════════════════════════════════ */
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .portal-layout {
   display: grid;
   grid-template-columns: var(--sidebar-w) 1fr;
   min-height: 100vh;
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    SIDEBAR
-   ══════════════════════════════════════════════════════════════ */
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .sidebar {
   background: var(--orange);
   color: var(--white);
@@ -559,9 +559,9 @@ input:focus, textarea:focus, select:focus { outline: none; }
 
 .sidebar-logout:hover { background: rgba(0,0,0,0.15); border-color: transparent; }
 
-/* ══════════════════════════════════════════════════════════════
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    CONTENT AREA
-   ══════════════════════════════════════════════════════════════ */
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .content {
   padding: 40px 48px 80px;
   max-width: 1280px;
@@ -613,9 +613,9 @@ input:focus, textarea:focus, select:focus { outline: none; }
   font-weight: 400;
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    DASHBOARD (HOME) - Welcome card + grid
-   ══════════════════════════════════════════════════════════════ */
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .welcome {
   margin-bottom: 32px;
 }
@@ -763,9 +763,9 @@ input:focus, textarea:focus, select:focus { outline: none; }
   transform: translateX(0);
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    CONTENT DETAIL
-   ══════════════════════════════════════════════════════════════ */
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .back-link {
   display: inline-flex;
   align-items: center;
@@ -865,9 +865,9 @@ input:focus, textarea:focus, select:focus { outline: none; }
   flex-shrink: 0;
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    ANNOUNCEMENTS
-   ══════════════════════════════════════════════════════════════ */
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .announcement-list {
   display: flex;
   flex-direction: column;
@@ -974,9 +974,9 @@ input:focus, textarea:focus, select:focus { outline: none; }
   font-weight: 500;
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    ADMIN PANEL
-   ══════════════════════════════════════════════════════════════ */
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .info-panel {
   background: var(--orange-pale);
   padding: 18px 22px;
@@ -1395,9 +1395,9 @@ input:focus, textarea:focus, select:focus { outline: none; }
   background: var(--fog);
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    RESPONSIVE
-   ══════════════════════════════════════════════════════════════ */
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 @media (max-width: 900px) {
   .login-wrap { grid-template-columns: 1fr; }
   .login-left { padding: 36px 24px; }
@@ -1437,10 +1437,10 @@ input:focus, textarea:focus, select:focus { outline: none; }
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   DARK THEME — PORTAL INTERNO
-   Aplica dark apenas na área de conteúdo (não afeta a sidebar)
-   ══════════════════════════════════════════════════════════════ */
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   DARK THEME â PORTAL INTERNO
+   Aplica dark apenas na Ã¡rea de conteÃºdo (nÃ£o afeta a sidebar)
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 /* Background geral do portal */
 body {
@@ -1451,7 +1451,7 @@ body {
   background: #111113;
 }
 
-/* Área de conteúdo principal */
+/* Ãrea de conteÃºdo principal */
 .portal-layout > *:not(.sidebar) {
   background: #111113;
 }
@@ -1478,7 +1478,7 @@ body {
   background: #2e2e35;
 }
 
-/* Cards de informação */
+/* Cards de informaÃ§Ã£o */
 .info-card {
   background: #1c1c20;
   border: 1px solid #2a2a30;
@@ -1592,7 +1592,7 @@ body {
   color: #8a8490;
 }
 
-/* Sidebar active link — mantém o fundo claro para contraste na sidebar laranja */
+/* Sidebar active link â mantÃ©m o fundo claro para contraste na sidebar laranja */
 .sidebar-link.active {
   background: rgba(255,255,255,0.92);
   color: #1a1411;
@@ -1614,18 +1614,19 @@ body {
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   HOME PAGE — redesign SaaS dark
-   ══════════════════════════════════════════════════════════════ */
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   HOME PAGE â redesign SaaS dark
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 .home-page {
   display: flex;
   flex-direction: column;
   gap: 32px;
-  max-width: 860px;
+  max-width: 1200px;
+  width: 100%;
 }
 
-/* ── Topbar ── */
+/* ââ Topbar ââ */
 .home-topbar {
   display: flex;
   align-items: center;
@@ -1699,8 +1700,8 @@ body {
   margin-top: 1px;
 }
 
-/* — Next Step Card — */
-/* == NEXT STEP CARD (único card dominante na Home) == */
+/* â Next Step Card â */
+/* == NEXT STEP CARD (Ãºnico card dominante na Home) == */
 .home-nextstep-card {
   display: flex;
   align-items: center;
@@ -1802,11 +1803,17 @@ body {
   margin-bottom: -16px;
 }
 
-/* ── Quick Access Grid ── */
+/* ââ Quick Access Grid ââ */
 .home-quick-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
+}
+
+@media (max-width: 1100px) {
+  .home-quick-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .home-quick-card {
@@ -1878,7 +1885,7 @@ body {
   line-height: 1.4;
 }
 
-/* ── Responsivo ── */
+/* ââ Responsivo ââ */
 @media (max-width: 640px) {
   .home-topbar {
     flex-direction: column;
@@ -1904,16 +1911,17 @@ body {
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   AULAS PAGE — LEARNING PATH
-══════════════════════════════════════════════════════════════ */
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   AULAS PAGE â LEARNING PATH
+ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 .aulas-page {
   padding: 32px 40px;
-  max-width: 900px;
+  max-width: 1200px;
+  width: 100%;
 }
 
-/* ── Level Tabs ── */
+/* ââ Level Tabs ââ */
 .aulas-tabs {
   display: flex;
   gap: 8px;
@@ -1959,7 +1967,7 @@ body {
 .aulas-tab.active .aulas-tab-badge { background: rgba(255,255,255,0.2); }
 .aulas-tab-badge.done { background: #22c55e33; color: #22c55e; }
 
-/* ── Your Next Step Card ── */
+/* ââ Your Next Step Card ââ */
 .path-nextstep-card {
   display: flex;
   align-items: center;
@@ -2038,7 +2046,7 @@ body {
   transform: scale(1.04);
 }
 
-/* ── Path Header ── */
+/* ââ Path Header ââ */
 .path-header {
   margin-bottom: 28px;
 }
@@ -2084,7 +2092,7 @@ body {
   transition: width 0.4s ease;
 }
 
-/* ── Timeline ── */
+/* ââ Timeline ââ */
 .path-timeline {
   display: flex;
   flex-direction: column;
@@ -2285,7 +2293,7 @@ body {
   line-height: 1;
 }
 
-/* ── Inline Expanded Panel ── */
+/* ââ Inline Expanded Panel ââ */
 .path-panel-wrap {
   display: flex;
   gap: 0;
@@ -2351,7 +2359,7 @@ body {
   color: var(--dark-orange);
 }
 
-/* Card open state — stronger border highlight */
+/* Card open state â stronger border highlight */
 .path-card.open {
   border-color: var(--dark-orange);
   background: rgba(232, 73, 30, 0.07);
@@ -2382,7 +2390,7 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* ── Lesson Panel (shared with old aulas panel) ── */
+/* ââ Lesson Panel (shared with old aulas panel) ââ */
 .aulas-lesson-panel {
   background: var(--dark-card);
   border: 1.5px solid var(--dark-border);
@@ -2450,7 +2458,7 @@ body {
 }
 .aulas-uncomplete-btn:hover { border-color: var(--dark-orange); color: var(--dark-orange); }
 
-/* ── Video Placeholder ── */
+/* ââ Video Placeholder ââ */
 .aulas-video-wrapper { margin-bottom: 28px; }
 
 .aulas-video-placeholder {
@@ -2470,7 +2478,7 @@ body {
 .aulas-video-text { color: var(--dark-muted); font-size: 1rem; margin: 0; }
 .aulas-video-hint { color: var(--dark-muted); font-size: 0.8rem; margin: 0; opacity: 0.6; }
 
-/* ── Quiz ── */
+/* ââ Quiz ââ */
 .aulas-quiz { margin-top: 8px; }
 .aulas-quiz-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 18px; color: var(--dark-text); }
 
@@ -2539,7 +2547,7 @@ body {
 }
 .aulas-quiz-retry:hover { border-color: var(--dark-orange); color: var(--dark-orange); }
 
-/* ── Responsive ── */
+/* ââ Responsive ââ */
 @media (max-width: 640px) {
   .aulas-page { padding: 20px 16px; }
   .path-nextstep-card { flex-wrap: wrap; gap: 14px; }
@@ -2551,16 +2559,16 @@ body {
 }
 
 
-/* ══════════════════════════════════════════════════════════════
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    DAILY PRACTICE PAGE
-══════════════════════════════════════════════════════════════ */
+ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 .daily-page {
   padding: 36px 40px;
   max-width: 760px;
 }
 
-/* ── Header ── */
+/* ââ Header ââ */
 .daily-header {
   display: flex;
   align-items: flex-start;
@@ -2622,7 +2630,7 @@ body {
   padding: 5px 12px;
 }
 
-/* ── Explanation ── */
+/* ââ Explanation ââ */
 .daily-explanation {
   display: flex;
   align-items: flex-start;
@@ -2650,7 +2658,7 @@ body {
   line-height: 1.6;
 }
 
-/* ── Exercises ── */
+/* ââ Exercises ââ */
 .daily-exercises {
   display: flex;
   flex-direction: column;
@@ -2687,7 +2695,7 @@ body {
   margin-bottom: 16px;
 }
 
-/* ── Options ── */
+/* ââ Options ââ */
 .daily-opts {
   display: flex;
   flex-direction: column;
@@ -2733,7 +2741,7 @@ body {
 
 .daily-opt:disabled { cursor: not-allowed; }
 
-/* ── Check Button ── */
+/* ââ Check Button ââ */
 .daily-check-btn {
   padding: 9px 20px;
   background: var(--dark-orange);
@@ -2757,7 +2765,7 @@ body {
   cursor: not-allowed;
 }
 
-/* ── Fill Input ── */
+/* ââ Fill Input ââ */
 .daily-fill-input {
   width: 100%;
   padding: 11px 14px;
@@ -2800,7 +2808,7 @@ body {
   margin-left: 6px;
 }
 
-/* ── Feedback ── */
+/* ââ Feedback ââ */
 .daily-feedback {
   display: flex;
   align-items: flex-start;
@@ -2832,7 +2840,7 @@ body {
   margin-top: 1px;
 }
 
-/* ── Summary & Complete Button ── */
+/* ââ Summary & Complete Button ââ */
 .daily-summary {
   display: flex;
   align-items: center;
@@ -2883,7 +2891,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* ── Already Done ── */
+/* ââ Already Done ââ */
 .daily-done-msg {
   text-align: center;
   padding: 48px 24px;
@@ -2929,7 +2937,7 @@ body {
   color: var(--dark-text);
 }
 
-/* ── Responsive ── */
+/* ââ Responsive ââ */
 @media (max-width: 768px) {
   .daily-page {
     padding: 20px 16px;
@@ -3164,9 +3172,9 @@ body {
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   SIDEBAR DÚVIDAS CARD
-══════════════════════════════════════════════════════════════ */
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   SIDEBAR DÃVIDAS CARD
+ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 .sidebar-duvidas {
   margin: 0 12px 12px;
@@ -3219,7 +3227,7 @@ body {
 }
 
 
-/* ── Dúvidas Page ── */
+/* ââ DÃºvidas Page ââ */
 .duvidas-page {
   padding: 32px 28px;
   max-width: 640px;
@@ -3254,9 +3262,9 @@ body {
 }
 
 
-/* ══════════════════════════════════════════════════════════════
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    CHAT COM IA
-══════════════════════════════════════════════════════════════ */
+ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .chat-page {
   display: flex;
   flex-direction: column;
@@ -3477,11 +3485,11 @@ body {
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   GAMIFICATION — XP, MODALS, BADGES
-══════════════════════════════════════════════════════════════ */
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   GAMIFICATION â XP, MODALS, BADGES
+ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
-/* ── XP Bar in Aulas page ── */
+/* ââ XP Bar in Aulas page ââ */
 .gami-xp-bar {
   display: flex;
   align-items: center;
@@ -3526,7 +3534,7 @@ body {
   font-weight: 500;
 }
 
-/* ── Module Complete Banner ── */
+/* ââ Module Complete Banner ââ */
 .gami-module-complete-banner {
   display: flex;
   align-items: center;
@@ -3557,7 +3565,7 @@ body {
   margin-left: auto;
 }
 
-/* ── Completion Modal Overlay ── */
+/* ââ Completion Modal Overlay ââ */
 .gami-overlay {
   position: fixed;
   inset: 0;
@@ -3709,12 +3717,12 @@ body {
   color: #f0f0f0;
 }
 
-/* ── Home XP stat ── */
+/* ââ Home XP stat ââ */
 .home-stat-icon {
   font-size: 1.4rem;
 }
 
-/* ── Responsive modal ── */
+/* ââ Responsive modal ââ */
 @media (max-width: 480px) {
   .gami-modal {
     padding: 28px 22px;
@@ -3725,12 +3733,12 @@ body {
 }
 
 
-/* ══════════════════════════════════════════════════════════════
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    RANKING SYSTEM
-   Sistema de Ranking / Leaderboard — Nexus Portal do Aluno
-   ══════════════════════════════════════════════════════════════ */
+   Sistema de Ranking / Leaderboard â Nexus Portal do Aluno
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
-/* ── Grid layout when ranking is active ── */
+/* ââ Grid layout when ranking is active ââ */
 .aulas-page-with-ranking {
   display: grid !important;
   grid-template-columns: 1fr 300px !important;
@@ -3762,7 +3770,7 @@ body {
 .aulas-page-with-ranking .path-timeline { grid-column: 1; }
 .aulas-page-with-ranking .gami-module-complete-banner { grid-column: 1; }
 
-/* ── Stat cards (top bar) ── */
+/* ââ Stat cards (top bar) ââ */
 .ranking-stat-card {
   display: flex;
   align-items: center;
@@ -3798,7 +3806,7 @@ body {
   margin-top: 3px;
 }
 
-/* ── Ranking card (right sidebar) ── */
+/* ââ Ranking card (right sidebar) ââ */
 .ranking-card {
   grid-column: 2;
   grid-row: 3 / 10;
@@ -3874,7 +3882,7 @@ body {
   color: #22c55e;
 }
 
-/* ── Mini leaderboard ── */
+/* ââ Mini leaderboard ââ */
 .ranking-mini-list {
   display: flex;
   flex-direction: column;
@@ -3945,7 +3953,7 @@ body {
 
 .ranking-mini-item.you .ranking-mini-xp { color: var(--dark-orange, #e7611c); }
 
-/* ── View Full Ranking button ── */
+/* ââ View Full Ranking button ââ */
 .ranking-view-btn {
   width: 100%;
   padding: 11px 16px;
@@ -3969,7 +3977,7 @@ body {
   border-color: var(--dark-orange, #e7611c);
 }
 
-/* ── Motivation card ── */
+/* ââ Motivation card ââ */
 .ranking-motivation-card {
   grid-column: 2;
   background: var(--dark-card, #1e1e1e);
@@ -3997,7 +4005,7 @@ body {
   line-height: 1.4;
 }
 
-/* ── Full Ranking Modal ── */
+/* ââ Full Ranking Modal ââ */
 .ranking-modal-overlay {
   position: fixed;
   inset: 0;
@@ -4106,7 +4114,7 @@ body {
 
 .ranking-modal-item.you .ranking-modal-xp { color: var(--dark-orange, #e7611c); }
 
-/* ── Responsive: hide ranking on small screens ── */
+/* ââ Responsive: hide ranking on small screens ââ */
 @media (max-width: 1024px) {
   .aulas-page-with-ranking {
     grid-template-columns: 1fr !important;

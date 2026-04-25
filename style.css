@@ -4730,8 +4730,8 @@ body {
 }
 
 @media (max-width: 900px) {
-      .av2-page { grid-template-columns: 1fr; }
-      .av2-right { position: static; grid-column: 1; grid-row: auto; }
+  .av2-grid { grid-template-columns: 1fr; }
+  .av2-right { position: static; }
   .aulas-v2-page { padding: 24px 20px; }
 }
 
@@ -4740,1016 +4740,161 @@ body {
    NEW AULAS PAGE STYLES - REFERENCE DESIGN
    ============================================ */
 
-/* Page wrapper */
+/* Page wrapper - flex column, full width */
 .av2-page {
-         display: grid;
-         grid-template-columns: 1fr 300px;
-         column-gap: 28px;
-       align-items: start;
-       /* Grid placement */
-       .av2-tabs {
-                  grid-column: 1;
-                  grid-row: 1;
-       }
-       .av2-grid {
-                  display: contents;
-       }
-       .av2-left {
-                  grid-column: 1;
-                  grid-row: 2;
-       }
-     /* ═══════════════════════════════════════════════════════════════
-      AULAS V2 - OVERRIDES (FIXES PARA LAYOUT CORRETO)
-   ═══════════════════════════════════════════════════════════════ */
-
-   /* Header: título à esquerda, stats à direita - sem quebrar linha */
-   .av2-header {
-        display: flex !important;
-        align-items: flex-start !important;
-        justify-content: space-between !important;
-        flex-wrap: nowrap !important;
-        gap: 24px !important;
-        margin-bottom: 32px !important;
-   }
-
-   /* Bloco título - tamanho fixo, não encolhe */
-   .av2-header-left {
-        flex: 0 0 auto !important;
-        min-width: 200px !important;
-        max-width: 260px !important;
-   }
-
-   /* Stats: não encolhe, não quebra */
-   .av2-stats-row {
-        display: flex !important;
-        gap: 12px !important;
-        align-items: flex-start !important;
-        flex-shrink: 0 !important;
-        flex-wrap: nowrap !important;
-   }
-
-   /* Stat card - mais compacto */
-   .av2-stat-card {
-        display: flex !important;
-        align-items: center !important;
-        gap: 10px !important;
-        background: #1e1e1e !important;
-        border: 1px solid rgba(255,255,255,0.08) !important;
-        border-radius: 12px !important;
-        padding: 12px 16px !important;
-        min-width: 0 !important;
-        white-space: nowrap !important;
-   }
-
-   .av2-stat-card-icon {
-        font-size: 1.4rem;
-        flex-shrink: 0;
-   }
-
-   .av2-stat-card-value {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #fff;
-        font-family: var(--font-display);
-        white-space: nowrap;
-        line-height: 1.2;
-   }
-
-   .av2-stat-card-label {
-        font-size: 0.68rem;
-        color: rgba(255,255,255,0.4);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-top: 1px;
-        white-space: nowrap;
-   }
-
-   /* Right column */
-   .av2-right {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        position: sticky;
-        top: 24px;
-          grid-column: 2;
-          grid-row: 1 / span 2;
-   }
-
-   /* Ranking card */
-   .av2-rank-card {
-        background: #18181b;
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 16px;
-        padding: 20px;
-   }
-
-   /* Next lesson card */
-   .av2-next-lesson {
-        background: #18181b;
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 16px;
-        padding: 20px;
-   }
-
-   .av2-next-lesson-label {
-        font-size: 0.72rem;
-        font-weight: 600;
-        color: rgba(255,255,255,0.4);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-   }
-
-   .av2-next-lesson-title {
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: #fff;
-        margin-bottom: 2px;
-        font-family: var(--font-display);
-   }
-
-   .av2-next-lesson-sub {
-        font-size: 0.8rem;
-        color: rgba(255,255,255,0.4);
-        margin-bottom: 14px;
-   }
-
-   .av2-next-lesson-btn {
-        display: block;
-        width: 100%;
-        background: #E8491E;
-        color: #fff;
-        border: none;
-        border-radius: 10px;
-        padding: 12px 20px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.18s;
-        text-align: center;
-   }
-   .av2-next-lesson-btn:hover { background: #c73d18; }
-
-   /* Ranking table rows */
-   .av2-rank-table {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        margin-bottom: 14px;
-   }
-
-   .av2-rank-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 8px 10px;
-        border-radius: 8px;
-        transition: background 0.15s;
-   }
-
-   .av2-rank-row.me {
-        background: rgba(232,73,30,0.12);
-        border: 1px solid rgba(232,73,30,0.25);
-   }
-
-   .av2-rank-pos {
-        font-size: 0.78rem;
-        color: rgba(255,255,255,0.4);
-        min-width: 28px;
-        font-family: var(--font-mono);
-   }
-
-   .av2-rank-row.me .av2-rank-pos {
-        color: #E8491E;
-        font-weight: 600;
-   }
-
-   .av2-rank-avatar {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.7rem;
-        font-weight: 600;
-        color: #fff;
-        flex-shrink: 0;
-   }
-
-   .av2-rank-row.me .av2-rank-avatar {
-        background: #E8491E;
-   }
-
-   .av2-rank-name {
-        flex: 1;
-        font-size: 0.85rem;
-        color: rgba(255,255,255,0.75);
-        min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-   }
-
-   .av2-rank-row.me .av2-rank-name {
-        color: #fff;
-        font-weight: 700;
-   }
-
-   .av2-rank-xp {
-        font-size: 0.8rem;
-        color: rgba(255,255,255,0.45);
-        font-family: var(--font-mono);
-        white-space: nowrap;
-   }
-
-   .av2-rank-row.me .av2-rank-xp {
-        color: #E8491E;
-        font-weight: 600;
-   }
-
-   .av2-rank-view-btn {
-        display: block;
-        width: 100%;
-        background: transparent;
-        color: #E8491E;
-        border: 1px solid rgba(232,73,30,0.3);
-        border-radius: 8px;
-        padding: 9px 16px;
-        font-size: 0.83rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.18s;
-        text-align: center;
-        margin-top: 8px;
-   }
-   .av2-rank-view-btn:hover {
-        background: rgba(232,73,30,0.08);
-        border-color: rgba(232,73,30,0.5);
-   }
-
-   /* Card inner layout */
-   .av2-card-inner {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-   }
-
-   /* Lesson icon box */
-   .av2-lesson-icon {
-        width: 44px;
-        height: 44px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.3rem;
-        flex-shrink: 0;
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.08);
-   }
-
-   .av2-lesson-icon.current {
-        background: rgba(232,73,30,0.15);
-        border-color: rgba(232,73,30,0.3);
-   }
-
-   .av2-lesson-icon.done {
-        background: rgba(34,197,94,0.1);
-        border-color: rgba(34,197,94,0.2);
-   }
-
-   .av2-lesson-icon.locked {
-        opacity: 0.5;
-   }
-
-   /* Card text block */
-   .av2-card-text {
-        flex: 1;
-        min-width: 0;
-   }
-
-   .av2-card-num {
-        font-size: 0.72rem;
-        font-weight: 600;
-        color: #E8491E;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        margin-bottom: 2px;
-   }
-
-   .av2-card-title {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #fff;
-        font-family: var(--font-display);
-        margin-bottom: 2px;
-   }
-
-   .av2-card-desc {
-        font-size: 0.8rem;
-        color: rgba(255,255,255,0.4);
-        margin: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-   }
-
-   /* Continue button */
-   .av2-continue-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: #E8491E;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        padding: 9px 20px;
-        font-size: 0.88rem;
-        font-weight: 600;
-        cursor: pointer;
-        white-space: nowrap;
-        transition: background 0.18s;
-        flex-shrink: 0;
-   }
-   .av2-continue-btn:hover { background: #c73d18; }
-
-   /* Chevron toggle */
-   .av2-chevron {
-        display: inline-flex;
-        align-items: center;
-        color: rgba(255,255,255,0.3);
-        transition: transform 0.2s;
-        flex-shrink: 0;
-   }
-   .av2-chevron.open { transform: rotate(180deg); }
-
-   /* Current node: solid orange fill (override) */
-   .av2-path-node.current {
-        background: #e7611c !important;
-        border: 2.5px solid #ff8c42 !important;
-        color: #fff !important;
-        box-shadow: 0 0 0 4px rgba(231,97,28,0.2) !important;
-   }
-
-   /* Ranking big section */
-   .av2-rank-big {
-        text-align: center;
-        padding: 12px 0 16px;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
-        margin-bottom: 14px;
-   }
-
-   .av2-rank-big-label {
-        font-size: 0.82rem;
-        color: rgba(255,255,255,0.5);
-        margin-bottom: 6px;
-   }
-
-   .av2-rank-big-pct {
-        font-size: 3rem;
-        font-weight: 900;
-        color: #E8491E;
-        font-family: var(--font-display);
-        line-height: 1;
-        letter-spacing: -0.03em;
-        margin-bottom: 4px;
-   }
-
-   .av2-rank-big-sub {
-        font-size: 0.88rem;
-        color: rgba(255,255,255,0.45);
-        margin-bottom: 8px;
-   }
-
-   .av2-rank-weekly {
-        font-size: 0.78rem;
-        color: rgba(255,255,255,0.4);
-   }
-
-   
-/* ═══════════════════════════════════════════════════════════════
-   HOME - NOVOS ESTILOS (JORNADA, PRATICA, FEEDBACK)
-═══════════════════════════════════════════════════════════════ */
-
-/* CARD JORNADA */
-.home-journey-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  background: linear-gradient(135deg, rgba(217,98,45,0.18) 0%, rgba(217,98,45,0.06) 100%);
-  border: 1.5px solid rgba(217,98,45,0.45);
-  border-radius: 20px;
-  padding: 28px 32px;
-  cursor: pointer;
-  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-  position: relative;
-  overflow: hidden;
-}
-.home-journey-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  background: radial-gradient(at 10% 50%, rgba(217,98,45,0.14) 0%, transparent 70%);
-  pointer-events: none;
-}
-.home-journey-card:hover {
-  border-color: rgba(217,98,45,0.75);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(217,98,45,0.22);
-}
-.home-journey-left {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex: 1;
-  min-width: 0;
-}
-.home-journey-icon-wrap {
-  flex-shrink: 0;
-  width: 64px;
-  height: 64px;
-  background: rgba(217,98,45,0.15);
-  border: 2px solid rgba(217,98,45,0.4);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--dark-orange);
-}
-.home-journey-book-icon {
-  width: 32px;
-  height: 32px;
-  background: var(--dark-orange);
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'/%3E%3Cpath d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'/%3E%3Cpath d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'/%3E%3C/svg%3E");
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-}
-.home-journey-info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  flex: 1;
-  min-width: 0;
-}
-.home-journey-tag {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--dark-orange);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 2px;
-}
-.home-journey-title {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--dark-text);
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.home-journey-progress-bar {
+  gap: 0;
+  max-width: 1300px;
   width: 100%;
-  max-width: 400px;
-  height: 6px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 3px;
-  margin-top: 6px;
-  overflow: hidden;
-}
-.home-journey-progress-fill {
-  height: 100%;
-  background: var(--dark-orange);
-  border-radius: 3px;
-  transition: width 0.6s ease;
-  min-width: 4px;
-}
-.home-journey-sub {
-  font-size: 13px;
-  color: var(--dark-muted);
-  margin-top: 2px;
-}
-.home-journey-btn {
-  background: var(--dark-orange);
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  padding: 14px 28px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
-  box-shadow: 0 4px 16px rgba(217,98,45,0.3);
-}
-.home-journey-btn:hover {
-  transform: scale(1.04);
-  box-shadow: 0 6px 24px rgba(217,98,45,0.42);
-  background: #e8641d;
-}
-.home-journey-btn:active {
-  transform: scale(0.97);
+  margin: 0 auto;
 }
 
-/* CARD PRATICA DO DIA */
-.home-daily-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  background: var(--dark-card);
-  border: 1px solid var(--dark-border);
-  border-radius: 18px;
-  padding: 24px 28px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+/* Tabs - full width row */
+.av2-tabs {
+  margin-bottom: 24px;
 }
-.home-daily-card:hover {
-  border-color: rgba(217,98,45,0.3);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+
+/* Header - full width row (title + stats) */
+.av2-header {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  flex-wrap: nowrap !important;
+  gap: 24px !important;
+  margin-bottom: 28px !important;
 }
-.home-daily-left {
+
+.av2-header-left {
+  flex: 0 0 auto !important;
+  min-width: 200px !important;
+}
+
+/* Stats row */
+.av2-stats-row {
+  display: flex !important;
+  gap: 12px !important;
+  align-items: flex-start !important;
+  flex-shrink: 0 !important;
+  flex-wrap: nowrap !important;
+}
+
+.av2-stat-card {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  background: #1e1e1e !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+}
+
+.av2-stat-card-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.av2-stat-card-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--font-display);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.av2-stat-card-label {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 1px;
+  white-space: nowrap;
+}
+
+/* 2-column grid (lessons + sidebar) */
+.av2-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 28px;
+  align-items: start;
+}
+
+.av2-left { min-width: 0; }
+
+/* Right sidebar - sticky */
+.av2-right {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  flex: 1;
+  gap: 16px;
+  position: sticky;
+  top: 24px;
 }
-.home-daily-tag {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--dark-orange);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+
+/* Ranking Card */
+.av2-rank-card {
+  background: #18181b;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+/* Ranking big display */
+.av2-rank-big {
+  text-align: center;
+  padding: 12px 0 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 14px;
+}
+
+.av2-rank-big-label {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 6px;
+}
+
+.av2-rank-big-pct {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #E8491E;
+  font-family: var(--font-display);
+  line-height: 1;
+  letter-spacing: -0.03em;
   margin-bottom: 4px;
 }
-.home-daily-title {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--dark-text);
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-.home-daily-sub {
-  font-size: 13px;
-  color: var(--dark-muted);
-  margin-top: 2px;
-}
-.home-daily-btn {
-  background: var(--dark-orange);
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 24px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 4px 16px rgba(217,98,45,0.25);
-}
-.home-daily-btn:hover {
-  transform: scale(1.04);
-  box-shadow: 0 6px 24px rgba(217,98,45,0.38);
-}
-.home-daily-done-badge {
-  font-size: 16px;
-  font-weight: 700;
-  color: #4ade80;
-  padding: 10px 20px;
-  background: rgba(74,222,128,0.1);
-  border-radius: 10px;
-  white-space: nowrap;
+
+.av2-rank-big-sub {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 8px;
 }
 
-/* QUICK ACCESS 3 COLUNAS */
-.home-quick-grid-3 {
-  grid-template-columns: repeat(3, 1fr);
-}
-.home-quick-card {
-  position: relative;
-}
-.home-quick-arrow {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 28px;
-  height: 28px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  color: var(--dark-muted);
-}
-
-/* FEEDBACK CARD */
-.home-feedback-card {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  background: var(--dark-card);
-  border: 1px solid var(--dark-border);
-  border-radius: 18px;
-  padding: 24px 28px;
-}
-.home-feedback-icon {
-  font-size: 2.5rem;
-  flex-shrink: 0;
-  line-height: 1;
-}
-.home-feedback-text {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.home-feedback-title {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--dark-text);
-  letter-spacing: -0.01em;
-}
-.home-feedback-sub {
-  font-size: 14px;
-  color: var(--dark-muted);
-}
-   /* AV2 FINAL FIX */
-   .av2-header-left { flex: 0 0 auto !important; min-width: 220px !important; max-width: 340px !important; }
-.av2-subtitle { font-size: 0.85rem; color: rgba(255,255,255,0.45); margin: 4px 0 0; font-family: var(--font-body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.av2-stats-row { gap: 10px !important; flex-shrink: 1 !important; }
-.av2-stat-card { padding: 10px 14px !important; gap: 8px !important; }
-.av2-stat-card-value { font-size: 0.95rem !important; }
-.av2-stat-card-label { font-size: 0.65rem !important; }
-.av2-rank-big { text-align: center; padding: 14px 0 18px !important; border-bottom: 1px solid rgba(255,255,255,0.07) !important; margin-bottom: 16px !important; }
-.av2-rank-big-label { font-size: 0.82rem !important; color: rgba(255,255,255,0.5) !important; margin-bottom: 6px !important; }
-.av2-rank-big-pct { font-size: 3.2rem !important; font-weight: 900 !important; color: #E8491E !important; line-height: 1 !important; letter-spacing: -0.02em !important; margin-bottom: 6px !important; }
-.av2-rank-big-sub { font-size: 0.9rem !important; color: rgba(255,255,255,0.5) !important; margin-bottom: 10px !important; }
-.av2-rank-weekly { font-size: 0.8rem !important; color: rgba(255,255,255,0.45) !important; }
-.av2-path-connector { width: 2px !important; min-height: 32px !important; background: rgba(255,255,255,0.15) !important; flex-shrink: 0; }
-.av2-path-connector.done { background: rgba(34,197,94,0.5) !important; }
-.av2-rank-big-label,.av2-rank-big-sub,.av2-rank-weekly { font-family: Geist, system-ui, sans-serif !important; letter-spacing: 0 !important; }
-
-
-/* ═══════════════════════════════════════════════════
-      AULAS LESSON PATH - REBUILT (STRICT)
-      ═══════════════════════════════════════════════════ */
-
-/* Vertical timeline container */
-.av2-path { display: flex; flex-direction: column; gap: 0; }
-
-/* Each lesson row: node LEFT + card RIGHT */
-.av2-path-item {
-     display: flex !important;
-     flex-direction: row !important;
-     align-items: flex-start !important;
-     gap: 0 !important;
-     margin-bottom: 0 !important;
-}
-
-/* Left column: node + connector line stacked */
-.av2-path-left {
-     display: flex !important;
-     flex-direction: column !important;
-     align-items: center !important;
-     flex-shrink: 0 !important;
-     width: 44px !important;
-     padding-top: 0 !important;
-}
-
-/* Connector line between nodes */
-.av2-path-connector {
-     width: 2px !important;
-     min-height: 36px !important;
-     background: rgba(255,255,255,0.12) !important;
-     flex-shrink: 0 !important;
-     border-radius: 2px !important;
-}
-.av2-path-connector.done {
-     background: rgba(34,197,94,0.45) !important;
-}
-
-/* Node circles */
-.av2-path-node {
-     width: 44px !important;
-     height: 44px !important;
-     border-radius: 50% !important;
-     display: flex !important;
-     align-items: center !important;
-     justify-content: center !important;
-     flex-shrink: 0 !important;
-     z-index: 1 !important;
-     transition: all 0.2s !important;
-}
-
-/* Completed: green circle with check, light weight */
-.av2-path-node.done {
-     background: rgba(34,197,94,0.12) !important;
-     border: 2px solid #22c55e !important;
-     color: #22c55e !important;
-     font-size: 1rem !important;
-     opacity: 0.9 !important;
-}
-
-/* Current: orange circle with play, most prominent */
-.av2-path-node.current {
-     background: #e7611c !important;
-     border: 2.5px solid #ff8c42 !important;
-     color: #fff !important;
-     box-shadow: 0 0 0 6px rgba(231,97,28,0.22), 0 2px 16px rgba(231,97,28,0.4) !important;
-     font-size: 1rem !important;
-}
-
-/* Locked: grey circle with lock, low opacity */
-.av2-path-node.locked {
-     background: rgba(255,255,255,0.04) !important;
-     border: 1.5px dashed rgba(255,255,255,0.15) !important;
-     color: rgba(255,255,255,0.3) !important;
-     opacity: 0.7 !important;
-}
-
-/* Lesson card - right side */
-.av2-lesson-card {
-     flex: 1 !important;
-     margin: 0 !important;
-     margin-left: 16px !important;
-     margin-bottom: 0 !important;
-     align-self: center !important;
-}
-
-/* Current lesson card: orange border, most prominent */
-.av2-lesson-card.current {
-     border-color: #e7611c !important;
-     background: rgba(231,97,28,0.08) !important;
-     box-shadow: 0 0 0 1px rgba(231,97,28,0.3), 0 4px 24px rgba(231,97,28,0.15) !important;
-}
-
-/* Completed lesson card: subtle green, light weight */
-.av2-lesson-card.done {
-     border-color: rgba(34,197,94,0.2) !important;
-     background: rgba(34,197,94,0.03) !important;
-     opacity: 0.85 !important;
-}
-
-/* Locked lesson card: low opacity, no interaction */
-.av2-lesson-card.locked {
-     opacity: 0.45 !important;
-     cursor: default !important;
-}
-
-/* Spacing wrapper: add vertical gap between lesson items */
-.av2-path-item + .av2-path-item {
-     margin-top: 0 !important;
-}
-
-/* Increase spacing between lessons via the connector */
-.av2-path-connector {
-     min-height: 36px !important;
-}
-
-/* Continuar button - only on current lesson */
-.av2-lesson-card.current .av2-btn-primary {
-     display: inline-flex !important;
-}
-
-/* Hide button on non-current lessons */
-.av2-lesson-card.locked .av2-btn-primary,
-.av2-lesson-card.done .av2-btn-primary {
-     display: none !important;
-}
-
-
-/* ============================================================
-      STEP 3 — VISUAL REFINEMENT
-      Improve visual quality only. No layout changes.
-      ============================================================ */
-
-/* --- SIDEBAR --- */
-/* Dark sidebar background */
-.sidebar, nav.sidebar, [class*="sidebar"] {
-     background: #111214 !important;
-     border-right: 1px solid rgba(255,255,255,0.06) !important;
-}
-
-/* Sidebar nav items — neutral by default */
-.sidebar a, .sidebar .nav-item, .sidebar li a,
-.sidebar [class*="nav-link"], .sidebar [class*="menu-item"] {
-     color: #9ca3af !important;
-     background: transparent !important;
-     border-radius: 8px !important;
-     transition: background 0.15s, color 0.15s !important;
-}
-
-/* Hover state */
-.sidebar a:hover, .sidebar .nav-item:hover,
-.sidebar li a:hover {
-     color: #f1f5f9 !important;
-     background: rgba(255,255,255,0.06) !important;
-}
-
-/* Active/current sidebar item — orange only here */
-.sidebar a.active, .sidebar .nav-item.active,
-.sidebar li.active a, .sidebar [class*="active"],
-.sidebar [aria-current="page"] {
-     color: #ffffff !important;
-     background: rgba(231,97,28,0.18) !important;
-     border-left: 3px solid #e7611c !important;
-     font-weight: 600 !important;
-}
-
-/* --- LESSON CARDS — general refinement --- */
-.av2-lesson-card {
-     background: #1a1d21 !important;
-     border: 1px solid rgba(255,255,255,0.08) !important;
-     border-radius: 12px !important;
-     padding: 16px 20px !important;
-     transition: box-shadow 0.2s, border-color 0.2s !important;
-}
-
-/* --- CURRENT LESSON — strong orange highlight + glow --- */
-.av2-lesson-card.current {
-     background: #1e1912 !important;
-     border: 2px solid #e7611c !important;
-     border-radius: 12px !important;
-     box-shadow: 0 0 0 1px rgba(231,97,28,0.25), 0 4px 32px rgba(231,97,28,0.18) !important;
-}
-
-/* --- COMPLETED LESSONS — green badge, reduced weight --- */
-.av2-lesson-card.done {
-     background: #141a16 !important;
-     border: 1px solid rgba(34,197,94,0.18) !important;
-     border-radius: 12px !important;
-     opacity: 0.9 !important;
-}
-
-/* Green badge label refinement */
-.av2-lesson-card.done .av2-lesson-status,
-.av2-lesson-card.done [class*="badge"],
-.av2-lesson-card.done [class*="status"] {
-     background: rgba(34,197,94,0.12) !important;
-     color: #4ade80 !important;
-     border: 1px solid rgba(34,197,94,0.25) !important;
-     border-radius: 20px !important;
-     padding: 2px 10px !important;
-     font-size: 12px !important;
-     font-weight: 600 !important;
-}
-
-/* --- LOCKED LESSONS — faded look --- */
-.av2-lesson-card.locked {
-     background: #16181c !important;
-     border: 1px solid rgba(255,255,255,0.05) !important;
-     border-radius: 12px !important;
-     opacity: 0.42 !important;
-     filter: grayscale(0.3) !important;
-}
-
-/* --- RANKING PANEL — secondary emphasis --- */
-.av2-ranking, [class*="ranking"],
-[class*="leaderboard"], .ranking-panel {
-     opacity: 0.82 !important;
-}
-
-/* Ranking title — smaller, less dominant */
-.av2-ranking h2, .av2-ranking h3,
-[class*="ranking"] h2, [class*="ranking"] h3 {
-     font-size: 14px !important;
-     font-weight: 500 !important;
-     color: #9ca3af !important;
-     text-transform: uppercase !important;
-     letter-spacing: 0.06em !important;
-}
-
-/* Big percentage in ranking — tone down */
-.av2-ranking .ranking-percent,
-[class*="ranking"] [class*="percent"],
-[class*="ranking"] [class*="top-value"] {
-     font-size: 2.4rem !important;
-     opacity: 0.88 !important;
-}
-
-/* Ranking rows — lighter borders */
-.av2-ranking-row, [class*="ranking-row"],
-[class*="leaderboard-item"] {
-     border-bottom: 1px solid rgba(255,255,255,0.05) !important;
-     padding: 6px 0 !important;
-}
-
-/* Ranking card background */
-.av2-ranking-card, [class*="ranking-card"] {
-     background: #16181c !important;
-     border: 1px solid rgba(255,255,255,0.06) !important;
-     border-radius: 12px !important;
-}
-
-
-/* --- STEP 3 PATCH: Targeted ranking & sidebar with real class names --- */
-
-/* Ranking: reduce big percentage prominence */
-.av2-rank-big-pct {
-     font-size: 2rem !important;
-     opacity: 0.85 !important;
-     line-height: 1.1 !important;
-}
-
-/* Ranking: muted label text */
-.av2-rank-big-label, .av2-rank-big-sub {
-     font-size: 12px !important;
-     color: #9ca3af !important;
-     opacity: 0.8 !important;
-}
-
-/* Ranking: weekly change smaller */
 .av2-rank-weekly {
-     font-size: 12px !important;
-     opacity: 0.75 !important;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.4);
 }
 
-/* Ranking: title styling */
-.av2-rank-title {
-     font-size: 13px !important;
-     font-weight: 500 !important;
-     color: #9ca3af !important;
-     text-transform: uppercase !important;
-     letter-spacing: 0.06em !important;
+/* Next lesson card */
+.av2-next-card {
+  background: #18181b;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 20px;
 }
 
-/* Ranking: row borders */
-.av2-rank-row {
-     border-bottom: 1px solid rgba(255,255,255,0.05) !important;
-     padding: 6px 4px !important;
-}
-
-/* Ranking: highlight your own row */
-.av2-rank-row.me {
-     background: rgba(231,97,28,0.08) !important;
-     border-radius: 6px !important;
-     border-bottom: none !important;
-}
-
-/* Sidebar: active item */
-.sidebar-link.active {
-     background: rgba(231,97,28,0.15) !important;
-     color: #ffffff !important;
-     border-left: 3px solid #e7611c !important;
-     font-weight: 600 !important;
-}
-
-/* Sidebar: inactive items */
-.sidebar-link:not(.active) {
-     color: #9ca3af !important;
-     background: transparent !important;
-}
-
-/* Sidebar: hover */
-.sidebar-link:not(.active):hover {
-     color: #e5e7eb !important;
-     background: rgba(255,255,255,0.07) !important;
-}
-
-
-/* --- STEP 4: Lesson completion toggle button --- */
-.av2-toggle-btn {
-     display: block;
-     width: 100%;
-     margin-top: 16px;
-     padding: 10px 20px;
-     border-radius: 8px;
-     border: 1.5px solid rgba(231,97,28,0.5);
-     background: rgba(231,97,28,0.08);
-     color: #e7611c;
-     font-size: 14px;
-     font-weight: 500;
-     cursor: pointer;
-     transition: background 0.15s, border-color 0.15s;
-     text-align: center;
-}
-.av2-toggle-btn:hover {
-     background: rgba(231,97,28,0.18);
-     border-color: #e7611c;
-}
-.av2-toggle-btn.done {
-     border-color: rgba(34,197,94,0.4);
-     background: rgba(34,197,94,0.08);
-     color: #4ade80;
-}
-.av2-toggle-btn.done:hover {
-     background: rgba(34,197,94,0.15);
-     border-color: #4ade80;
+@media (max-width: 900px) {
+  .av2-grid {
+    grid-template-columns: 1fr;
+  }
+  .av2-right {
+    position: static;
+  }
+  .av2-header {
+    flex-wrap: wrap !important;
+  }
+  .av2-stats-row {
+    flex-wrap: wrap !important;
+  }
 }

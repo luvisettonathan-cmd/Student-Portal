@@ -528,7 +528,7 @@ function renderSidebar(isAdmin) {
   } else {
     // Aluno sidebar
     const mainLinks = [
-      { id: 'home', label: 'Início', iconName: 'home' },      { id: 'daily', label: 'Prática do dia', iconName: 'spark' },
+      { id: 'home', label: 'Home', iconName: 'home' },      { id: 'daily', label: 'Daily practice', iconName: 'spark' },
       { id: 'aulas', label: 'Aulas', iconName: 'book' },
       { id: 'exercicios', label: 'Exercícios', iconName: 'stack' },
       { id: 'materiais', label: 'Materiais', iconName: 'compass' },
@@ -861,91 +861,57 @@ function renderHome() {
 
   const topBar = h('div', { className: 'home-topbar' },
     h('div', { className: 'home-welcome' },
-      h('h1', { className: 'home-welcome-title' }, 'Bem-vindo(a) de volta, ' + firstName + ' 👋'),
-      h('p', { className: 'home-welcome-sub' }, 'Você está no nível ', h('strong', {}, modLabel))
+      h('h1', { className: 'home-welcome-title' }, 'Welcome back, ' + firstName + ' 👋'),
+      h('p', { className: 'home-welcome-sub' }, "You're on: ", h('strong', {}, modLabel))
     ),
     h('div', { className: 'home-stats' },
       h('div', { className: 'home-stat' },
         h('span', { className: 'home-stat-icon' }, '🔥'),
         h('div', {},
-          h('div', { className: 'home-stat-value' }, streak + (streak === 1 ? ' dia' : ' dias')),
-          h('div', { className: 'home-stat-label' }, 'sequência')
+          h('div', { className: 'home-stat-value' }, streak + (streak === 1 ? ' day' : ' days')),
+          h('div', { className: 'home-stat-label' }, 'Streak')
         )
       ),
       h('div', { className: 'home-stat' },
         h('span', { className: 'home-stat-icon' }, '⚡'),
         h('div', {},
           h('div', { className: 'home-stat-value' }, getXP() + ' XP'),
-          h('div', { className: 'home-stat-label' }, 'total')
+          h('div', { className: 'home-stat-label' }, 'XP')
         )
       ),
       h('div', { className: 'home-stat' },
         h('span', { className: 'home-stat-icon' }, '📊'),
         h('div', {},
           h('div', { className: 'home-stat-value' }, progress + '%'),
-          h('div', { className: 'home-stat-label' }, 'progresso')
+          h('div', { className: 'home-stat-label' }, 'Progress')
         )
       )
     )
   );
   d.appendChild(topBar);
 
-  const COURSES_HOME = [
-    { id: 'starter', label: 'Starter', lessons: Array.from({ length: 8 }, (_, i) => ({ id: 'starter-' + (i+1), label: 'Aula ' + (i+1) })) },
-    { id: 'a1', label: 'A1', lessons: Array.from({ length: 10 }, (_, i) => ({ id: 'a1-' + (i+1), label: 'Aula ' + (i+1) })) },
-    { id: 'a2', label: 'A2', lessons: Array.from({ length: 10 }, (_, i) => ({ id: 'a2-' + (i+11), label: 'Aula ' + (i+11) })) },
-    { id: 'b1', label: 'B1', lessons: Array.from({ length: 10 }, (_, i) => ({ id: 'b1-' + (i+21), label: 'Aula ' + (i+21) })) },
-    { id: 'b2', label: 'B2', lessons: [1,2,3,4,6,7,8,9,11,12,13,14,16,17,18,19].map(function(n){ return { id: 'b2-' + n, label: 'Unidade ' + n }; }) },
-  ];
-  const progHome = JSON.parse(localStorage.getItem('nexus_aulas_progress') || '{}');
-  const activeCourse = COURSES_HOME.find(function(c) { return c.id === _modId; }) || COURSES_HOME[0];
-  const doneCount = activeCourse.lessons.filter(function(l) { return progHome[l.id] === 'completed'; }).length;
-  const nextLesson = activeCourse.lessons.find(function(l) { return progHome[l.id] !== 'completed'; });
-  const totalLessons = activeCourse.lessons.length;
-  const lessonTitle = nextLesson ? nextLesson.label : 'Todas as aulas concluídas';
-  const progressPercent = totalLessons > 0 ? (doneCount / totalLessons * 100) : 100;
-
-  const journeyCard = h('div', { className: 'home-journey-card' },
-    h('div', { className: 'home-journey-left' },
-      h('div', { className: 'home-journey-icon-wrap' },
-        h('div', { className: 'home-journey-book-icon' })
-      ),
-      h('div', { className: 'home-journey-info' },
-        h('div', { className: 'home-journey-tag' }, 'Continue sua jornada'),
-        h('div', { className: 'home-journey-title' }, lessonTitle),
-        h('div', { className: 'home-journey-progress-bar' },
-          h('div', { className: 'home-journey-progress-fill', style: 'width:' + progressPercent.toFixed(0) + '%' })
-        ),
-        h('div', { className: 'home-journey-sub' }, doneCount + ' de ' + totalLessons + ' aulas concluídas')
-      )
-    ),
-    h('button', {
-      className: 'home-journey-btn',
-      onClick: function() { const ns = getNextStep(); ns.action(); render(); }
-    }, 'Continuar →')
-  );
-  d.appendChild(journeyCard);
-
-  const todayStr = new Date().toDateString();
-  const dailyDone = localStorage.getItem('nexus_daily_done') === todayStr;
-  d.appendChild(h('div', { className: 'home-daily-card' },
-    h('div', { className: 'home-daily-left' },
-      h('div', { className: 'home-daily-tag' }, '🔥 PRÁTICA DO DIA'),
-      h('div', { className: 'home-daily-title' }, dailyDone ? 'Desafio concluído hoje! ✅' : 'Complete o desafio de hoje'),
-      h('div', { className: 'home-daily-sub' }, '5 min • Exercícios rápidos para manter sua sequência')
-    ),
-    !dailyDone
-      ? h('button', { className: 'home-daily-btn', onClick: function() { state.tab = 'daily'; render(); } }, 'Começar agora')
-      : h('span', { className: 'home-daily-done-badge' }, '✅ Feito!')
-  ));
-
-  d.appendChild(h('div', { className: 'home-section-label' }, 'ACESSO RÁPIDO'));
+        // ══════ 2. NEXT STEP ─ \u00danico card dominante ══════
+        const ns = getNextStep();
+        const nsCard = h('div', { className: 'home-nextstep-card' },
+                                 h('div', { className: 'home-nextstep-left' },
+                                             h('div', { className: 'home-nextstep-tag'   }, ns.tag),
+                                             h('div', { className: 'home-nextstep-title' }, ns.title),
+                                             h('div', { className: 'home-nextstep-sub'   }, ns.sub)
+                                           ),
+                                 h('button', {
+                                             className: 'home-nextstep-btn',
+                                             onClick: function() { ns.action(); render(); }
+                                 }, ns.btnLabel)
+                               );
+        d.appendChild(nsCard);
+  d.appendChild(h('div', { className: 'home-section-label' }, 'Quick access'));
   const quickItems = [
+    { iconName: 'waveform', title: 'Chat com IA', desc: 'Ask questions anytime',    tab: 'chat'       },
     { iconName: 'book', title: 'Aulas', desc: 'Assista às aulas', tab: 'aulas' },
     { iconName: 'stack', title: 'Exercícios', desc: 'Pratique o que aprendeu', tab: 'exercicios' },
     { iconName: 'compass', title: 'Materiais', desc: 'Acesse conteúdos extras', tab: 'materiais' },
   ];
-  const grid = h('div', { className: 'home-quick-grid home-quick-grid-3' });
+  const grid = h('div', { className: 'home-quick-grid' });
   quickItems.forEach(function(item) {
     var iconEl = icon(item.iconName);
     if (iconEl) { iconEl.removeAttribute('class'); iconEl.setAttribute('class', 'home-quick-svg'); }
@@ -953,19 +919,9 @@ function renderHome() {
       h('div', { className: 'home-quick-icon' }, iconEl || ''),
       h('div', { className: 'home-quick-title' }, item.title),
       h('div', { className: 'home-quick-desc' }, item.desc),
-      h('span', { className: 'home-quick-arrow' }, '→')
     ));
   });
   d.appendChild(grid);
-
-  d.appendChild(h('div', { className: 'home-feedback-card' },
-    h('div', { className: 'home-feedback-icon' }, '🏆'),
-    h('div', { className: 'home-feedback-text' },
-      h('div', { className: 'home-feedback-title' }, 'Você está indo bem! 🔥'),
-      h('div', { className: 'home-feedback-sub' }, 'Continue assim para alcançar seus objetivos.')
-    )
-  ));
-
   return d;
 }
 

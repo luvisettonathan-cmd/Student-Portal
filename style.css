@@ -5329,3 +5329,17 @@ body {
   font-size: 14px;
   color: var(--dark-muted);
 }
+   /* AV2 FINAL FIX */
+   .av2-header-left { flex: 0 0 auto !important; min-width: 220px !important; max-width: 340px !important; }
+.av2-subtitle { font-size: 0.85rem; color: rgba(255,255,255,0.45); margin: 4px 0 0; font-family: var(--font-body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.av2-stats-row { gap: 10px !important; flex-shrink: 1 !important; }
+.av2-stat-card { padding: 10px 14px !important; gap: 8px !important; }
+.av2-stat-card-value { font-size: 0.95rem !important; }
+.av2-stat-card-label { font-size: 0.65rem !important; }
+.av2-rank-big { text-align: center; padding: 14px 0 18px !important; border-bottom: 1px solid rgba(255,255,255,0.07) !important; margin-bottom: 16px !important; }
+.av2-rank-big-label { font-size: 0.82rem !important; color: rgba(255,255,255,0.5) !important; margin-bottom: 6px !important; }
+.av2-rank-big-pct { font-size: 3.2rem !important; font-weight: 900 !important; color: #E8491E !important; line-height: 1 !important; letter-spacing: -0.02em !important; margin-bottom: 6px !important; }
+.av2-rank-big-sub { font-size: 0.9rem !important; color: rgba(255,255,255,0.5) !important; margin-bottom: 10px !important; }
+.av2-rank-weekly { font-size: 0.8rem !important; color: rgba(255,255,255,0.45) !important; }
+.av2-path-connector { width: 2px !important; min-height: 20px !important; background: rgba(255,255,255,0.15) !important; }
+.av2-path-connector.done { background: rgba(34,197,94,0.5) !important; }

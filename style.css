@@ -5487,3 +5487,127 @@ body {
 .av2-lesson-card.done .av2-btn-primary {
      display: none !important;
 }
+
+
+/* ============================================================
+      STEP 3 — VISUAL REFINEMENT
+      Improve visual quality only. No layout changes.
+      ============================================================ */
+
+/* --- SIDEBAR --- */
+/* Dark sidebar background */
+.sidebar, nav.sidebar, [class*="sidebar"] {
+     background: #111214 !important;
+     border-right: 1px solid rgba(255,255,255,0.06) !important;
+}
+
+/* Sidebar nav items — neutral by default */
+.sidebar a, .sidebar .nav-item, .sidebar li a,
+.sidebar [class*="nav-link"], .sidebar [class*="menu-item"] {
+     color: #9ca3af !important;
+     background: transparent !important;
+     border-radius: 8px !important;
+     transition: background 0.15s, color 0.15s !important;
+}
+
+/* Hover state */
+.sidebar a:hover, .sidebar .nav-item:hover,
+.sidebar li a:hover {
+     color: #f1f5f9 !important;
+     background: rgba(255,255,255,0.06) !important;
+}
+
+/* Active/current sidebar item — orange only here */
+.sidebar a.active, .sidebar .nav-item.active,
+.sidebar li.active a, .sidebar [class*="active"],
+.sidebar [aria-current="page"] {
+     color: #ffffff !important;
+     background: rgba(231,97,28,0.18) !important;
+     border-left: 3px solid #e7611c !important;
+     font-weight: 600 !important;
+}
+
+/* --- LESSON CARDS — general refinement --- */
+.av2-lesson-card {
+     background: #1a1d21 !important;
+     border: 1px solid rgba(255,255,255,0.08) !important;
+     border-radius: 12px !important;
+     padding: 16px 20px !important;
+     transition: box-shadow 0.2s, border-color 0.2s !important;
+}
+
+/* --- CURRENT LESSON — strong orange highlight + glow --- */
+.av2-lesson-card.current {
+     background: #1e1912 !important;
+     border: 2px solid #e7611c !important;
+     border-radius: 12px !important;
+     box-shadow: 0 0 0 1px rgba(231,97,28,0.25), 0 4px 32px rgba(231,97,28,0.18) !important;
+}
+
+/* --- COMPLETED LESSONS — green badge, reduced weight --- */
+.av2-lesson-card.done {
+     background: #141a16 !important;
+     border: 1px solid rgba(34,197,94,0.18) !important;
+     border-radius: 12px !important;
+     opacity: 0.9 !important;
+}
+
+/* Green badge label refinement */
+.av2-lesson-card.done .av2-lesson-status,
+.av2-lesson-card.done [class*="badge"],
+.av2-lesson-card.done [class*="status"] {
+     background: rgba(34,197,94,0.12) !important;
+     color: #4ade80 !important;
+     border: 1px solid rgba(34,197,94,0.25) !important;
+     border-radius: 20px !important;
+     padding: 2px 10px !important;
+     font-size: 12px !important;
+     font-weight: 600 !important;
+}
+
+/* --- LOCKED LESSONS — faded look --- */
+.av2-lesson-card.locked {
+     background: #16181c !important;
+     border: 1px solid rgba(255,255,255,0.05) !important;
+     border-radius: 12px !important;
+     opacity: 0.42 !important;
+     filter: grayscale(0.3) !important;
+}
+
+/* --- RANKING PANEL — secondary emphasis --- */
+.av2-ranking, [class*="ranking"],
+[class*="leaderboard"], .ranking-panel {
+     opacity: 0.82 !important;
+}
+
+/* Ranking title — smaller, less dominant */
+.av2-ranking h2, .av2-ranking h3,
+[class*="ranking"] h2, [class*="ranking"] h3 {
+     font-size: 14px !important;
+     font-weight: 500 !important;
+     color: #9ca3af !important;
+     text-transform: uppercase !important;
+     letter-spacing: 0.06em !important;
+}
+
+/* Big percentage in ranking — tone down */
+.av2-ranking .ranking-percent,
+[class*="ranking"] [class*="percent"],
+[class*="ranking"] [class*="top-value"] {
+     font-size: 2.4rem !important;
+     opacity: 0.88 !important;
+}
+
+/* Ranking rows — lighter borders */
+.av2-ranking-row, [class*="ranking-row"],
+[class*="leaderboard-item"] {
+     border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+     padding: 6px 0 !important;
+}
+
+/* Ranking card background */
+.av2-ranking-card, [class*="ranking-card"] {
+     background: #16181c !important;
+     border: 1px solid rgba(255,255,255,0.06) !important;
+     border-radius: 12px !important;
+}

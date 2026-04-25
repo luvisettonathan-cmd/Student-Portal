@@ -1230,7 +1230,7 @@ function renderAulas() {
     statsRow.appendChild(rankCard2);
 
     header.appendChild(statsRow);
-    leftCol.appendChild(header);
+    page.appendChild(header);
 
     // ======= LEARNING PATH =======
     const pathSection = h('div', { className: 'av2-learning-path' });

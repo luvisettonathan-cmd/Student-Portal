@@ -10,7 +10,7 @@
   --orange: #d9622d;
   --orange-dark: #b84d1f;
   --orange-deep: #8a3a16;
-  --orange-soft: #f4a27a;
+  --orange-soft: #f4a27a;h
   --orange-pale: #ffe8d6;
   --cream: #fff6ec;
   --cream-deep: #fbeedd;
@@ -4684,8 +4684,8 @@ body {
 }
 
 @media (max-width: 900px) {
-  .av2-grid { grid-template-columns: 1fr; }
-  .av2-right { position: static; }
+      .av2-page { grid-template-columns: 1fr; }
+      .av2-right { position: static; grid-column: 1; grid-row: auto; }
   .aulas-v2-page { padding: 24px 20px; }
 }
 
@@ -4696,9 +4696,22 @@ body {
 
 /* Page wrapper */
 .av2-page {
-     display: flex;
-     flex-direction: column;
-     gap: 0;
+         display: grid;
+         grid-template-columns: 1fr 300px;
+         column-gap: 28px;
+       align-items: start;
+       /* Grid placement */
+       .av2-tabs {
+                  grid-column: 1;
+                  grid-row: 1;
+       }
+       .av2-grid {
+                  display: contents;
+       }
+       .av2-left {
+                  grid-column: 1;
+                  grid-row: 2;
+       }
      /* ═══════════════════════════════════════════════════════════════
       AULAS V2 - OVERRIDES (FIXES PARA LAYOUT CORRETO)
    ═══════════════════════════════════════════════════════════════ */
@@ -4772,6 +4785,8 @@ body {
         gap: 16px;
         position: sticky;
         top: 24px;
+          grid-column: 2;
+          grid-row: 1 / span 2;
    }
 
    /* Ranking card */

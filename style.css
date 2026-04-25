@@ -4699,252 +4699,378 @@ body {
      display: flex;
      flex-direction: column;
      gap: 0;
-     min-height: 100%;
-}
+     /* ═══════════════════════════════════════════════════════════════
+      AULAS V2 - OVERRIDES (FIXES PARA LAYOUT CORRETO)
+   ═══════════════════════════════════════════════════════════════ */
 
-/* Header layout - title left, stats right */
-.av2-header {
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-     margin-bottom: 28px;
-     gap: 24px;
-     flex-wrap: wrap;
-}
+   /* Header: título à esquerda, stats à direita - sem quebrar linha */
+   .av2-header {
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: space-between !important;
+        flex-wrap: nowrap !important;
+        gap: 24px !important;
+        margin-bottom: 32px !important;
+   }
 
-.av2-header-left {
-     flex: 1;
-     min-width: 0;
-}
+   /* Bloco título - tamanho fixo, não encolhe */
+   .av2-header-left {
+        flex: 0 0 auto !important;
+        min-width: 200px !important;
+        max-width: 260px !important;
+   }
 
-/* Stats row - horizontal cards */
-.av2-stats-row {
-     display: flex;
-     gap: 16px;
-     align-items: center;
-     flex-shrink: 0;
-}
+   /* Stats: não encolhe, não quebra */
+   .av2-stats-row {
+        display: flex !important;
+        gap: 12px !important;
+        align-items: flex-start !important;
+        flex-shrink: 0 !important;
+        flex-wrap: nowrap !important;
+   }
 
-.av2-stat-card {
-     display: flex;
-     align-items: center;
-     gap: 12px;
-     background: #1e1e1e;
-     border: 1px solid rgba(255,255,255,0.07);
-     border-radius: 12px;
-     padding: 14px 18px;
-     min-width: 140px;
-}
+   /* Stat card - mais compacto */
+   .av2-stat-card {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        background: #1e1e1e !important;
+        border: 1px solid rgba(255,255,255,0.08) !important;
+        border-radius: 12px !important;
+        padding: 12px 16px !important;
+        min-width: 0 !important;
+        white-space: nowrap !important;
+   }
 
-.av2-stat-card-icon {
-     font-size: 1.5rem;
-     flex-shrink: 0;
-}
+   .av2-stat-card-icon {
+        font-size: 1.4rem;
+        flex-shrink: 0;
+   }
 
-.av2-stat-card-value {
-     font-size: 1.1rem;
-     font-weight: 700;
-     color: #fff;
-     font-family: var(--font-display);
-     white-space: nowrap;
-}
+   .av2-stat-card-value {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #fff;
+        font-family: var(--font-display);
+        white-space: nowrap;
+        line-height: 1.2;
+   }
 
-.av2-stat-card-label {
-     font-size: 0.72rem;
-     color: rgba(255,255,255,0.4);
-     text-transform: uppercase;
-     letter-spacing: 0.05em;
-     margin-top: 2px;
-     white-space: nowrap;
-}
+   .av2-stat-card-label {
+        font-size: 0.68rem;
+        color: rgba(255,255,255,0.4);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 1px;
+        white-space: nowrap;
+   }
 
-/* Learning path - new layout with left column */
-.av2-learning-path {
-     display: flex;
-     flex-direction: column;
-     gap: 0;
-}
+   /* Right column */
+   .av2-right {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        position: sticky;
+        top: 24px;
+   }
 
-.av2-path-item {
-     display: flex;
-     gap: 0;
-     align-items: flex-start;
-     position: relative;
-}
+   /* Ranking card */
+   .av2-rank-card {
+        background: #18181b;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 20px;
+   }
 
-.av2-path-left {
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     width: 52px;
-     flex-shrink: 0;
-     padding-top: 6px;
-}
+   /* Next lesson card */
+   .av2-next-lesson {
+        background: #18181b;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 20px;
+   }
 
-/* Vertical connector between nodes */
-.av2-path-connector {
-     width: 2px;
-     flex: 1;
-     min-height: 24px;
-     background: rgba(255,255,255,0.12);
-     margin: 4px 0;
-     border-radius: 2px;
-     transition: background 0.3s;
-}
+   .av2-next-lesson-label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: rgba(255,255,255,0.4);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+   }
 
-.av2-path-connector.done {
-     background: rgba(34,197,94,0.4);
-}
+   .av2-next-lesson-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 2px;
+        font-family: var(--font-display);
+   }
 
-/* Lesson card - new layout */
-.av2-lesson-card {
-     flex: 1;
-     background: #1e1e1e;
-     border: 1px solid rgba(255,255,255,0.07);
-     border-radius: 14px;
-     padding: 16px 20px;
-     margin-bottom: 12px;
-     transition: all 0.2s;
-     min-width: 0;
-}
+   .av2-next-lesson-sub {
+        font-size: 0.8rem;
+        color: rgba(255,255,255,0.4);
+        margin-bottom: 14px;
+   }
 
-.av2-lesson-card.done {
-     border-color: rgba(34,197,94,0.2);
-     background: rgba(34,197,94,0.03);
-}
+   .av2-next-lesson-btn {
+        display: block;
+        width: 100%;
+        background: #E8491E;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.18s;
+        text-align: center;
+   }
+   .av2-next-lesson-btn:hover { background: #c73d18; }
 
-.av2-lesson-card.current {
-     border-color: #E8491E;
-     background: rgba(232,73,30,0.06);
-}
+   /* Ranking table rows */
+   .av2-rank-table {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 14px;
+   }
 
-.av2-lesson-card.locked {
-     opacity: 0.6;
-}
+   .av2-rank-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        transition: background 0.15s;
+   }
 
-.av2-lesson-card:hover:not(.locked) {
-     border-color: rgba(255,255,255,0.15);
-     background: rgba(255,255,255,0.04);
-}
+   .av2-rank-row.me {
+        background: rgba(232,73,30,0.12);
+        border: 1px solid rgba(232,73,30,0.25);
+   }
 
-/* Card right section - badge/button + chevron */
-.av2-card-right {
-     display: flex;
-     align-items: center;
-     gap: 12px;
-     flex-shrink: 0;
-}
+   .av2-rank-pos {
+        font-size: 0.78rem;
+        color: rgba(255,255,255,0.4);
+        min-width: 28px;
+        font-family: var(--font-mono);
+   }
 
-/* Badge for done/locked */
-.av2-badge {
-     display: inline-flex;
-     align-items: center;
-     gap: 5px;
-     padding: 5px 12px;
-     border-radius: 99px;
-     font-size: 0.78rem;
-     font-weight: 500;
-     white-space: nowrap;
-}
+   .av2-rank-row.me .av2-rank-pos {
+        color: #E8491E;
+        font-weight: 600;
+   }
 
-.av2-badge.done {
-     background: rgba(34,197,94,0.12);
-     color: #4ade80;
-     border: 1px solid rgba(34,197,94,0.25);
-}
+   .av2-rank-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #fff;
+        flex-shrink: 0;
+   }
 
-.av2-badge.locked {
-     background: rgba(255,255,255,0.06);
-     color: rgba(255,255,255,0.4);
-     border: 1px solid rgba(255,255,255,0.1);
-}
+   .av2-rank-row.me .av2-rank-avatar {
+        background: #E8491E;
+   }
 
-/* Ranking card - new big pct display */
-.av2-rank-header {
-     display: flex;
-     align-items: center;
-     gap: 8px;
-     margin-bottom: 16px;
-}
+   .av2-rank-name {
+        flex: 1;
+        font-size: 0.85rem;
+        color: rgba(255,255,255,0.75);
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+   }
 
-.av2-rank-icon {
-     font-size: 1.2rem;
-}
+   .av2-rank-row.me .av2-rank-name {
+        color: #fff;
+        font-weight: 700;
+   }
 
-.av2-rank-title {
-     font-size: 1rem;
-     font-weight: 600;
-     color: #fff;
-}
+   .av2-rank-xp {
+        font-size: 0.8rem;
+        color: rgba(255,255,255,0.45);
+        font-family: var(--font-mono);
+        white-space: nowrap;
+   }
 
-.av2-rank-big {
-     text-align: center;
-     margin-bottom: 20px;
-     padding: 8px 0;
-}
+   .av2-rank-row.me .av2-rank-xp {
+        color: #E8491E;
+        font-weight: 600;
+   }
 
-.av2-rank-big-label {
-     font-size: 0.85rem;
-     color: rgba(255,255,255,0.5);
-     margin-bottom: 4px;
-}
+   .av2-rank-view-btn {
+        display: block;
+        width: 100%;
+        background: transparent;
+        color: #E8491E;
+        border: 1px solid rgba(232,73,30,0.3);
+        border-radius: 8px;
+        padding: 9px 16px;
+        font-size: 0.83rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.18s;
+        text-align: center;
+        margin-top: 8px;
+   }
+   .av2-rank-view-btn:hover {
+        background: rgba(232,73,30,0.08);
+        border-color: rgba(232,73,30,0.5);
+   }
 
-.av2-rank-big-pct {
-     font-size: 2.8rem;
-     font-weight: 800;
-     color: #E8491E;
-     font-family: var(--font-display);
-     line-height: 1;
-     margin-bottom: 4px;
-}
+   /* Card inner layout */
+   .av2-card-inner {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+   }
 
-.av2-rank-big-sub {
-     font-size: 0.9rem;
-     color: rgba(255,255,255,0.5);
-     margin-bottom: 8px;
-}
+   /* Lesson icon box */
+   .av2-lesson-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.08);
+   }
 
-.av2-rank-weekly {
-     font-size: 0.8rem;
-     color: rgba(255,255,255,0.5);
-     margin-top: 4px;
-}
+   .av2-lesson-icon.current {
+        background: rgba(232,73,30,0.15);
+        border-color: rgba(232,73,30,0.3);
+   }
 
-/* Path node override for new layout */
-.av2-path-node.done {
-     background: rgba(34,197,94,0.15);
-     border-color: rgba(34,197,94,0.5);
-     color: #4ade80;
-}
+   .av2-lesson-icon.done {
+        background: rgba(34,197,94,0.1);
+        border-color: rgba(34,197,94,0.2);
+   }
 
-.av2-path-node.current {
-     background: rgba(232,73,30,0.15);
-     border-color: #E8491E;
-     color: #E8491E;
-     box-shadow: 0 0 12px rgba(232,73,30,0.3);
-}
+   .av2-lesson-icon.locked {
+        opacity: 0.5;
+   }
 
-.av2-path-node.locked {
-     background: rgba(255,255,255,0.04);
-     border-color: rgba(255,255,255,0.12);
-     color: rgba(255,255,255,0.3);
-}
+   /* Card text block */
+   .av2-card-text {
+        flex: 1;
+        min-width: 0;
+   }
 
-/* Card title styles */
-.av2-card-title {
-     font-size: 1rem;
-     font-weight: 600;
-     color: #fff;
-     margin-top: 1px;
-}
+   .av2-card-num {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: #E8491E;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 2px;
+   }
 
-.av2-card-desc {
-     font-size: 0.82rem;
-     color: rgba(255,255,255,0.45);
-     margin-top: 4px;
-}
+   .av2-card-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #fff;
+        font-family: var(--font-display);
+        margin-bottom: 2px;
+   }
 
+   .av2-card-desc {
+        font-size: 0.8rem;
+        color: rgba(255,255,255,0.4);
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+   }
 
+   /* Continue button */
+   .av2-continue-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #E8491E;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 20px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 0.18s;
+        flex-shrink: 0;
+   }
+   .av2-continue-btn:hover { background: #c73d18; }
+
+   /* Chevron toggle */
+   .av2-chevron {
+        display: inline-flex;
+        align-items: center;
+        color: rgba(255,255,255,0.3);
+        transition: transform 0.2s;
+        flex-shrink: 0;
+   }
+   .av2-chevron.open { transform: rotate(180deg); }
+
+   /* Current node: solid orange fill (override) */
+   .av2-path-node.current {
+        background: #e7611c !important;
+        border: 2.5px solid #ff8c42 !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 4px rgba(231,97,28,0.2) !important;
+   }
+
+   /* Ranking big section */
+   .av2-rank-big {
+        text-align: center;
+        padding: 12px 0 16px;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        margin-bottom: 14px;
+   }
+
+   .av2-rank-big-label {
+        font-size: 0.82rem;
+        color: rgba(255,255,255,0.5);
+        margin-bottom: 6px;
+   }
+
+   .av2-rank-big-pct {
+        font-size: 3rem;
+        font-weight: 900;
+        color: #E8491E;
+        font-family: var(--font-display);
+        line-height: 1;
+        letter-spacing: -0.03em;
+        margin-bottom: 4px;
+   }
+
+   .av2-rank-big-sub {
+        font-size: 0.88rem;
+        color: rgba(255,255,255,0.45);
+        margin-bottom: 8px;
+   }
+
+   .av2-rank-weekly {
+        font-size: 0.78rem;
+        color: rgba(255,255,255,0.4);
+   }
+
+   
 /* ═══════════════════════════════════════════════════════════════
    HOME - NOVOS ESTILOS (JORNADA, PRATICA, FEEDBACK)
 ═══════════════════════════════════════════════════════════════ */

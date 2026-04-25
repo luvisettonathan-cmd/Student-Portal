@@ -30,7 +30,7 @@
   --font-body: 'Geist', system-ui, sans-serif;
   --font-mono: 'Geist Mono', 'Courier New', monospace;
 
-  --sidebar-w: 240px;
+  --sidebar-w: 250px;
   --radius: 14px;
   --radius-lg: 20px;
 
@@ -1910,16 +1910,16 @@ body {
 ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 .aulas-page {
-  padding: 32px 40px;
-  max-width: 1200px;
+  padding: 40px 48px;
+  max-width: 1400px;
   width: 100%;
 }
 
 /* ââ Level Tabs ââ */
 .aulas-tabs {
   display: flex;
-  gap: 8px;
-  margin-bottom: 28px;
+  gap: 10px;
+  margin-bottom: 32px;
   flex-wrap: wrap;
 }
 
@@ -2042,7 +2042,7 @@ body {
 
 /* ââ Path Header ââ */
 .path-header {
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .path-header-top {
@@ -3735,12 +3735,12 @@ body {
 /* ââ Grid layout when ranking is active ââ */
 .aulas-page-with-ranking {
   display: grid !important;
-  grid-template-columns: 1fr 300px !important;
-  gap: 0 24px !important;
-  max-width: 1200px !important;
-  padding: 32px 40px !important;
+  grid-template-columns: 1fr 360px !important;
+  gap: 0 32px !important;
+  max-width: 1400px !important;
+  padding: 40px 48px !important;
   align-items: start !important;
-     grid-auto-flow: row dense !important;
+  grid-auto-flow: row dense !important;
 }
 
 .aulas-page-with-ranking .aulas-tabs {
@@ -3750,8 +3750,8 @@ body {
 .ranking-stats-bar {
   grid-column: 1 / -1;
   display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 28px;
   flex-wrap: wrap;
 }
 
@@ -3774,7 +3774,7 @@ body {
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 14px;
   flex: 1;
-  min-width: 160px;
+  min-width: 180px;
   transition: border-color 0.2s;
 }
 
@@ -3803,7 +3803,7 @@ body {
 /* ââ Ranking card (right sidebar) ââ */
 .ranking-card {
   grid-column: 2;
-  grid-row: 3 / 10;
+  grid-row: 3 / 20;
   background: var(--dark-card, #1e1e1e);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 18px;

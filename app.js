@@ -1143,7 +1143,29 @@ function renderAulas() {
                   if (pct < 70) { const rb = h('button', { className: 'aulas-quiz-retry' }); rb.textContent = 'Try again'; rb.onclick = () => { as.quizSubmitted[quizKey] = false; render(); }; res.appendChild(rb); } else { const cg = h('span', { className: 'aulas-quiz-congrats' }); cg.textContent = 'Congrats!'; res.appendChild(cg); }
                   quizSection.appendChild(res);
           }
-          panel.appendChild(quizSection); return panel;
+          panel.appendChild(quizSection);
+
+              // Toggle completion button
+              const isDoneNow = getProgress()[lesson.id] === 'completed';
+              const toggleBtn = h('button', {
+                          className: 'av2-toggle-btn' + (isDoneNow ? ' done' : ''),
+                          onclick: (e) => {
+                                        e.stopPropagation();
+                                        if (isDoneNow) {
+                                                        markUncomplete(lesson.id);
+                                        } else {
+                                                        const p = getProgress();
+                                                        p[lesson.id] = 'completed';
+                                                        saveProgress(p);
+                                                        addXP(XP_PER_LESSON, lesson.id);
+                                                        render();
+                                        }
+                          }
+              });
+              toggleBtn.textContent = isDoneNow ? '✓ Concluída — clique para desmarcar' : 'Marcar como concluída';
+              panel.appendChild(toggleBtn);
+
+              return panel;
     }
   const tabs = h('div', { className: 'av2-tabs' });
   COURSES.forEach(course => {

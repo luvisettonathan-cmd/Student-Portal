@@ -4255,7 +4255,7 @@ body {
 /* Learning Path */
 .av2-path { display: flex; flex-direction: column; }
 
-.av2-path-item { display: flex; flex-direction: row; align-items: flex-start; gap: 0; }
+.av2-path-item { display: flex; flex-direction: row; align-items: flex-start; gap: 0; margin-bottom: 2px; }
 
 .av2-path-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 44px; }.av2-path-row {
   display: flex;
@@ -4265,8 +4265,8 @@ body {
 
 .av2-path-line {
   width: 2px;
-  height: 16px;
-  background: rgba(255,255,255,0.1);
+  height: 20px;
+  background: rgba(255,255,255,0.08);
   margin-left: 21px;
   border-radius: 2px;
 }
@@ -4321,26 +4321,35 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #18181b;
-  border: 1.5px solid rgba(255,255,255,0.07);
-  border-radius: 16px;
-  padding: 18px 22px;
+  background: #1a1a1f;
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 20px 24px;
   cursor: pointer;
-  transition: all 0.18s;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   gap: 16px;
-  margin: 5px 0;
+  margin: 6px 0;
+  min-height: 80px;
+  position: relative;
 }
 
 .av2-lesson-card:hover:not(.locked) {
-  border-color: rgba(231,97,28,0.35);
-  background: rgba(231,97,28,0.04);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  border-color: rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.03);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.3);
 }
 
 .av2-lesson-card.current {
   border-color: #e7611c;
-  background: rgba(231,97,28,0.07);
+  border-width: 2px;
+  background: rgba(231,97,28,0.08);
+  box-shadow: 0 0 0 3px rgba(231,97,28,0.12), 0 4px 20px rgba(231,97,28,0.12);
+}
+.av2-lesson-card.current:hover:not(.locked) {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 3px rgba(231,97,28,0.18), 0 8px 28px rgba(231,97,28,0.2);
+  border-color: #ff7a35;
 }
 
 .av2-lesson-card.done {
@@ -4348,10 +4357,17 @@ body {
   background: rgba(34,197,94,0.04);
   opacity: 1;
 }
+.av2-lesson-card.done:hover {
+  border-color: rgba(34,197,94,0.35);
+  background: rgba(34,197,94,0.07);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
 
 .av2-lesson-card.locked {
   cursor: default;
-  opacity: 0.5;
+  opacity: 0.45;
+  filter: grayscale(0.2);
 }
 
 .av2-card-inner {
@@ -4363,28 +4379,41 @@ body {
 }
 
 .av2-lesson-icon {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
+  font-size: 1.45rem;
   flex-shrink: 0;
   background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: background 0.2s;
 }
 
-.av2-lesson-icon.done { background: rgba(34,197,94,0.1); }
-.av2-lesson-icon.current { background: rgba(231,97,28,0.15); }
-.av2-lesson-icon.locked { background: rgba(255,255,255,0.03); opacity: 0.6; }
+.av2-lesson-icon.done {
+  background: rgba(34,197,94,0.12);
+  border-color: rgba(34,197,94,0.2);
+}
+.av2-lesson-icon.current {
+  background: rgba(231,97,28,0.18);
+  border-color: rgba(231,97,28,0.25);
+}
+.av2-lesson-icon.locked {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(255,255,255,0.05);
+  opacity: 0.5;
+}
 
 .av2-card-text { min-width: 0; flex: 1; }
 
 .av2-card-num {
-  font-size: 0.72rem;
+  font-size: 0.71rem;
   color: rgba(255,255,255,0.35);
   font-family: var(--font-mono);
   text-transform: uppercase;
+  letter-spacing: 0.08em;
   letter-spacing: 0.08em;
   margin-bottom: 3px;
 }
@@ -4402,17 +4431,20 @@ body {
   font-family: var(--font-display);
 }
 
-.av2-lesson-card.locked .av2-card-title { color: rgba(255,255,255,0.4); }
+.av2-lesson-card.locked .av2-card-title { color: rgba(255,255,255,0.3); }
+.av2-lesson-card.done .av2-card-title { color: rgba(255,255,255,0.75); }
+.av2-lesson-card.current .av2-card-title { color: #ffffff; }
 
 .av2-card-desc {
   font-size: 0.8rem;
-  color: rgba(255,255,255,0.4);
-  margin-top: 3px;
+  color: rgba(255,255,255,0.38);
+  margin-top: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: var(--font-body);
 }
+.av2-lesson-card.locked .av2-card-desc { color: rgba(255,255,255,0.2); }
 
 .av2-card-right {
   display: flex;
@@ -4431,42 +4463,56 @@ body {
 }
 
 .av2-badge.done {
-  background: rgba(34,197,94,0.12);
-  color: #22c55e;
-  border: 1px solid rgba(34,197,94,0.2);
+  background: rgba(34,197,94,0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34,197,94,0.28);
+  font-weight: 700;
 }
 
 .av2-badge.locked {
   background: rgba(255,255,255,0.04);
-  color: rgba(255,255,255,0.3);
-  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.28);
+  border: 1px solid rgba(255,255,255,0.07);
   font-weight: 400;
+  font-size: 0.72rem;
 }
 
 .av2-continue-btn {
   background: #e7611c;
   color: #fff;
   border: none;
-  border-radius: 99px;
-  padding: 8px 20px;
+  border-radius: 10px;
+  padding: 9px 22px;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   font-family: var(--font-body);
-  transition: all 0.15s;
+  transition: all 0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   white-space: nowrap;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 8px rgba(231,97,28,0.3);
 }
 
 .av2-continue-btn:hover {
   background: #ff7a35;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(231,97,28,0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231,97,28,0.45);
 }
 
 .av2-chevron {
-  color: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.25);
   display: flex;
   align-items: center;
+  transition: color 0.18s, transform 0.18s;
+}
+.av2-lesson-card:hover .av2-chevron {
+  color: rgba(255,255,255,0.5);
+}
+.av2-lesson-card.current .av2-chevron {
+  color: rgba(231,97,28,0.7);
+}
+.av2-lesson-card.done .av2-chevron {
+  color: rgba(74,222,128,0.5);
 }
 
 /* Right Column */

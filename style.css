@@ -4520,8 +4520,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  position: sticky;
-  top: 32px;
+  position: static;
 }
 
 /* Ranking Card */
@@ -4837,8 +4836,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  position: sticky;
-  top: 24px;
+  position: static;
 }
 
 /* Ranking Card */

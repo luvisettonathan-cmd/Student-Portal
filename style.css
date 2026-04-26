@@ -4745,24 +4745,23 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0;
-  max-width: 1300px;
   width: 100%;
-  margin: 0 auto;
 }
 
 /* Tabs - full width row */
 .av2-tabs {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 /* Header - full width row (title + stats) */
 .av2-header {
   display: flex !important;
-  align-items: flex-start !important;
+  align-items: center !important;
   justify-content: space-between !important;
   flex-wrap: nowrap !important;
   gap: 24px !important;
-  margin-bottom: 28px !important;
+  margin-bottom: 20px !important;
+  padding-bottom: 0 !important;
 }
 
 .av2-header-left {
@@ -4774,7 +4773,7 @@ body {
 .av2-stats-row {
   display: flex !important;
   gap: 12px !important;
-  align-items: flex-start !important;
+  align-items: center !important;
   flex-shrink: 0 !important;
   flex-wrap: nowrap !important;
 }
@@ -4817,7 +4816,7 @@ body {
 /* 2-column grid (lessons + sidebar) */
 .av2-grid {
   display: grid;
-  grid-template-columns: 1fr 320px;
+  grid-template-columns: 1fr 350px;
   gap: 28px;
   align-items: start;
 }

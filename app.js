@@ -1106,38 +1106,7 @@ function renderAulas() {
           const allBefore = course.lessons.slice(0, index).every(l => p[l.id] === 'completed'); return allBefore ? 'current' : 'available';
     }
     function buildLessonPanel(lesson, lessonIndex) {
-  const status = getLessonStatus(activeCourse, lessonIndex);
   const panel = h('div', { className: 'path-inline-panel' });
-
-  // Header
-  const header = h('div', { className: 'lp-header' });
-  const headerLeft = h('div', { className: 'lp-header-left' });
-  const iconBox = h('div', { className: 'lp-icon-box' + (status === 'current' ? ' current' : '') });
-  iconBox.innerHTML = lesson.icon || '&#128218;';
-  const meta = h('div', { className: 'lp-meta' });
-  const lessonNum = h('div', { className: 'lp-lesson-num' });
-  lessonNum.textContent = 'LESSON ' + lesson.num;
-  const lessonTitle = h('div', { className: 'lp-lesson-title' });
-  lessonTitle.textContent = lesson.label;
-  const lessonDesc = h('div', { className: 'lp-lesson-desc' });
-  lessonDesc.textContent = lesson.desc || '';
-  meta.appendChild(lessonNum);
-  meta.appendChild(lessonTitle);
-  meta.appendChild(lessonDesc);
-  headerLeft.appendChild(iconBox);
-  headerLeft.appendChild(meta);
-  const headerRight = h('div', { className: 'lp-header-right' });
-  const contBtn = h('button', { className: 'av2-continue-btn' });
-  contBtn.textContent = 'Continuar';
-  contBtn.onclick = (e) => { e.stopPropagation(); };
-  const chevron = h('span', { className: 'lp-chevron' });
-  chevron.innerHTML = '&#8964;';
-  headerRight.appendChild(contBtn);
-  headerRight.appendChild(chevron);
-  header.appendChild(headerLeft);
-  header.appendChild(headerRight);
-  panel.appendChild(header);
-  panel.appendChild(h('hr', { className: 'lp-divider' }));
 
   // Video section
   const videoSection = h('div', { className: 'lp-section' });

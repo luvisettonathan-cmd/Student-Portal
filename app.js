@@ -4,7 +4,7 @@
 //
 // ⚠️ SUBSTITUA AS 2 LINHAS ABAIXO COM OS DADOS DO SEU SUPABASE
 //
-const SUPABASE_URL = 'https://aqlnihunzthcilrabasp.supabase.co';
+const SUPABASE_URL = 'https://aqlnihunzthcilrabasp.supabase.hco';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxbG5paHVuenRoY2lscmFiYXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwNDMxOTQsImV4cCI6MjA5MTYxOTE5NH0.Dth5evj04iA9X9V68QfbSJ9qFC2PSCdetXNOG5MKg7c';
 //
 // ══════════════════════════════════════════════════════════════
@@ -1058,9 +1058,7 @@ function renderAulas() {
   const activeCourse = COURSES.find(c => c.id === state.aulas.level) || COURSES[0];
   const lessons = activeCourse.lessons;
 
-  const totalXPReal = (() => {
-    try { return parseInt(localStorage.getItem('nexus_total_xp') || '0', 10); } catch { return 0; }
-  })();
+  const totalXPReal = getXP()
 
   const allCompleted = lessons.filter(l => progress[l.id] === 'completed').length;
   const totalLessons = lessons.length;
@@ -1072,7 +1070,7 @@ function renderAulas() {
     const sorted = [...all].sort((a, b) => (b.xp || 0) - (a.xp || 0));
     const myIdx = sorted.findIndex(s => s.id === state.user.id && s.id !== undefined);
     if (myIdx !== -1) {
-      aheadPct = Math.round(((sorted.length - 1 - myIdx) / Math.max(sorted.length - 1, 1)) * 100);
+      aheadPct = Math.max(1, Math.ceil((myIdx + 1) / sorted.length * 100));
     }
     const start = Math.max(0, (myIdx !== -1 ? myIdx : 0) - 2);
     rankList = sorted.slice(start, start + 5).map((s, i) => ({ ...s, rankNum: start + i + 1, isMe: s.id === state.user?.id }));
@@ -1226,7 +1224,7 @@ function renderAulas() {
 
     // Ranking Stat
     const rankCard2 = h('div', { className: 'av2-stat-card' });
-    rankCard2.innerHTML = `<span class="av2-stat-card-icon">📊</span><div><div class="av2-stat-card-value">Top ${100 - aheadPct}%</div><div class="av2-stat-card-label">Entre os alunos</div></div>`;
+    rankCard2.innerHTML = `<span class="av2-stat-card-icon">📊</span><div><div class="av2-stat-card-value">Top ${aheadPct}%</div><div class="av2-stat-card-label">Entre os alunos</div></div>`;
     statsRow.appendChild(rankCard2);
 
     header.appendChild(statsRow);
@@ -1363,7 +1361,7 @@ function renderAulas() {
     const rbLabel = h('div', { className: 'av2-rank-big-label' });
     rbLabel.textContent = 'Você está no';
     const rbPct = h('div', { className: 'av2-rank-big-pct' });
-    rbPct.textContent = `Top ${100 - aheadPct}%`;
+    rbPct.textContent = `Top ${aheadPct}%`;
     const rbSub = h('div', { className: 'av2-rank-big-sub' });
     rbSub.textContent = 'dos alunos 🚀';
     rankBig.appendChild(rbLabel);

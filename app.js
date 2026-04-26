@@ -1106,65 +1106,148 @@ function renderAulas() {
           const allBefore = course.lessons.slice(0, index).every(l => p[l.id] === 'completed'); return allBefore ? 'current' : 'available';
     }
     function buildLessonPanel(lesson, lessonIndex) {
-          const status = getLessonStatus(activeCourse, lessonIndex);
-          const panel = h('div', { className: 'path-inline-panel' });
-          const vw = h('div', { className: 'aulas-video-wrapper' }); const vp = h('div', { className: 'aulas-video-placeholder' });
-          const vi = h('div', { className: 'aulas-video-icon' }); vi.appendChild(icon('book')); vp.appendChild(vi);
-          const vt = h('p', { className: 'aulas-video-text' }); vt.textContent = 'Video: ' + lesson.label; vp.appendChild(vt);
-          const vh = h('p', { className: 'aulas-video-hint' }); vh.textContent = 'The video will be embedded here'; vp.appendChild(vh); vw.appendChild(vp); panel.appendChild(vw);
-          const quizKey = lesson.id; const submitted = !!as.quizSubmitted[quizKey];
-          const quizSection = h('div', { className: 'aulas-quiz' });
-          const qt = h('h3', { className: 'aulas-quiz-title' }); qt.textContent = 'Quiz'; quizSection.appendChild(qt);
-          const questions = [{ id: 'q1', text: 'Question 1: ' + lesson.label, options: ['Option A', 'Option B', 'Option C', 'Option D'], correct: 0 }, { id: 'q2', text: 'Question 2: ' + lesson.label, options: ['Option A', 'Option B', 'Option C', 'Option D'], correct: 1 }, { id: 'q3', text: 'Question 3: ' + lesson.label, options: ['Option A', 'Option B', 'Option C', 'Option D'], correct: 2 }];
-          questions.forEach((q, qi) => {
-                  const qBlock = h('div', { className: 'aulas-quiz-question' }); const qTxt = h('p', { className: 'aulas-quiz-q-text' }); qTxt.textContent = (qi+1) + '. ' + q.text; qBlock.appendChild(qTxt);
-                  const opts = h('div', { className: 'aulas-quiz-options' });
-                  q.options.forEach((opt, oi) => {
-                            const sel = as.quizAnswers[quizKey+'_'+q.id] === oi; let oc = 'aulas-quiz-opt';
-                            if (submitted) { if (oi === q.correct) oc += ' correct'; else if (sel) oc += ' wrong'; } else if (sel) oc += ' selected';
-                            const ob = h('button', { className: oc, disabled: submitted }); ob.textContent = opt;
-                            ob.onclick = () => { if (!submitted) { as.quizAnswers[quizKey+'_'+q.id] = oi; render(); } };
-                            opts.appendChild(ob);
-                  }); qBlock.appendChild(opts); quizSection.appendChild(qBlock);
-          });
-          if (!submitted) {
-                  const allAnswered = questions.every(q => as.quizAnswers[quizKey+'_'+q.id] !== undefined);
-                  const sb = h('button', { className: 'aulas-quiz-submit' + (allAnswered ? '' : ' disabled'), disabled: !allAnswered });
-                  sb.textContent = 'Submit answers';
-                  sb.onclick = () => { if (allAnswered) { as.quizSubmitted[quizKey] = true; markComplete(lesson.id, lesson.label, activeCourse); render(); } };
-                  quizSection.appendChild(sb);
-          } else {
-                  const score = questions.filter(q => as.quizAnswers[quizKey+'_'+q.id] === q.correct).length;
-                  const pct = Math.round((score/questions.length)*100); const rc = pct >= 70 ? 'great' : pct >= 40 ? 'ok' : 'retry';
-                  const res = h('div', { className: 'aulas-quiz-result ' + rc }); const rs = h('span', { className: 'aulas-quiz-score' }); rs.textContent = score+'/'+questions.length+' correct'; res.appendChild(rs);
-                  const rp = h('span', { className: 'aulas-quiz-pct' }); rp.textContent = pct+'%'; res.appendChild(rp);
-                  if (pct < 70) { const rb = h('button', { className: 'aulas-quiz-retry' }); rb.textContent = 'Try again'; rb.onclick = () => { as.quizSubmitted[quizKey] = false; render(); }; res.appendChild(rb); } else { const cg = h('span', { className: 'aulas-quiz-congrats' }); cg.textContent = 'Congrats!'; res.appendChild(cg); }
-                  quizSection.appendChild(res);
-          }
-          panel.appendChild(quizSection);
+  const status = getLessonStatus(activeCourse, lessonIndex);
+  const panel = h('div', { className: 'path-inline-panel' });
 
-              // Toggle completion button
-              const isDoneNow = getProgress()[lesson.id] === 'completed';
-              const toggleBtn = h('button', {
-                          className: 'av2-toggle-btn' + (isDoneNow ? ' done' : ''),
-                          onclick: (e) => {
-                                        e.stopPropagation();
-                                        if (isDoneNow) {
-                                                        markUncomplete(lesson.id);
-                                        } else {
-                                                        const p = getProgress();
-                                                        p[lesson.id] = 'completed';
-                                                        saveProgress(p);
-                                                        addXP(XP_PER_LESSON, lesson.id);
-                                                        render();
-                                        }
-                          }
-              });
-              toggleBtn.textContent = isDoneNow ? '✓ Concluída — clique para desmarcar' : 'Marcar como concluída';
-              panel.appendChild(toggleBtn);
+  // Header
+  const header = h('div', { className: 'lp-header' });
+  const headerLeft = h('div', { className: 'lp-header-left' });
+  const iconBox = h('div', { className: 'lp-icon-box' + (status === 'current' ? ' current' : '') });
+  iconBox.innerHTML = lesson.icon || '&#128218;';
+  const meta = h('div', { className: 'lp-meta' });
+  const lessonNum = h('div', { className: 'lp-lesson-num' });
+  lessonNum.textContent = 'LESSON ' + lesson.num;
+  const lessonTitle = h('div', { className: 'lp-lesson-title' });
+  lessonTitle.textContent = lesson.label;
+  const lessonDesc = h('div', { className: 'lp-lesson-desc' });
+  lessonDesc.textContent = lesson.desc || '';
+  meta.appendChild(lessonNum);
+  meta.appendChild(lessonTitle);
+  meta.appendChild(lessonDesc);
+  headerLeft.appendChild(iconBox);
+  headerLeft.appendChild(meta);
+  const headerRight = h('div', { className: 'lp-header-right' });
+  const contBtn = h('button', { className: 'av2-continue-btn' });
+  contBtn.textContent = 'Continuar';
+  contBtn.onclick = (e) => { e.stopPropagation(); };
+  const chevron = h('span', { className: 'lp-chevron' });
+  chevron.innerHTML = '&#8964;';
+  headerRight.appendChild(contBtn);
+  headerRight.appendChild(chevron);
+  header.appendChild(headerLeft);
+  header.appendChild(headerRight);
+  panel.appendChild(header);
+  panel.appendChild(h('hr', { className: 'lp-divider' }));
 
-              return panel;
+  // Video section
+  const videoSection = h('div', { className: 'lp-section' });
+  const videoTitle = h('h3', { className: 'lp-section-title' });
+  videoTitle.textContent = 'Vídeo da aula';
+  const videoPlaceholder = h('div', { className: 'lp-video-placeholder' });
+  videoSection.appendChild(videoTitle);
+  videoSection.appendChild(videoPlaceholder);
+  panel.appendChild(videoSection);
+  panel.appendChild(h('hr', { className: 'lp-divider' }));
+
+  // Materials section
+  const materialsSection = h('div', { className: 'lp-section' });
+  const materialsTitle = h('h3', { className: 'lp-section-title' });
+  materialsTitle.textContent = 'Materiais de apoio';
+  const materialItem = h('div', { className: 'lp-material-item' });
+  const materialName = h('span', { className: 'lp-material-name' });
+  materialName.textContent = lesson.label + ' - Study Guide.pdf';
+  const dlBtn = h('button', { className: 'lp-download-btn' });
+  dlBtn.textContent = 'Download';
+  dlBtn.onclick = (e) => e.stopPropagation();
+  materialItem.appendChild(materialName);
+  materialItem.appendChild(dlBtn);
+  materialsSection.appendChild(materialsTitle);
+  materialsSection.appendChild(materialItem);
+  panel.appendChild(materialsSection);
+  panel.appendChild(h('hr', { className: 'lp-divider' }));
+
+  // Exercises section
+  const exercisesSection = h('div', { className: 'lp-section' });
+  const exercisesHeader = h('div', { className: 'lp-exercises-header' });
+  const exercisesTitle = h('h3', { className: 'lp-section-title' });
+  exercisesTitle.textContent = 'Exercícios';
+  const exercisesProgress = h('span', { className: 'lp-exercises-progress' });
+  exercisesProgress.textContent = '0/3 concluídos';
+  exercisesHeader.appendChild(exercisesTitle);
+  exercisesHeader.appendChild(exercisesProgress);
+  exercisesSection.appendChild(exercisesHeader);
+
+  // Exercise 1: Multiple choice
+  const ex1 = h('div', { className: 'lp-exercise' });
+  const ex1Q = h('p', { className: 'lp-exercise-question' });
+  ex1Q.textContent = '1. How do you greet someone for the first time?';
+  const ex1Opts = h('div', { className: 'lp-exercise-options' });
+  ['A. Nice to meet you', 'B. See you later', 'C. No problem', 'D. Never mind'].forEach((opt, idx) => {
+    const btn = h('button', { className: 'lp-option-btn' + (idx === 0 ? ' selected' : '') });
+    btn.textContent = opt;
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      ex1Opts.querySelectorAll('.lp-option-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    };
+    ex1Opts.appendChild(btn);
+  });
+  ex1.appendChild(ex1Q);
+  ex1.appendChild(ex1Opts);
+  exercisesSection.appendChild(ex1);
+
+  // Exercise 2: Text input
+  const ex2 = h('div', { className: 'lp-exercise' });
+  const ex2Q = h('p', { className: 'lp-exercise-question' });
+  ex2Q.textContent = '2. Complete: "My name ___ John."';
+  const ex2Input = h('input', { className: 'lp-text-input', type: 'text', placeholder: 'Type your answer here...' });
+  ex2Input.onclick = (e) => e.stopPropagation();
+  ex2.appendChild(ex2Q);
+  ex2.appendChild(ex2Input);
+  exercisesSection.appendChild(ex2);
+
+  // Exercise 3: Audio player
+  const ex3 = h('div', { className: 'lp-exercise' });
+  const ex3Q = h('p', { className: 'lp-exercise-question' });
+  ex3Q.textContent = '3. Listen and identify the greeting:';
+  const audioPlayer = h('div', { className: 'lp-audio-player' });
+  const audioPlayBtn = h('button', { className: 'lp-audio-play-btn' });
+  audioPlayBtn.innerHTML = '&#9654;';
+  audioPlayBtn.onclick = (e) => e.stopPropagation();
+  const audioBar = h('div', { className: 'lp-audio-bar' });
+  const audioFill = h('div', { className: 'lp-audio-fill' });
+  audioBar.appendChild(audioFill);
+  const audioTime = h('span', { className: 'lp-audio-time' });
+  audioTime.textContent = '0:00 / 0:30';
+  audioPlayer.appendChild(audioPlayBtn);
+  audioPlayer.appendChild(audioBar);
+  audioPlayer.appendChild(audioTime);
+  ex3.appendChild(ex3Q);
+  ex3.appendChild(audioPlayer);
+  exercisesSection.appendChild(ex3);
+
+  panel.appendChild(exercisesSection);
+
+  // Footer button
+  const isDoneNow = getProgress()[lesson.id] === 'completed';
+  const footerBtn = h('button', { className: 'lp-footer-btn' + (isDoneNow ? ' done' : '') });
+  footerBtn.textContent = isDoneNow ? '✓ Concluída — clique para desmarcar' : 'Marcar como concluída';
+  footerBtn.onclick = (e) => {
+    e.stopPropagation();
+    if (isDoneNow) {
+      markUncomplete(lesson.id);
+    } else {
+      const p = getProgress();
+      p[lesson.id] = 'completed';
+      saveProgress(p);
+      addXP(XP_PER_LESSON, lesson.id);
+      render();
     }
+  };
+  panel.appendChild(footerBtn);
+
+  return panel;
+}
   const tabs = h('div', { className: 'av2-tabs' });
   COURSES.forEach(course => {
     const cp = getProgress();

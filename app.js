@@ -1530,34 +1530,106 @@ function renderDaily() {
     try { return localStorage.getItem(todayKey) === 'done'; } catch { return false; }
   }
   function markDoneToday() {
-    try { localStorage.setItem(todayKey, 'done'); localStorage.setItem('nexus_daily_done', new Date().toDateString()); } catch {}
+    try { localStorage.setItem(todayKey, 'done'); localStorage.setItem('nexus_last_daily', now.toISOString()); } catch {}
   }
 
   const alreadyDone = isDoneToday() || ds.completed;
 
-  const page = h('div', { className: 'daily-page' });
-
-  // ── Header ──
   const dayNum = todayIndex + 1;
   const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-  page.appendChild(h('div', { className: 'daily-header' },
-    h('div', { className: 'daily-header-left' },
-      h('div', { className: 'daily-tag' }, '🔥 Day ' + dayNum),
-      h('h1', { className: 'daily-title' }, practice.topic),
-      h('p', { className: 'daily-date' }, dateStr)
-    ),
-    alreadyDone
-      ? h('div', { className: 'daily-done-badge' }, '✓ Completed today!')
-      : h('div', { className: 'daily-level-badge' }, mod.toUpperCase())
-  ));
 
-  // ── Explicação ──
-  page.appendChild(h('div', { className: 'daily-explanation' },
+  // ── Gamification data ──
+  const totalXP = getXP();
+  const streak = getStreak();
+  const totalEx = practice.exercises.length;
+  const completedEx = practice.exercises.filter((_, ei) => !!ds.submitted['ex_' + ei]).length;
+
+  // ── Page wrapper ──
+  const page = h('div', { className: 'daily-page' });
+
+  // ── 2-column layout ──
+  const layout = h('div', { className: 'daily-layout' });
+  const mainContent = h('div', { className: 'daily-main' });
+  const rightSidebar = h('div', { className: 'daily-right-sidebar' });
+
+  // ════════════════════════════════
+  // MAIN CONTENT
+  // ════════════════════════════════
+
+  // ── Gamified Header ──
+  const headerWrap = h('div', { className: 'daily-header-gamified' });
+
+  // Day tag + title + subtitle
+  const headerTop = h('div', { className: 'daily-header-top' });
+  headerTop.appendChild(h('div', { className: 'daily-tag' }, '🔥 Day ' + dayNum));
+  headerTop.appendChild(h('h1', { className: 'daily-title' }, 'Daily Practice'));
+  headerTop.appendChild(h('p', { className: 'daily-subtitle' }, 'Train a little every day and watch your English improve 🚀'));
+
+  if (alreadyDone) {
+    headerTop.appendChild(h('div', { className: 'daily-done-badge' }, '✓ Completed today!'));
+  } else {
+    headerTop.appendChild(h('div', { className: 'daily-level-badge' }, mod.toUpperCase()));
+  }
+  headerWrap.appendChild(headerTop);
+
+  // Stats cards
+  const statsRow = h('div', { className: 'daily-stats-row' });
+  statsRow.appendChild(h('div', { className: 'daily-stat-card' },
+    h('span', { className: 'daily-stat-icon' }, '⭐'),
+    h('div', { className: 'daily-stat-info' },
+      h('span', { className: 'daily-stat-value' }, totalXP + ' XP'),
+      h('span', { className: 'daily-stat-label' }, 'Total XP')
+    )
+  ));
+  statsRow.appendChild(h('div', { className: 'daily-stat-card' },
+    h('span', { className: 'daily-stat-icon' }, '🎯'),
+    h('div', { className: 'daily-stat-info' },
+      h('span', { className: 'daily-stat-value' }, completedEx + '/' + totalEx),
+      h('span', { className: 'daily-stat-label' }, 'Questions today')
+    )
+  ));
+  statsRow.appendChild(h('div', { className: 'daily-stat-card' },
+    h('span', { className: 'daily-stat-icon' }, '🔥'),
+    h('div', { className: 'daily-stat-info' },
+      h('span', { className: 'daily-stat-value' }, streak + ' days'),
+      h('span', { className: 'daily-stat-label' }, 'Streak')
+    )
+  ));
+  headerWrap.appendChild(statsRow);
+  mainContent.appendChild(headerWrap);
+
+  // ── Progress Bar ──
+  const progressWrap = h('div', { className: 'daily-progress-wrap' });
+  const progressHeader = h('div', { className: 'daily-progress-header' });
+  progressHeader.appendChild(h('span', { className: 'daily-progress-title' }, 'Your progress today'));
+  progressHeader.appendChild(h('span', { className: 'daily-progress-count' }, completedEx + ' / ' + totalEx + ' completed'));
+  progressWrap.appendChild(progressHeader);
+
+  const progressTrack = h('div', { className: 'daily-progress-track' });
+  practice.exercises.forEach((_, idx) => {
+    const isDone = !!ds.submitted['ex_' + idx];
+    const isCurrent = idx === completedEx && !alreadyDone;
+    const stepCls = 'daily-progress-step' + (isDone ? ' done' : '') + (isCurrent ? ' current' : '');
+    const step = h('div', { className: stepCls },
+      h('div', { className: 'daily-step-circle' }, isDone ? '✓' : (idx + 1).toString()),
+      idx < totalEx - 1 ? h('div', { className: 'daily-step-line' + (isDone ? ' done' : '') }) : null
+    );
+    progressTrack.appendChild(step);
+  });
+  progressWrap.appendChild(progressTrack);
+
+  if (alreadyDone) {
+    progressWrap.appendChild(h('div', { className: 'daily-bonus-hint' }, '🎁 Complete all questions and earn bonus! +20 XP'));
+  }
+  mainContent.appendChild(progressWrap);
+
+  // ── Explanation ──
+  mainContent.appendChild(h('div', { className: 'daily-explanation' },
     h('div', { className: 'daily-exp-icon' }, icon('info')),
     h('p', { className: 'daily-exp-text' }, practice.explanation)
   ));
 
-  // ── Exercícios ──
+  // ── Exercises ──
   const exercisesWrap = h('div', { className: 'daily-exercises' });
 
   practice.exercises.forEach((ex, ei) => {
@@ -1568,11 +1640,15 @@ function renderDaily() {
 
     const exCard = h('div', { className: `daily-ex-card ${submitted ? 'revealed' : ''}` });
 
-    // Tipo label
+    // Exercise number + type
+    const exHeader = h('div', { className: 'daily-ex-header' });
     const typeLabel = ex.type === 'mc' ? 'Multiple choice'
                     : ex.type === 'fill' ? 'Fill in the blank'
                     : 'Correct the error';
-    exCard.appendChild(h('div', { className: 'daily-ex-type' }, typeLabel));
+    exHeader.appendChild(h('div', { className: 'daily-ex-type' }, typeLabel));
+    exHeader.appendChild(h('div', { className: 'daily-ex-num' }, (ei + 1) + ' of ' + totalEx));
+    exCard.appendChild(exHeader);
+
     exCard.appendChild(h('p', { className: 'daily-ex-q' }, (ei + 1) + '. ' + ex.q));
 
     if (ex.type === 'mc' || ex.type === 'error') {
@@ -1583,8 +1659,7 @@ function renderDaily() {
         if (submitted) {
           if (oi === ex.correct) cls += ' correct';
           else if (userAns === oi && oi !== ex.correct) cls += ' wrong';
-        } else if (userAns === oi) cls += ' selected';
-
+        } else if (answered && userAns === oi) cls += ' selected';
         optsWrap.appendChild(h('button', {
           className: cls,
           disabled: submitted || alreadyDone,
@@ -1615,8 +1690,7 @@ function renderDaily() {
           type: 'text',
           placeholder: 'Type your answer…',
           value: ds.answers[ansKey] || '',
-          onInput: (e) => { ds.answers[ansKey] = e.target.value; const _btn = e.target.nextElementSibling; if (_btn) { const _has = !!e.target.value; _btn.disabled = !_has; _btn.className = 'daily-check-btn' + (_has ? '' : ' disabled'); } },
-          onKeyDown: (e) => { if (e.key === 'Enter' && ds.answers[ansKey]) { ds.submitted[ansKey] = true; render(); } }
+          onInput: (e) => { ds.answers[ansKey] = e.target.value; const _btn = e.target.nextElementSibling; if (_btn) { const _has = !!e.target.value; _btn.disabled = !_has; _btn.className = `daily-check-btn ${_has ? '' : 'disabled'}`; } }
         });
         exCard.appendChild(inp);
         exCard.appendChild(h('button', {
@@ -1627,8 +1701,7 @@ function renderDaily() {
           }
         }, 'Check answer'));
       } else {
-        const isCorrect = typeof userAns === 'string' &&
-          userAns.trim().toLowerCase() === ex.answer.toLowerCase();
+        const isCorrect = typeof userAns === 'string' && userAns.trim().toLowerCase() === ex.answer.toLowerCase();
         exCard.appendChild(h('div', { className: `daily-fill-result ${isCorrect ? 'correct' : 'wrong'}` },
           h('span', {}, 'Your answer: '),
           h('strong', {}, userAns || ex.answer),
@@ -1646,17 +1719,21 @@ function renderDaily() {
         isRight = userAns === ex.correct;
       }
       exCard.appendChild(h('div', { className: `daily-feedback ${isRight ? 'right' : 'wrong'}` },
-        h('span', { className: 'daily-feedback-icon' }, isRight ? '✓' : '✗'),
-        h('span', {}, ex.exp)
+        h('div', { className: 'daily-feedback-row' },
+          h('span', { className: 'daily-feedback-icon' }, isRight ? '✓' : '✗'),
+          h('span', {}, isRight ? 'Correct! 🎉' : 'Not quite.'),
+          isRight ? h('span', { className: 'daily-xp-gain' }, '+' + XP_DAILY_PRACTICE + ' XP ⚡') : null
+        ),
+        h('span', { className: 'daily-feedback-exp' }, ex.exp)
       ));
     }
 
     exercisesWrap.appendChild(exCard);
   });
 
-  page.appendChild(exercisesWrap);
+  mainContent.appendChild(exercisesWrap);
 
-  // ── Botão Complete ──
+  // ── Summary + Complete Button (when all answered) ──
   const allSubmitted = practice.exercises.every((_, ei) => !!ds.submitted['ex_' + ei]);
 
   if (!alreadyDone) {
@@ -1667,9 +1744,8 @@ function renderDaily() {
           ? typeof ua === 'string' && ua.trim().toLowerCase() === ex.answer.toLowerCase()
           : ua === ex.correct;
       }).length;
-      const pct = Math.round((score / practice.exercises.length) * 100);
 
-      page.appendChild(h('div', { className: 'daily-summary' },
+      mainContent.appendChild(h('div', { className: 'daily-summary' },
         h('div', { className: 'daily-summary-score' },
           h('span', { className: 'daily-summary-num' }, score + '/' + practice.exercises.length),
           h('span', { className: 'daily-summary-label' }, 'correct')
@@ -1677,8 +1753,8 @@ function renderDaily() {
         h('button', {
           className: 'daily-complete-btn',
           onClick: () => {
-            markDoneToday();
             ds.completed = true;
+            markDoneToday();
             updateStreak();
             addXP(XP_DAILY_PRACTICE, 'daily-' + todayKey);
             render();
@@ -1686,8 +1762,21 @@ function renderDaily() {
         }, '🔥 Complete Daily Practice')
       ));
     }
+
+    // Bottom CTA
+    mainContent.appendChild(h('div', { className: 'daily-cta-bottom' },
+      h('div', { className: 'daily-cta-text' },
+        h('span', {}, 'Complete all questions and earn bonus'),
+        h('span', { className: 'daily-cta-bonus' }, '🌟 +20 XP')
+      ),
+      allSubmitted ? null : h('button', {
+        className: 'daily-complete-btn daily-cta-finish-btn',
+        disabled: true
+      }, 'Finish Daily Practice 🚀')
+    ));
   } else {
-    page.appendChild(h('div', { className: 'daily-done-msg' },
+    // Already done message
+    mainContent.appendChild(h('div', { className: 'daily-done-msg' },
       h('div', { className: 'daily-done-icon' }, '🎉'),
       h('h2', { className: 'daily-done-title' }, "You're done for today!"),
       h('p', { className: 'daily-done-sub' }, 'Come back tomorrow for a new practice.'),
@@ -1698,6 +1787,72 @@ function renderDaily() {
     ));
   }
 
+  // ════════════════════════════════
+  // RIGHT SIDEBAR
+  // ════════════════════════════════
+
+  // Ranking card
+  const rankCard = h('div', { className: 'daily-rank-card' });
+  rankCard.appendChild(h('div', { className: 'daily-rank-title' }, '🏆 Your ranking'));
+
+  // Get rank data from state if available
+  const rankList = (state.data && state.data.students) ? [...state.data.students].sort((a, b) => (b.xp || 0) - (a.xp || 0)).slice(0, 5) : [];
+  const myId = state.user && state.user.id;
+  const myXPPos = rankList.findIndex(s => s.id === myId);
+  const totalStudents = rankList.length;
+  const myRankPct = totalStudents > 0 && myXPPos >= 0 ? Math.round(((totalStudents - myXPPos) / totalStudents) * 100) : null;
+
+  if (myRankPct !== null) {
+    rankCard.appendChild(h('div', { className: 'daily-rank-position' },
+      h('p', { className: 'daily-rank-label' }, 'Você está no'),
+      h('div', { className: 'daily-rank-pct' }, 'Top ' + myRankPct + '%'),
+      h('p', { className: 'daily-rank-sub' }, 'dos alunos 🚀')
+    ));
+  }
+
+  if (rankList.length > 0) {
+    const rankRows = h('div', { className: 'daily-rank-rows' });
+    rankList.forEach((student, idx) => {
+      const isMe = student.id === myId;
+      const row = h('div', { className: 'daily-rank-row' + (isMe ? ' me' : '') },
+        h('span', { className: 'daily-rank-pos' }, '#' + (idx + 1)),
+        h('span', { className: 'daily-rank-avatar', style: 'background:' + (student.color || '#555') }, (student.name || 'U')[0].toUpperCase()),
+        h('span', { className: 'daily-rank-name' }, isMe ? 'Você' : (student.name || 'Student')),
+        h('span', { className: 'daily-rank-xp' + (isMe ? ' me' : '') }, (student.xp || 0) + ' XP')
+      );
+      rankRows.appendChild(row);
+    });
+    rankCard.appendChild(rankRows);
+  }
+
+  rankCard.appendChild(h('button', {
+    className: 'daily-rank-btn',
+    onClick: () => { state.tab = 'home'; render(); }
+  }, 'Ver ranking completo →'));
+
+  rightSidebar.appendChild(rankCard);
+
+  // Streak card
+  const streakCard = h('div', { className: 'daily-streak-card' });
+  streakCard.appendChild(h('div', { className: 'daily-streak-title' }, 'Sequência atual 🔥'));
+  streakCard.appendChild(h('div', { className: 'daily-streak-num' }, streak + ' dias'));
+  streakCard.appendChild(h('p', { className: 'daily-streak-sub' }, 'Continue assim! 💪'));
+
+  const daysRow = h('div', { className: 'daily-streak-days' });
+  ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].forEach((day, i) => {
+    const isActive = i < streak;
+    daysRow.appendChild(h('div', { className: 'daily-streak-day' },
+      h('div', { className: 'daily-streak-dot' + (isActive ? ' active' : '') }, isActive ? '✓' : ''),
+      h('span', {}, day)
+    ));
+  });
+  streakCard.appendChild(daysRow);
+  rightSidebar.appendChild(streakCard);
+
+  // Assemble layout
+  layout.appendChild(mainContent);
+  layout.appendChild(rightSidebar);
+  page.appendChild(layout);
   return page;
 }
 

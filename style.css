@@ -4645,12 +4645,16 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.88);
 }
 
 .av2-rank-xp {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.4);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
   flex-shrink: 0;
 }
 
@@ -4860,13 +4864,14 @@ body {
 }
 
 .av2-rank-big-label {
-  font-size: 0.82rem;
-  color: rgba(255,255,255,0.5);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
   margin-bottom: 6px;
 }
 
 .av2-rank-big-pct {
-  font-size: 3rem;
+  font-size: 3.8rem;
   font-weight: 900;
   color: #E8491E;
   font-family: var(--font-display);
@@ -4876,8 +4881,9 @@ body {
 }
 
 .av2-rank-big-sub {
-  font-size: 0.88rem;
-  color: rgba(255,255,255,0.45);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
   margin-bottom: 8px;
 }
 
@@ -4921,10 +4927,10 @@ body {
 .av2-rank-row.me .av2-rank-name { color: #E8491E; }
 
 /* XP value in white/bright for non-me rows */
-.av2-rank-row:not(.me) .av2-rank-xp { color: rgba(255,255,255,0.5); }
+.av2-rank-row:not(.me) .av2-rank-xp { color: rgba(255,255,255,0.78); font-weight: 600; }
 
 /* Rank position number brighter */
-.av2-rank-row:not(.me) .av2-rank-pos { color: rgba(255,255,255,0.35); }
+.av2-rank-row:not(.me) .av2-rank-pos { color: rgba(255,255,255,0.65); font-weight: 600; }
 
 @media (max-width: 900px) {
   .av2-grid {
